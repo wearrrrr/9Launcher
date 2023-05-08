@@ -1,0 +1,11 @@
+#modern-era {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 1rem;
+}
+#modern-era > div {
+    border: 1px solid #ccc;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+}

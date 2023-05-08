@@ -1,0 +1,150 @@
+{
+    "pc-98": {
+        "th01": {
+            "long_title": "東方靈異伝　～ Highly Responsive to Prayers",
+            "short_title": "Highly Responsive to Prayers",
+            "img": "th01.png",
+            "img_unset": "th01_unset.png",
+            "url_trial": "http://www16.big.or.jp/~zun/html/th01dl.html",
+            "release_year": 1996
+        },
+        "th02": {
+            "long_title": "東方封魔録　～ the Story of Eastern Wonderland",
+            "short_title": "Story of Eastern Wonderland",
+            "img": "th02.png",
+            "img_unset": "th02_unset.png",
+            "url_trial": "http://www16.big.or.jp/~zun/html/th02dl.html",
+            "release_year": 1997
+        },
+        "th03": {
+            "long_title": "東方夢時空　～ Phantasmagoria of Dim.Dream",
+            "short_title": "Phantasmagoria of Dim.Dream",
+            "img": "th03.png",
+            "img_unset": "th03_unset.png",
+            "url_trial": "http://www16.big.or.jp/~zun/html/th03dl.html",
+            "release_year": 1997
+        },
+        "th04": {
+            "long_title": "東方幻想郷　～ Lotus Land Story",
+            "short_title": "Lotus Land Story",
+            "img": "th04.png",
+            "img_unset": "th04_unset.png",
+            "url_trial": "http://www16.big.or.jp/~zun/html/th04dl.html",
+            "release_year": 1998
+        },
+        "th05": {
+            "long_title": "東方怪綺談　～ Mystic Square",
+            "short_title": "Mystic Square",
+            "img": "th05.png",
+            "img_unset": "th05_unset.png",
+            "url_trial": "http://www16.big.or.jp/~zun/html/th05dl.html",
+            "release_year": 1998
+        }
+    },
+    "modern": {
+        "th06": {
+            "long_title": "東方紅魔郷　～ The Embodiment of Scarlet Devil",
+            "short_title": "Embodiment of Scarlet Devil",
+            "img": "th06.png",
+            "img_unset": "th06_unset.png",
+            "url_trial": "http://www16.big.or.jp/~zun/html/th06dl.html",
+            "release_year": 2002
+        },
+        "th07": {
+            "long_title": "東方妖々夢　～ Perfect Cherry Blossom",
+            "short_title": "Perfect Cherry Blossom",
+            "img": "th07.png",
+            "img_unset": "th07_unset.png",
+            "url_trial": "http://www16.big.or.jp/~zun/html/th07dl.html",
+            "release_year": 2003
+        },
+        "th08": {
+            "long_title": "東方永夜抄　～ Imperishable Night",
+            "short_title": "Imperishable Night",
+            "img": "th08.png",
+            "img_unset": "th08_unset.png",
+            "url_trial": "http://www16.big.or.jp/~zun/html/th08dl.html",
+            "release_year": 2004
+        },
+        "th09": {
+            "long_title": "東方花映塚　～ Phantasmagoria of Flower View",
+            "short_title": "Phantasmagoria of Flower View",
+            "img": "th09.png",
+            "img_unset": "th09_unset.png",
+            "url_trial": "http://www16.big.or.jp/~zun/html/th09dl.html",
+            "release_year": 2005
+        },
+        "th10": {
+            "long_title": "東方風神録　～ Mountain of Faith",
+            "short_title": "Mountain of Faith",
+            "img": "th10.png",
+            "img_unset": "th10_unset.png",
+            "url_trial": "http://www16.big.or.jp/~zun/html/th10dl.html",
+            "release_year": 2007
+        },
+        "th11": {
+            "long_title": "東方地霊殿　～ Subterranean Animism",
+            "short_title": "Subterranean Animism",
+            "img": "th11.png",
+            "img_unset": "th11_unset.png",
+            "url_trial": "http://www16.big.or.jp/~zun/html/th11dl.html",
+            "release_year": 2008
+        },
+        "th12": {
+            "long_title": "東方星蓮船　～ Undefined Fantastic Object",
+            "short_title": "Undefined Fantastic Object",
+            "img": "th12.png",
+            "img_unset": "th12_unset.png",
+            "url_trial": "http://www16.big.or.jp/~zun/html/th12dl.html",
+            "release_year": 2009
+        },
+        "th13": {
+            "long_title": "東方神霊廟　～ Ten Desires",
+            "short_title": "Ten Desires",
+            "img": "th13.png",
+            "img_unset": "th13_unset.png",
+            "url_trial": "http://www16.big.or.jp/~zun/html/th13dl.html",
+            "release_year": 2011
+        },
+        "th14": {
+            "long_title": "東方輝針城　～ Double Dealing Character",
+            "short_title": "Double Dealing Character",
+            "img": "th14.png",
+            "img_unset": "th14_unset.png",
+            "url_trial": "http://www16.big.or.jp/~zun/html/th14dl.html",
+            "release_year": 2013
+        },
+        "th15": {
+            "long_title": "東方紺珠伝　～ Legacy of Lunatic Kingdom",
+            "short_title": "Legacy of Lunatic Kingdom",
+            "img": "th15.png",
+            "img_unset": "th15_unset.png",
+            "url_trial": "http://www16.big.or.jp/~zun/html/th15dl.html",
+            "release_year": 2015
+        },
+        "th16": {
+            "long_title": "東方天空璋　～ Hidden Star in Four Seasons",
+            "short_title": "Hidden Star in Four Seasons",
+            "img": "th16.png",
+            "img_unset": "th16_unset.png",
+            "url_trial": "http://www16.big.or.jp/~zun/html/th16dl.html",
+            "release_year": 2017
+        },
+        "th17": {
+            "long_title": "東方鬼形獣　～ Wily Beast and Weakest Creature",
+            "short_title": "Wily Beast and Weakest Creature",
+            "img": "th17.png",
+            "img_unset": "th17_unset.png",
+            "url_trial": "http://www16.big.or.jp/~zun/html/th17dl.html",
+            "release_year": 2019
+        },
+        "th18": {
+            "long_title": "東方虹龍洞　～ Unconnected Marketeers",
+            "short_title": "Unconnected Marketeers",
+            "img": "th18.png",
+            "img_unset": "th18_unset.png",
+            "url_trial": "http://www16.big.or.jp/~zun/html/th18dl.html",
+            "release_year": 2021
+        }
+    }
+}
