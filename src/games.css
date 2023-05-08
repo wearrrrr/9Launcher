@@ -1,11 +1,27 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 #modern-era {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 1rem;
+  font-size: 15px;
+  width: 97%;
+  margin: 0 auto;
 }
 #modern-era > div {
-    border: 1px solid #ccc;
-    text-align: center;
-    border-radius: 5px;
-    cursor: pointer;
+  border: 1px solid #ccc;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.game-card {
+  background-size: cover !important;
+  background-position: center;
+}
+.game-card__title {
+  font-weight: 500;
+  background-color: rgba(0, 0, 0, 0.35);
 }
