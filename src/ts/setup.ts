@@ -14,6 +14,10 @@ for (const [name, value] of Object.entries(games.modern)) {
     addGame(name, value);
 }
 
+for (const [name, value] of Object.entries(games.spinoffs)) {
+    addGame(name, value);
+}
+
 function addGame(name: string, value: any) {
     const gameCard = document.createElement('div') as HTMLDivElement;
     gameCard.classList.add('game-card');

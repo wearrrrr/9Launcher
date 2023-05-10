@@ -6,13 +6,22 @@
 #modern-era, .installed-games {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-gap: 1rem;
+  gap: 0.5rem;
   font-size: 15px;
   width: 97%;
   margin: 0 auto;
 }
+.games-spinoffs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 20px;
+  margin-left: 1.5%;
+  font-size: 15px;
+  gap: 0.5rem;
+  width: 250px;
+}
 @media (min-width: 1200px) {
-  #modern-era, .installed-games{
+  #modern-era, .installed-games {
     grid-template-columns: repeat(9, 1fr);
   }
 }
@@ -36,7 +45,7 @@
     grid-template-columns: repeat(13, 1fr);
   }
 }
-#modern-era > div, .installed-games > div {
+#modern-era > div, .installed-games > div, .games-spinoffs > div {
   border: 1px solid #ccc;
   text-align: center;
   border-radius: 10px;

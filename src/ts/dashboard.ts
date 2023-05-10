@@ -34,6 +34,7 @@ import games from '../assets/games.json';
 // }
 // getInstalledGames()
 const gameGrid = document.getElementById("games") as HTMLDivElement;
+const gamesGridSpinoffs = document.getElementById("games-spinoffs") as HTMLDivElement;
 let installedGames = gamesManager.installedGamesIterator();
 
 for (const [name, value] of Object.entries(games["pc-98"])) {
@@ -44,7 +45,11 @@ for (const [name, value] of Object.entries(games.modern)) {
     addGame(name, value);
 }
 
-function addGame(name: string, value: any) {
+for (const [name, value] of Object.entries(games.spinoffs)) {
+    addGame(name, value, gamesGridSpinoffs);
+}
+
+function addGame(name: string, value: any, gamesElement: HTMLDivElement = gameGrid as HTMLDivElement) {
     const gameCard = document.createElement('div') as HTMLDivElement;
     gameCard.classList.add('game-card');
     gameCard.dataset.added = value.img;
@@ -66,6 +71,5 @@ function addGame(name: string, value: any) {
             gamesManager.installGamePrompt(name, value, gameCard);
         });
     }
-    gameGrid.append(gameCard)
-
+    gamesElement.append(gameCard)
 }

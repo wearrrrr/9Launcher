@@ -165,6 +165,73 @@
       "game_id": "th18"
     }
   },
+  "spinoffs": {
+    "th09.5": {
+      "long_title": "東方文花帖　～ Shoot the Bullet",
+      "short_title": "Shoot the Bullet",
+      "img": "th09.5.png",
+      "img_unset": "th09.5_unset.png",
+      "url_trial": "http://www16.big.or.jp/~zun/html/th095dl.html",
+      "release_year": 2005,
+      "game_id": "th09.5"
+    },
+    "th12.5": {
+      "long_title": "ダブルスポイラー　～ Double Spoiler",
+      "short_title": "Double Spoiler",
+      "img": "th12.5.png",
+      "img_unset": "th12.5_unset.png",
+      "url_trial": "http://www16.big.or.jp/~zun/html/th125dl.html",
+      "release_year": 2010,
+      "game_id": "th12.5"
+    },
+    "th12.8": {
+      "long_title": "妖精大戦争　～ Great Fairy Wars",
+      "short_title": "Great Fairy Wars",
+      "img": "th12.8.png",
+      "img_unset": "th12.8_unset.png",
+      "url_trial": "http://www16.big.or.jp/~zun/html/th128dl.html",
+      "release_year": 2010,
+      "game_id": "th12.8"
+    },
+    "th14.3": {
+      "long_title": "弾幕アマノジャク　～ Impossible Spell Card",
+      "short_title": "Impossible Spell Card",
+      "img": "th14.3.png",
+      "img_unset": "th14.3_unset.png",
+      "url_trial": "http://www16.big.or.jp/~zun/html/th143dl.html",
+      "release_year": 2014,
+      "game_id": "th14.3"
+    },
+    "th16.5": {
+      "long_title": "秘封ナイトメアダイアリー　～ Violet Detector",
+      "short_title": "Violet Detector",
+      "img": "th16.5.png",
+      "img_unset": "th16.5_unset.png",
+      "url_trial": "http://www16.big.or.jp/~zun/html/th165dl.html",
+      "release_year": 2018,
+      "game_id": "th16.5"
+    },
+    "th18.5": {
+      "long_title": "秘封ナイトメアダイアリー　～ 100th Black Market",
+      "short_title": "100th Black Market",
+      "img": "th18.5.png",
+      "img_unset": "th18.5_unset.png",
+      "url_trial": "http://www16.big.or.jp/~zun/html/th185dl.html",
+      "release_year": 2022,
+      "game_id": "th18.5"
+    }
+  },
+  "twilight-frontier": {
+    "th10.5": {
+      "long_title": "東方緋想天　～ Scarlet Weather Rhapsody",
+      "short_title": "Scarlet Weather Rhapsody",
+      "img": "th10.5.png",
+      "img_unset": "th10.5_unset.png",
+      "url_trial": "http://www16.big.or.jp/~zun/html/th105dl.html",
+      "release_year": 2008,
+      "game_id": "th10.5"
+    }
+  },
   "all": {
     "th01": {
       "long_title": "東方靈異伝　～ Highly Responsive to Prayers",
@@ -247,6 +314,15 @@
       "release_year": 2005,
       "game_id": "th09"
     },
+    "th09.5": {
+      "long_title": "東方文花帖　～ Shoot the Bullet",
+      "short_title": "Shoot the Bullet",
+      "img": "th09.5.png",
+      "img_unset": "th09.5_unset.png",
+      "url_trial": "http://www16.big.or.jp/~zun/html/th095dl.html",
+      "release_year": 2005,
+      "game_id": "th09.5"
+    },
     "th10": {
       "long_title": "東方風神録　～ Mountain of Faith",
       "short_title": "Mountain of Faith",
@@ -274,6 +350,15 @@
       "release_year": 2009,
       "game_id": "th12"
     },
+    "th12.8": {
+      "long_title": "妖精大戦争　～ Great Fairy Wars",
+      "short_title": "Great Fairy Wars",
+      "img": "th12.8.png",
+      "img_unset": "th12.8_unset.png",
+      "url_trial": "http://www16.big.or.jp/~zun/html/th128dl.html",
+      "release_year": 2010,
+      "game_id": "th12.8"
+    },
     "th13": {
       "long_title": "東方神霊廟　～ Ten Desires",
       "short_title": "Ten Desires",
@@ -291,6 +376,15 @@
       "url_trial": "http://www16.big.or.jp/~zun/html/th14dl.html",
       "release_year": 2013,
       "game_id": "th14"
+    },
+    "th14.3": {
+      "long_title": "弾幕アマノジャク　～ Impossible Spell Card",
+      "short_title": "Impossible Spell Card",
+      "img": "th14.3.png",
+      "img_unset": "th14.3_unset.png",
+      "url_trial": "http://www16.big.or.jp/~zun/html/th143dl.html",
+      "release_year": 2014,
+      "game_id": "th14.3"
     },
     "th15": {
       "long_title": "東方紺珠伝　～ Legacy of Lunatic Kingdom",
@@ -310,6 +404,15 @@
       "release_year": 2017,
       "game_id": "th16"
     },
+    "th16.5": {
+      "long_title": "秘封ナイトメアダイアリー　～ Violet Detector",
+      "short_title": "Violet Detector",
+      "img": "th16.5.png",
+      "img_unset": "th16.5_unset.png",
+      "url_trial": "http://www16.big.or.jp/~zun/html/th165dl.html",
+      "release_year": 2018,
+      "game_id": "th16.5"
+    },
     "th17": {
       "long_title": "東方鬼形獣　～ Wily Beast and Weakest Creature",
       "short_title": "Wily Beast and Weakest Creature",
@@ -327,6 +430,15 @@
       "url_trial": "http://www16.big.or.jp/~zun/html/th18dl.html",
       "release_year": 2021,
       "game_id": "th18"
+    },
+    "th18.5": {
+      "long_title": "秘封ナイトメアダイアリー　～ 100th Black Market",
+      "short_title": "100th Black Market",
+      "img": "th18.5.png",
+      "img_unset": "th18.5_unset.png",
+      "url_trial": "http://www16.big.or.jp/~zun/html/th185dl.html",
+      "release_year": 2022,
+      "game_id": "th18.5"
     }
   },
   "validIDs": [
