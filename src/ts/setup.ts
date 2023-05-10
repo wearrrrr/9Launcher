@@ -1,13 +1,20 @@
 import games from '../assets/games.json';
-import gameIterator from './lib/gamesIterator';
-import { dialog } from '@tauri-apps/api';
-import messageBox from './lib/bottombar';
+import gameIterator from './lib/games';
 
 
+const classicGames = document.getElementById('pc-98') as HTMLDivElement;
 const gameGrid = document.getElementById('modern-era') as HTMLDivElement;
 const nextStep = document.getElementById('next-step') as HTMLDivElement
 
+for (const [name, value] of Object.entries(games["pc-98"])) {
+    addGame(name, value)
+};
+
 for (const [name, value] of Object.entries(games.modern)) {
+    addGame(name, value);
+}
+
+function addGame(name: string, value: any) {
     const gameCard = document.createElement('div') as HTMLDivElement;
     gameCard.classList.add('game-card');
     gameCard.dataset.added = value.img;
@@ -20,27 +27,7 @@ for (const [name, value] of Object.entries(games.modern)) {
     `;
     gameGrid.append(gameCard)
     gameCard.addEventListener('click', async () => {
-        await dialog.open({
-            multiple: false,
-            directory: false,
-            filters: [{
-                name: `${name} Executable`,
-                extensions: ['exe']
-            }]
-        }).then(async (file) => {
-            if (file !== null) {
-                gameCard.style.background = `url(/src/assets/game-images/${value.img})`;
-                let gameObject = {
-                    name: name,
-                    img: value.img,
-                    path: file
-                }
-                await messageBox(`${value.short_title} added to library!`, "Success")
-                localStorage.setItem(name, JSON.stringify(gameObject));
-            } else {
-                await messageBox(`No file selected!`, "Error")
-            }
-        })
+        gameIterator.installGamePrompt(name, value, gameCard);
     })
 }
 
@@ -53,5 +40,5 @@ nextStep.addEventListener('click', () => {
       }, 2000);
 })
 
-gameIterator();
+gameIterator.gameIterator();
 

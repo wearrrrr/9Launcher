@@ -4,7 +4,6 @@ import { dialog } from '@tauri-apps/api';
 
 const settingsDiv = document.getElementById('settings-icn') as HTMLDivElement;
 const settingsGear = document.getElementById('settings-gear') as HTMLDivElement;
-const settingsClip = document.getElementById('settings-gear-clip') as HTMLDivElement;
 const quickSettings = document.getElementById('quick-settings') as HTMLDivElement;
 const notificationSlider = document.getElementById('notifications-slider') as HTMLInputElement;
 const clearGames = document.getElementById('clear-games-btn') as HTMLButtonElement;
@@ -13,12 +12,6 @@ const clearGames = document.getElementById('clear-games-btn') as HTMLButtonEleme
 let quickSettingsToggle = 0;
 
 if (settingsGear !== null) {
-    settingsDiv.addEventListener('mouseover', () => {
-        settingsClip.style.opacity = '1';
-    })
-    settingsDiv.addEventListener('mouseout', () => {
-        settingsClip.style.opacity = '0';
-    })
     settingsDiv.addEventListener('click', () => {
         if (quickSettingsToggle == 0) {
             quickSettings.style.opacity = "1";
@@ -50,10 +43,9 @@ if (settingsGear !== null) {
             }
             ).then(async (response) => {
             if (response == true) {
-                for (const [name] of Object.entries(games.modern)) {
-                    if (name == "libraryUpdateAlerts") continue;
-                    localStorage.removeItem(name);
-                }
+                let libalertskey = localStorage.getItem("libraryUpdateAlerts");
+                localStorage.clear();
+                localStorage.setItem("libraryUpdateAlerts", libalertskey as string);
                 await messageBox("Library cleared!", "Success");
                 window.location.reload();
             }

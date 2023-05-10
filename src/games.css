@@ -3,18 +3,47 @@
 *::after {
   box-sizing: border-box;
 }
-#modern-era {
+#modern-era, .installed-games {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   grid-gap: 1rem;
   font-size: 15px;
   width: 97%;
   margin: 0 auto;
 }
-#modern-era > div {
+@media (min-width: 1200px) {
+  #modern-era, .installed-games{
+    grid-template-columns: repeat(9, 1fr);
+  }
+}
+@media (min-width: 1350px) {
+  #modern-era, .installed-games {
+    grid-template-columns: repeat(10, 1fr);
+  }
+}
+@media (min-width: 1500px) {
+  #modern-era, .installed-games {
+    grid-template-columns: repeat(11, 1fr);
+  }
+}
+@media (min-width: 1650px) {
+  #modern-era, .installed-games {
+    grid-template-columns: repeat(12, 1fr);
+  }
+}
+@media (min-width: 1800px) {
+  #modern-era, .installed-games {
+    grid-template-columns: repeat(13, 1fr);
+  }
+}
+#modern-era > div, .installed-games > div {
   border: 1px solid #ccc;
   text-align: center;
   border-radius: 10px;
+  font-size: 12px;
+  line-height: 12px;
+  width: 120px;
+  height: 44px;
   cursor: pointer;
 }
 .game-card {
@@ -23,5 +52,5 @@
 }
 .game-card__title {
   font-weight: 500;
-  background-color: rgba(0, 0, 0, 0.35);
+  background-color: rgba(0, 0, 0, 0.582);
 }

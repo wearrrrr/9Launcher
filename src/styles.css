@@ -133,18 +133,14 @@ button {
   width: 24px;
 }
 #settings-gear {
-  position: absolute;
-  bottom: 5px;
+  position: relative;
+  top: 8px;
   left: 15px;
-  font-size: 18px;
+  transition: 500ms ease-in-out;
 }
-#settings-gear-clip {
-  font-size: 18px;
-  position: absolute;
-  bottom: 5px;
-  left: 15px;
-  opacity: 0;
-  transition: 250ms ease-in-out;
+#settings-gear:hover {
+  cursor: pointer;
+  rotate: 180deg;
 }
 .arrow-down {
   width: 20px;
@@ -173,6 +169,8 @@ button {
 .notifications {
   display: flex;
   flex-direction: row;
+  margin-top: 5px;
+  margin-left: 5px;
 }
 
 .switch {
@@ -180,7 +178,6 @@ button {
   display: inline-block;
   width: 45px;
   height: 26px;
-  top: 4px;
   margin-left: 10px;
 }
 
@@ -255,5 +252,6 @@ input:checked + .slider:before {
 .clear-games {
   position: relative;
   width: 60%;
-  
+  margin-top: 10px;
+  margin-left: 5px;
 }

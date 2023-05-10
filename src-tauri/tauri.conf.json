@@ -12,10 +12,17 @@
   },
   "tauri": {
     "allowlist": {
-      "all": false,
+      "all": true,
       "shell": {
-        "all": false,
-        "open": true
+        "all": true,
+        "open": true,
+        "scope": [
+          {
+            "name": "wine",
+            "cmd": "/home/wearr/.local/share/lutris/runners/wine/GE-Proton7-48/bin/wine",
+            "args": true
+          }
+        ]
       },
       "dialog": {
         "all": true,
