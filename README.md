@@ -1,7 +1,13 @@
-# Tauri + Vanilla TS
+# Touhou Launcher Reborn
 
-This template should help get you started developing with Tauri in vanilla HTML, CSS and Typescript.
+## Touhou Launcher Reborn is a Linux and Windows launcher for Touhou Games!
 
-## Recommended IDE Setup
+Touhou Launcher Reborn is written in [Tauri](https://tauri.app) and [Typescript](https://www.typescriptlang.org/)!
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+Features: 
+* Support for every mainline Touhou Games and spinoffs
+* Semi Automatic Wine Installation and Wine Manager for Linux Devices!
+* Clean UI
+* Delete and add games with one click!
+
+![Touhou Launcher Reborn UI](https://github.com/wearrrrr/Touhou_Launcher_Reborn/assets/99224452/2eb69938-5a80-4957-bc1b-2ffc822b505f)
