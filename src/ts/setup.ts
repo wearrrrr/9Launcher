@@ -1,24 +1,23 @@
 import games from '../assets/games.json';
-import gameIterator from './lib/games';
+import gamesManager from './lib/games';
 
-
-const classicGames = document.getElementById('pc-98') as HTMLDivElement;
 const gameGrid = document.getElementById('modern-era') as HTMLDivElement;
+const spinoffs = document.getElementById('games-spinoffs') as HTMLDivElement;
 const nextStep = document.getElementById('next-step') as HTMLDivElement
 
 for (const [name, value] of Object.entries(games["pc-98"])) {
-    addGame(name, value)
+    gamesManager.addGame(name, value, gameGrid)
 };
 
 for (const [name, value] of Object.entries(games.modern)) {
-    addGame(name, value);
+    gamesManager.addGame(name, value, gameGrid)
 }
 
 for (const [name, value] of Object.entries(games.spinoffs)) {
-    addGame(name, value);
+    gamesManager.addGame(name, value, spinoffs)
 }
 
-function addGame(name: string, value: any) {
+function addGame(name: string, value: any, gamesElement: HTMLDivElement = gameGrid as HTMLDivElement) {
     const gameCard = document.createElement('div') as HTMLDivElement;
     gameCard.classList.add('game-card');
     gameCard.dataset.added = value.img;
@@ -29,9 +28,9 @@ function addGame(name: string, value: any) {
             <p class="game-card__title">${value.short_title}</p>
         </div>
     `;
-    gameGrid.append(gameCard)
+    gameGrid.append(gamesElement);
     gameCard.addEventListener('click', async () => {
-        gameIterator.installGamePrompt(name, value, gameCard);
+        gamesManager.installGamePrompt(name, value, gameCard);
     })
 }
 
@@ -44,5 +43,5 @@ nextStep.addEventListener('click', () => {
       }, 2000);
 })
 
-gameIterator.gameIterator();
+gamesManager.gameIterator();
 

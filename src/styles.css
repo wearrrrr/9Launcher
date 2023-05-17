@@ -125,6 +125,9 @@ button {
   height: 40px;
   background-color: var(--bottom-banner-color);
   position: fixed;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   bottom: 0;
   left: 0;
 }
@@ -134,15 +137,35 @@ button {
 }
 #settings-gear {
   position: relative;
-  top: 8px;
-  left: 15px;
+  margin-left: 15px;
   transition: 500ms ease-in-out;
 }
 #settings-gear:hover {
   cursor: pointer;
   rotate: 180deg;
 }
-.arrow-down {
+.info-icn {
+  margin-right: 20px;
+  transition: 500ms ease-in-out;
+}
+.info-page {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.info-page > .info-header {
+  line-height: 15px;
+}
+.info-page > .computer-info > p {
+  line-height: 5px;
+}
+#info-page:hover {
+  cursor: pointer;
+}
+.copy-info {
+  width: 50%;
+}
+.arrow-down-qs {
   width: 20px;
   height: 20px;
   transform: rotate(45deg);
@@ -151,10 +174,22 @@ button {
   left: 15px;
   border-radius: 3px;
   background-color: var(--bottom-banner-color);
+  z-index: 1;
+}
+.arrow-down-info {
+  width: 20px;
+  height: 20px;
+  transform: rotate(45deg);
+  position: fixed;
+  margin-top: 28.5vh;
+  left: 96.5%;
+  border-radius: 3px;
+  background-color: var(--bottom-banner-color);
+  z-index: 1;
 }
 .quick-settings-modal {
   background-color: var(--bottom-banner-color);
-  width: 40%;
+  width: 30%;
   position: fixed;
   top: 73%;
   left: 5px;
@@ -162,15 +197,39 @@ button {
   margin: 0;
   padding: 0;
   opacity: 0;
-  transition: 250ms ease-in-out;
+  transition: opacity 250ms ease-in-out;
   z-index: 2;
+  border-radius: 5px;
+}
+.information-page {
+  background-color: var(--bottom-banner-color);
+  width: 30%;
+  position: fixed;
+  top: 63%;
+  left: 69.5%;
+  height: 30vh;
+  margin: 0;
+  padding: 0;
+  transition: opacity 250ms ease-in-out;
+  border-radius: 5px;
+}
+@media (min-height: 900px) {
+  .quick-settings-modal {
+    top: 74%;
+  }
+  .information-page {
+    top: 64%;
+  }
+}
+#app-info {
+  opacity: 0;
 }
 
 .notifications {
   display: flex;
   flex-direction: row;
-  margin-top: 5px;
-  margin-left: 5px;
+  margin-top: 10px;
+  margin-left: 20px;
 }
 
 .switch {
@@ -241,17 +300,119 @@ input:checked + .slider:before {
 .next-arrow {
   position: relative;
 }
-
-.next-step {
-  width: 50%;
-  display: flex;
-  justify-content:space-between;
+.clear-games, .wine-manager {
   position: relative;
+  width: 80%;
+  margin-top: 10px;
+  margin-left: 15px;
+}
+.links {
+  margin-top: 10px;
+  display: flex;
+  position: relative;
+  gap: 10px;
+  width: 100%;
+  justify-content: space-between;
+}
+.links > .link-container {
+  margin-top: 50px;
+}
+.links > .link-container > a {
+  font-size: 32px;
+  color: white;
+}
+.links > .touhou-character > div > img {
+  margin-top: 15px;
+  width: 64px;
+  height: 80px;
+  cursor: pointer;
+}
+
+@media (min-height: 800px) {
+  .links > .link-container {
+    margin-top: 0;
+  }
+  .links > .touhou-character > div > img {
+    margin-top: -40px;
+  }
+}
+
+#inconspicous-character {
+  opacity: 1;
   transition: 250ms ease-in-out;
 }
-.clear-games {
-  position: relative;
-  width: 60%;
+
+@media (min-height: 850px) {
+  .links > .link-container {
+    margin-top: 10px;
+  }
+  .links > .touhou-character > div > img {
+    margin-top: -20px;
+  }
+}
+
+@media (min-height: 1000px) {
+  .links > .link-container {
+    margin-top: 60px;
+  }
+  .links > .touhou-character > div > img {
+    margin-top: 20px;
+  }
+}
+
+.modal-title {
+  text-align: center;
+}
+.tingle-modal-box {
+  background: #0f0f0f;
+}
+.tingle-modal-box__content {
+  background: #0f0f0f;
+}
+.tingle-modal-box__footer {
+  background: #0f0f0f !important;
+}
+.tingle-btn {
+  width: 100%;
+}
+.tingle-btn--danger {
   margin-top: 10px;
-  margin-left: 5px;
+}
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  border: 1px solid rgb(74, 247, 88);
+  border-radius: 10px;
+}
+#progress-bar-progress {
+  width: 0%;
+  color: black;
+  background-color: rgb(74, 247, 88);
+  height: 100%;
+  transition: width 250ms ease-in-out;
+  border-radius: 9px;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  overflow: hidden;
+}
+#progress-bar-text {
+  position: relative;
+  right: 5px;
+  font-size: 18px;
+  font-weight: bold;
+}
+.wine {
+  background-color: #0f0f0f;
+  border-radius: 10px;
+  padding: 10px;
+  width: 50%;
+  margin: 0 auto;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: 250ms ease-in-out;
+  text-align: center;
+}
+.wine:hover {
+  background-color: #1a1a1a;
 }

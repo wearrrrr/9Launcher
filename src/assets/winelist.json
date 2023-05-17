@@ -1,0 +1,28 @@
+{
+    "linux-wine": {
+        "GE-Proton8-3": {
+            "prefix": "GE-Proton8.3.tar.gz",
+            "description": "GE-Proton8.3",
+            "downloadURL": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton8-3/GE-Proton8-3.tar.gz",
+            "path": "wine/GE-Proton8-3/files/bin/wine"
+        },
+        "GE-Proton8-2": {
+            "prefix": "GE-Proton8.2.tar.gz",
+            "description": "GE-Proton8.2",
+            "downloadURL": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton8-2/GE-Proton8-2.tar.gz",
+            "path": "wine/GE-Proton8-2/files/bin/wine"
+        },
+        "GE-Proton8-1": {
+            "prefix": "GE-Proton8.1.tar.gz",
+            "description": "GE-Proton8.1",
+            "downloadURL": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton8-1/GE-Proton8-1.tar.gz",
+            "path": "wine/GE-Proton8-1/files/bin/wine"
+        },
+        "GE-Proton7-55": {
+            "prefix": "GE-Proton7.55.tar.gz",
+            "description": "GE-Proton7.55",
+            "downloadURL": "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton7-55/GE-Proton7-55.tar.gz",
+            "path": "wine/GE-Proton7-55/files/bin/wine"
+        }
+    }
+}

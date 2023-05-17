@@ -163,6 +163,15 @@
       "url_trial": "http://www16.big.or.jp/~zun/html/th18dl.html",
       "release_year": 2021,
       "game_id": "th18"
+    },
+    "th19": {
+      "long_title": "東方獣王園　～ Unfinished Dream of All Living Ghost.",
+      "short_title": "Unfinished Dream of All Living Ghost",
+      "img": "th19.png",
+      "img_unset": "th19_unset.png",
+      "url_trial": "http://www16.big.or.jp/~zun/html/th19dl.html",
+      "release_year": 2023,
+      "game_id": "th19"
     }
   },
   "spinoffs": {
@@ -439,7 +448,17 @@
       "url_trial": "http://www16.big.or.jp/~zun/html/th185dl.html",
       "release_year": 2022,
       "game_id": "th18.5"
+    },
+    "th19": {
+      "long_title": "東方獣王園　～ Unfinished Dream of All Living Ghost.",
+      "short_title": "Unfinished Dream of All Living Ghost",
+      "img": "th19.png",
+      "img_unset": "th19_unset.png",
+      "url_trial": "http://www16.big.or.jp/~zun/html/th19dl.html",
+      "release_year": 2023,
+      "game_id": "th19"
     }
+    
   },
   "validIDs": [
     "th01",

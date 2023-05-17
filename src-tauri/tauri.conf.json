@@ -12,17 +12,45 @@
   },
   "tauri": {
     "allowlist": {
-      "all": true,
+      "all": false,
       "shell": {
         "all": true,
         "open": true,
         "scope": [
           {
             "name": "wine",
-            "cmd": "/home/wearr/.local/share/lutris/runners/wine/GE-Proton7-48/bin/wine",
+            "cmd": "$APPDATA/wine/wine",
+            "args": true
+          },
+          {
+            "name": "tar",
+            "cmd": "tar",
+            "args": true
+          },
+          {
+            "name": "ln",
+            "cmd": "ln",
             "args": true
           }
         ]
+      },
+      "http": {
+        "all": true,
+        "request": true,
+        "scope": ["https://**/*", "http://**/*"] 
+      },
+      "fs": {
+        "all": false,
+        "createDir": true,
+        "exists": true,
+        "removeFile": true,
+        "scope": ["$APPDATA/wine/", "$APPDATA/wine/**", "$APPDATA/*"]
+      },
+      "path": {
+        "all": true
+      },
+      "os": {
+        "all": true
       },
       "dialog": {
         "all": true,
@@ -31,6 +59,9 @@
         "message": true,
         "open": true,
         "save": true
+      },
+      "window": {
+        "all": true
       }
     },
     "bundle": {
