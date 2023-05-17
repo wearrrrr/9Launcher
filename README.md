@@ -10,4 +10,5 @@ Features:
 * Clean UI
 * Delete and add games with one click!
 
-![Touhou Launcher Reborn UI](https://github.com/wearrrrr/Touhou_Launcher_Reborn/assets/99224452/2eb69938-5a80-4957-bc1b-2ffc822b505f)
+![TLR UI](https://github.com/wearrrrr/Touhou_Launcher_Reborn/assets/99224452/a595ce3d-1799-4b67-b63b-9b751706c50c)
+
