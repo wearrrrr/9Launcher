@@ -12,3 +12,8 @@ Features:
 
 ![TLR UI](https://github.com/wearrrrr/Touhou_Launcher_Reborn/assets/99224452/a595ce3d-1799-4b67-b63b-9b751706c50c)
 
+
+TODO: 
+* OSX Support
+* PC-98 Games support (Using Neko Project II) 
+* Getting an actually functional build (loading resources with vite is gonna drive me crazy)
