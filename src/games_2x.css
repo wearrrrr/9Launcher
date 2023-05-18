@@ -5,7 +5,7 @@
 }
 #modern-era, .installed-games {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 0.5rem;
   font-size: 15px;
   width: 97%;
@@ -22,27 +22,22 @@
 }
 @media (min-width: 1200px) {
   #modern-era, .installed-games {
-    grid-template-columns: repeat(9, 1fr);
+    grid-template-columns: repeat(6, 1fr);
   }
 }
 @media (min-width: 1350px) {
   #modern-era, .installed-games {
-    grid-template-columns: repeat(10, 1fr);
+    grid-template-columns: repeat(7, 1fr);
   }
 }
 @media (min-width: 1500px) {
   #modern-era, .installed-games {
-    grid-template-columns: repeat(11, 1fr);
+    grid-template-columns: repeat(8, 1fr);
   }
 }
 @media (min-width: 1650px) {
   #modern-era, .installed-games {
-    grid-template-columns: repeat(12, 1fr);
-  }
-}
-@media (min-width: 1800px) {
-  #modern-era, .installed-games {
-    grid-template-columns: repeat(13, 1fr);
+    grid-template-columns: repeat(9, 1fr);
   }
 }
 #modern-era > div, .installed-games > div, .games-spinoffs > div {
@@ -50,9 +45,9 @@
   text-align: center;
   border-radius: 10px;
   font-size: 12px;
-  line-height: 12px;
-  width: 120px;
-  height: 44px;
+  line-height: 16px;
+  width: 180px;
+  height: 66px;
   cursor: pointer;
 }
 .game-card {
@@ -63,6 +58,8 @@
   align-items: center;
 }
 .game-card__title {
+  font-size: 16px;
   font-weight: 500;
+  width: 100%;
   background-color: rgba(0, 0, 0, 0.582);
 }

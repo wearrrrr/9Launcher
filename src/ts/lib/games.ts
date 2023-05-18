@@ -24,7 +24,7 @@ function gameIterator() {
         if (localStorage.getItem(name) !== null) {
             let game = document.getElementById(name)
             if (game == null) throw new Error("Game element not found, despite being set in localStorage! Try clearing localStorage.")
-            game.style.background = `url(/src/assets/game-images/${value.img})`;
+            game.style.background = `url(assets/game-images/${value.img})`;
         }
     }
 }
@@ -180,7 +180,7 @@ async function installGamePrompt(name: string, value: gameObject, gameCard: HTML
             const pathComponents: string[] = file.toString().split("/");
             pathComponents.pop();
             const filePath: string = pathComponents.join("/");
-            gameCard.style.background = `url(/src/assets/game-images/${value.img})`;
+            gameCard.style.background = `url(assets/game-images/${value.img})`;
             let gameObject = {
                 name: name,
                 img: value.img,
@@ -203,7 +203,7 @@ function addGame(name: string, value: gameObject, gamesElement: HTMLDivElement) 
     gameCard.classList.add('game-card');
     gameCard.dataset.added = value.img;
     gameCard.id = name;
-    gameCard.style.background = `url(/src/assets/game-images/${value.img_unset})`;
+    gameCard.style.background = `url(assets/game-images/${value.img_unset})`;
     gameCard.innerHTML = `
         <div class="game-card__info ${name}">
             <p class="game-card__title">${value.short_title}</p>
@@ -211,7 +211,7 @@ function addGame(name: string, value: gameObject, gamesElement: HTMLDivElement) 
     `;
     const checkInstallStatus = installedGames.includes(name);
     if (checkInstallStatus) {
-        gameCard.style.background = `url(/src/assets/game-images/${value.img})`;
+        gameCard.style.background = `url(assets/game-images/${value.img})`;
     }
     gamesElement.appendChild(gameCard);
     gameCard.addEventListener('contextmenu', async (e) => {
@@ -219,7 +219,7 @@ function addGame(name: string, value: gameObject, gamesElement: HTMLDivElement) 
         removeGame(name, value, gameCard);
     })
     if (checkInstallStatus) {
-        gameCard.style.background = `url(/src/assets/game-images/${value.img})`;
+        gameCard.style.background = `url(assets/game-images/${value.img})`;
         gameCard.addEventListener('click', async () => {
             launchGame(games.all[name as keyof typeof games.all]);
         })
@@ -236,7 +236,7 @@ async function removeGame(name: string, value: gameObject, gameCard: HTMLElement
         let confirm = await dialog.confirm("This will remove the game from your library, but will not delete the game files.", `Remove ${value.short_title}?`);
         if (confirm) {
             localStorage.removeItem(name);
-            gameCard.style.background = `url(/src/assets/game-images/${value.img_unset})`;
+            gameCard.style.background = `url(assets/game-images/${value.img_unset})`;
             gameCard.addEventListener('click', async () => {
                 installGamePrompt(name, value, gameCard);
             });

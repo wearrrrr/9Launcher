@@ -21,6 +21,9 @@ const copyInfoBtn = document.getElementById('copy-info') as HTMLButtonElement;
 let quickSettingsToggle = 0;
 let infoPageToggle = 0;
 
+let largeCardsState = localStorage.getItem("largeCards") === "enabled" ? true : false;
+console.log(largeCardsState)
+
 function setSliderState(element: HTMLInputElement, state: boolean) {
     if (state == true) {
         element.checked = true;
