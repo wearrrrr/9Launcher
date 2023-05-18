@@ -145,6 +145,7 @@ function inconspicuous() {
                 waruielem?.remove();
             }, 260);
         }
+        return false;
     });
 }
 inconspicuous();

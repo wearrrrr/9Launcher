@@ -92,6 +92,7 @@ const funcs = {
     resetProgressBar,
     openModal,
     unzipBegin,
+    openWineManager
 }
 
 export default funcs;
