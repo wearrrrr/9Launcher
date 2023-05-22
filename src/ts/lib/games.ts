@@ -129,42 +129,56 @@ const checkIfWineIsNeeded = async () => {
 }
 checkIfWineIsNeeded();
 
+let pc98 = ["th01", "th02", "th03", "th04", "th05"]
+
 async function launchGame(gameObj: gameObject) {
     let gamePath = getGameFile(gameObj.game_id);
     let command;
-    switch (await infoManager.getPlatform()) {
-        case "win32":
-            console.log("Windows detected, running with cmd!")
-            command = new Command('cmd', ['/c', gamePath], { cwd: getGamePath(gameObj.game_id) });
-            break;
-        case "linux":
-            console.log("Linux detected, running with wine!")
-            console.log(getGamePath(gameObj.game_id))
-            console.log(gamePath)
-            command = new Command('wine', gamePath, { cwd: getGamePath(gameObj.game_id) });
-            break;
-        case "darwin":
-            console.log("MacOS detected, running with wine!")
-            setTimeout(() => {
-                command = new Command('wine', gamePath, { cwd: getGamePath(gameObj.game_id) });
-            }, 500);
-            break;
-        default:
-            console.log("Unknown OS detected, attempting to run with wine! (assuming POSIX based OS)")
-            setTimeout(() => {
-                command = new Command('wine', gamePath, { cwd: getGamePath(gameObj.game_id) });
-            }, 500);
-            break;
+    if (pc98.includes(gameObj.game_id)) {
+        switch (await infoManager.getPlatform()) {
+            case "win32":
+                // TODO: Add PC-98 support for Windows
+                console.log("Windows Unsupported Currently, sorry!")
+                break;
+            case "linux":
+                console.log("Linux detected, running with dosbox-x!")
+                command = new Command("dosbox-x", ["-c", `IMGMOUNT A: ${gamePath}`, "-c", "A:", "-c", "autoexec.bat", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
+                break;
         }
-        command?.on('close', data => {
-            console.log(`command finished with code ${data.code} and signal ${data.signal}`)
-        });
-        command?.on('error', error => console.error(`command error: "${error}"`));
-        command?.stdout.on('data', line => console.log(`command stdout: "${line}"`));
-        command?.stderr.on('data', line => console.log(`command stderr: "${line}"`));
-        const child = await command?.spawn();
-        console.log('pid:', child?.pid);
-    
+    } else {
+        switch (await infoManager.getPlatform()) {
+            case "win32":
+                console.log("Windows detected, running with cmd!")
+                command = new Command('cmd', ['/c', gamePath], { cwd: getGamePath(gameObj.game_id) });
+                break;
+            case "linux":
+                console.log("Linux detected, running with wine!")
+                console.log(getGamePath(gameObj.game_id))
+                console.log(gamePath)
+                command = new Command('wine', gamePath, { cwd: getGamePath(gameObj.game_id) });
+                break;
+            case "darwin":
+                console.log("MacOS detected, running with wine!")
+                setTimeout(() => {
+                    command = new Command('wine', gamePath, { cwd: getGamePath(gameObj.game_id) });
+                }, 500);
+                break;
+            default:
+                console.log("Unknown OS detected, attempting to run with wine! (assuming POSIX based OS)")
+                setTimeout(() => {
+                    command = new Command('wine', gamePath, { cwd: getGamePath(gameObj.game_id) });
+                }, 500);
+                break;
+            }
+    }
+    command?.on('close', data => {
+        console.log(`command finished with code ${data.code} and signal ${data.signal}`)
+    });
+    command?.on('error', error => console.error(`command error: "${error}"`));
+    command?.stdout.on('data', line => console.log(`command stdout: "${line}"`));
+    command?.stderr.on('data', line => console.log(`command stderr: "${line}"`));
+    const child = await command?.spawn();
+    console.log('pid:', child?.pid);
 }
 
 async function installGamePrompt(name: string, value: gameObject, gameCard: HTMLElement) {
@@ -173,7 +187,7 @@ async function installGamePrompt(name: string, value: gameObject, gameCard: HTML
         directory: false,
         filters: [{
             name: `${name} Executable`,
-            extensions: ['exe']
+            extensions: ['exe', 'hdi']
         }]
     }).then(async (file) => {
         if (file !== null) {

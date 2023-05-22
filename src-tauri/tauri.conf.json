@@ -31,6 +31,11 @@
             "name": "ln",
             "cmd": "ln",
             "args": true
+          },
+          {
+            "name": "dosbox-x",
+            "cmd": "dosbox-x",
+            "args": true
           }
         ]
       },

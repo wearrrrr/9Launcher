@@ -1,4 +1,4 @@
-export function logger(message: string, type: string = "none") {
+export function logger(message: string, type: string = "info") {
     switch (type) {
         case "error":
             console.error("[TLR] " + message);
