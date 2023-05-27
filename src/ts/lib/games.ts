@@ -52,6 +52,14 @@ function getGameFile(gameID: string) {
     return gamePathParsed.file
 }
 
+function getGameLocation(gameID: string) {
+    if (games.validIDs.includes(gameID) == false) throw new Error("Invalid game ID! Valid game IDs are: " + games.validIDs.join(", "));
+    let gamePath = localStorage.getItem(gameID);
+    let gamePathParsed = JSON.parse(gamePath as string)
+    if (gamePath == null) throw new Error("Game path not found! Try clearing localStorage.")
+    return gamePathParsed.path
+}
+
 function getGamePath(gameID: string) {
     if (games.validIDs.includes(gameID) == false) throw new Error("Invalid game ID! Valid game IDs are: " + games.validIDs.join(", "));
     let gamePath = localStorage.getItem(gameID);
@@ -69,7 +77,7 @@ function unzip(wineArchive: string, wineDir: string) {
 
 const downloadWine = async (archiveName: string) => {
     if (progressBar !== null || progressBar !== undefined) {
-        progressBar.resetProgressBar();
+        progressBar.wineResetProgressBar();
     }
     const wineDir = await path.appDataDir() + "/wine/";
     const wineArchive = await path.appDataDir() + "/wine/" + archiveName;
@@ -90,17 +98,17 @@ const downloadWine = async (archiveName: string) => {
             totalBytesDownloaded += progress;
             total = total;
             if (progressBar !== null || progressBar !== undefined) {
-                progressBar.updateProgressBar(totalBytesDownloaded, total);
+                progressBar.wineUpdateProgressBar(totalBytesDownloaded, total);
             }
         }
     ).then(async () => {
         console.log("Download complete... Unzipping wine!")
         if (progressBar !== null || progressBar !== undefined) {
-            progressBar.unzipBegin();
+            progressBar.wineUnzipBegin();
         }
         unzip(wineArchive, wineDir);
         if (progressBar !== null || progressBar !== undefined) {
-            progressBar.finalizeProgressBar();
+            progressBar.wineFinalizeProgressBar();
         }
     })
     return "Wine downloaded!";
@@ -114,10 +122,20 @@ async function checkWineExists() {
 
     if (proton755 == false && proton81 == false && proton82 == false && proton83 == false) {
         if (progressBar !== null || progressBar !== undefined) {
-            progressBar.openModal();
+            progressBar.wineOpenModal();
         }
     }
 }
+
+async function checkDosboxExists() {
+    let dosboxExists = await fs.exists(await path.appDataDir() + "dosbox/dosbox-x");
+    if (dosboxExists == false) {
+        if (progressBar !== null || progressBar !== undefined) {
+            progressBar.dosboxOpenModal();
+        }
+    }
+}
+checkDosboxExists();
 
 const checkIfWineIsNeeded = async () => {
     const platform = await infoManager.getPlatform();
@@ -133,16 +151,24 @@ let pc98 = ["th01", "th02", "th03", "th04", "th05"]
 
 async function launchGame(gameObj: gameObject) {
     let gamePath = getGameFile(gameObj.game_id);
+    let gameLocation = getGameLocation(gameObj.game_id);
+    let fileExtenion = await path.extname(gamePath);
     let command;
     if (pc98.includes(gameObj.game_id)) {
         switch (await infoManager.getPlatform()) {
             case "win32":
                 // TODO: Add PC-98 support for Windows
-                console.log("Windows Unsupported Currently, sorry!")
+                console.log("Windows is in very early beta for PC-98 support! There be dragons!")
+                command = new Command("cmd", ["/C", `${await path.appDataDir() + "bin/x64/Release SDL2/dosbox-x.exe"}`, "-set", "machine=pc98", "-c", `IMGMOUNT A: ${gamePath}`, "-c", "A:", "-c", "game", "-nopromptfolder"])
                 break;
             case "linux":
                 console.log("Linux detected, running with dosbox-x!")
-                command = new Command("dosbox-x", ["-c", `IMGMOUNT A: ${gamePath}`, "-c", "A:", "-c", "autoexec.bat", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
+                if (fileExtenion == "hdi") {
+                    command = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gamePath}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
+                }
+                if (fileExtenion == "exe") {
+                    command = new Command("dosbox-x", ["-c", `MOUNT C: ${gameLocation}`, "-c", "C:", "-c", `${gamePath}`, "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
+                }
                 break;
         }
     } else {

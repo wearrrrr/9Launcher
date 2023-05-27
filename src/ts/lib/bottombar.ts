@@ -10,6 +10,7 @@ const quickSettings = document.getElementById('quick-settings') as HTMLDivElemen
 const notificationSlider = document.getElementById('notifications-slider') as HTMLInputElement;
 const clearGames = document.getElementById('clear-games-btn') as HTMLButtonElement;
 const wineManager = document.getElementById('wine-manager-btn') as HTMLButtonElement;
+const dosboxManager = document.getElementById('dosbox-manager-btn') as HTMLButtonElement;
 
 const osInfo = document.getElementById('os-info') as HTMLParagraphElement;
 const kernelInfo = document.getElementById('kernel-info') as HTMLParagraphElement;
@@ -73,6 +74,9 @@ if (settingsDiv !== null) {
             }
         });
     });
+    dosboxManager.addEventListener('click', () => {
+        dashboard.dosboxOpenModal();
+    })
     wineManager.addEventListener('click', () => {
         dashboard.openWineManager();
     })

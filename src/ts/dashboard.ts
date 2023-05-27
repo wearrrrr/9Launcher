@@ -2,6 +2,8 @@ import gamesManager from './lib/games';
 import games from '../assets/games.json';
 import { WebviewWindow } from "@tauri-apps/api/window"
 import modalManager from './lib/modalManager';
+import * as pc98manager from './lib/pc98manager';
+import downloadDosbox from './lib/pc98manager';
 // TODO: Support for .5 games
 
 // const pc98Games = ['th01', 'th02', 'th03', 'th04', 'th05']
@@ -24,55 +26,99 @@ for (const [name, value] of Object.entries(games.spinoffs)) {
     gamesManager.addGame(name, value, gamesGridSpinoffs);
 }
 
-var modal = modalManager.createNewModal({
+var wineModal = modalManager.createNewModal({
     footer: true,
     stickyFooter: false,
     closeMethods: [], 
     beforeClose: function() {
         return true;
     }
-})
-modal.setContent(`
+});
+wineModal.setContent(`
 <h2 class="modal-title">Warning! No Wine builds installed! Open wine manager?</h2>
 <div class="progress-bar" id="progress-bar">
     <div id="progress-bar-progress"><p id="progress-bar-text">0%</p></div>
 </div>`);
-modal.addFooterBtn('Download', 'tingle-btn tingle-btn--primary', function() {
+wineModal.addFooterBtn('Download', 'tingle-btn tingle-btn--primary', function() {
     openWineManager()
-    modalManager.closeModal(modal)
+    modalManager.closeModal(wineModal)
 });
-modal.addFooterBtn(`Don't Download (Games won't launch!)`, 'tingle-btn tingle-btn--danger', function() {
-    modalManager.closeModal(modal)
+wineModal.addFooterBtn(`Don't Download (Games won't launch!)`, 'tingle-btn tingle-btn--danger', function() {
+    modalManager.closeModal(wineModal)
 });
 
-function openModal() {
-    modalManager.openModal(modal);
+function wineOpenModal() {
+    modalManager.openModal(wineModal);
+}
+
+var dosboxModal = modalManager.createNewModal({
+    footer: true,
+    stickyFooter: false,
+    closeMethods: [],
+    beforeClose: function() {
+        return true;
+    }
+});
+dosboxModal.setContent(`
+<h2 class="modal-title">Download PC-98 Emulator now?</h2>
+<div class="progress-bar" id="dosbox-progress-bar">
+    <div id="dosbox-progress-bar-progress"><p id="dosbox-progress-bar-text">0%</p></div>
+</div>`);
+dosboxModal.addFooterBtn('Download', 'tingle-btn tingle-btn--primary', function() {
+    pc98manager.default.downloadDosbox();
+})
+dosboxModal.addFooterBtn(`Don't Download (PC-98 games won't work!)`, 'tingle-btn tingle-btn--danger', function() {
+    modalManager.closeModal(dosboxModal)
+})
+
+function dosboxOpenModal() {
+    modalManager.openModal(dosboxModal);
+}
+
+const dosboxProgressBarProgress = document.getElementById("dosbox-progress-bar-progress") as HTMLDivElement;
+const dosboxProgressBarText = document.getElementById("dosbox-progress-bar-text") as HTMLDivElement;
+
+function dosboxUpdateProgressBar(totalDownloaded: number, total: number) {
+    const percentage = Math.round((totalDownloaded / total) * 100);
+    dosboxProgressBarProgress.style.width = percentage + "%";
+    dosboxProgressBarText.textContent = percentage + "%";
+}
+
+function dosboxFinalizeProgressBar() {
+    dosboxProgressBarProgress.style.width = "100%"
+    setTimeout(() => {
+        dosboxModal.close();
+        dosboxResetProgressBar();
+    }, 500);
+}
+
+function dosboxResetProgressBar() {
+    dosboxProgressBarProgress.style.width = "0%"
 }
 
 
 const progressBarProgress = document.getElementById("progress-bar-progress") as HTMLDivElement;
 const progressBarText = document.getElementById("progress-bar-text") as HTMLDivElement;
 
-function updateProgressBar(totalDownloaded: number, total: number) {
+function wineUpdateProgressBar(totalDownloaded: number, total: number) {
         const percentage = Math.round((totalDownloaded / total) * 100);
-        openWineManager();
         progressBarProgress.style.width = percentage + "%";
         progressBarText.textContent = percentage + "%";
     
 }
 
-function finalizeProgressBar() {
+function wineFinalizeProgressBar() {
     progressBarProgress.style.width = "100%"
     setTimeout(() => {
-        modal.close();
+        wineModal.close();
     }, 500);
 }
 
-function unzipBegin() {
+function wineUnzipBegin() {
     progressBarProgress.textContent = "Unzipping..."
 }
 
-function resetProgressBar() {
+function wineResetProgressBar() {
     progressBarProgress.style.width = "0%"
 }
 
@@ -87,12 +133,16 @@ function openWineManager() {
 }
 
 const funcs = {
-    updateProgressBar,
-    finalizeProgressBar,
-    resetProgressBar,
-    openModal,
-    unzipBegin,
-    openWineManager
+    wineUpdateProgressBar,
+    wineFinalizeProgressBar,
+    wineResetProgressBar,
+    wineOpenModal,
+    wineUnzipBegin,
+    openWineManager,
+    dosboxOpenModal,
+    dosboxUpdateProgressBar,
+    dosboxFinalizeProgressBar,
+    dosboxResetProgressBar,
 }
 
 export default funcs;

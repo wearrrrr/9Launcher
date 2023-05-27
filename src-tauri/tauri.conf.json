@@ -28,13 +28,28 @@
             "args": true
           },
           {
+            "name": "unzip",
+            "cmd": "unzip",
+            "args": true
+          },
+          {
             "name": "ln",
             "cmd": "ln",
             "args": true
           },
           {
             "name": "dosbox-x",
-            "cmd": "dosbox-x",
+            "cmd": "$APPDATA/dosbox/dosbox-x",
+            "args": true
+          },
+          {
+            "name": "powershell",
+            "cmd": "powershell",
+            "args": true
+          },
+          {
+            "name": "chmod",
+            "cmd": "chmod",
             "args": true
           }
         ]
@@ -49,7 +64,8 @@
         "createDir": true,
         "exists": true,
         "removeFile": true,
-        "scope": ["$APPDATA/wine/", "$APPDATA/wine/**", "$APPDATA/*"]
+        "copyFile": true,
+        "scope": ["$APPDATA/wine/", "$APPDATA/wine/**", "$APPDATA/*", "$APPDATA/dosbox/*", "$APPDATA/dosbox/**"]
       },
       "path": {
         "all": true
