@@ -22,9 +22,6 @@ const copyInfoBtn = document.getElementById('copy-info') as HTMLButtonElement;
 let quickSettingsToggle = 0;
 let infoPageToggle = 0;
 
-let largeCardsState = localStorage.getItem("largeCards") === "enabled" ? true : false;
-console.log(largeCardsState)
-
 function setSliderState(element: HTMLInputElement, state: boolean) {
     if (state == true) {
         element.checked = true;
@@ -131,7 +128,6 @@ function inconspicuous() {
     inconspicuous.addEventListener('click', () => {
         if (waruicount < 2 && iswaruiplaying == false) {
             waruicount++;
-            console.log(waruicount)
             const warui = new Audio("/src/assets/warui.mp3")
             warui.addEventListener('ended', () => {
                 iswaruiplaying = false;

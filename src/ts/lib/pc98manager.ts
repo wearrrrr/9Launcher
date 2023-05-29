@@ -60,20 +60,20 @@ function unzipWindows(archive: string, unzipDir: string) {
         dashboard.dosboxFinalizeProgressBar();
     })
 }
-function unzipUnix(archive: string, unzipDir: string, outputDir: string) {
-    console.log(archive)
-    console.log(unzipDir)
-    let unzip = new Command('unzip', [archive, '-d', unzipDir + outputDir], { cwd: unzipDir });
-    unzip.on('close', (code) => {
-        console.log(code)
-    })
-    unzip.stderr.on('data', (data) => {
-        console.log(data)
-    })
-    unzip.execute().then(() => {
-        logger("Wine unzipped!", "success");
-    })
-}
+// function unzipUnix(archive: string, unzipDir: string, outputDir: string) {
+//     console.log(archive)
+//     console.log(unzipDir)
+//     let unzip = new Command('unzip', [archive, '-d', unzipDir + outputDir], { cwd: unzipDir });
+//     unzip.on('close', (code) => {
+//         console.log(code)
+//     })
+//     unzip.stderr.on('data', (data) => {
+//         console.log(data)
+//     })
+//     unzip.execute().then(() => {
+//         logger("Wine unzipped!", "success");
+//     })
+// }
 
 const funcs = {
     downloadDosbox

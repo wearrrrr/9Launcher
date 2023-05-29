@@ -11,71 +11,71 @@
     <link rel="stylesheet" href="/src/games.css">
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.0/css/all.css">
 </head>
-<body>
-    <h2 class="dashboard-title">Mainline Games</h2>
+    <body>
+        <h2 class="dashboard-title">Mainline Games</h2>
 
-    <div id="games" class="installed-games"></div>
-    <h2>Spinoffs</h2>
-    <div id="games-spinoffs" class="games-spinoffs"></div>
+        <div id="games" class="installed-games"></div>
+        <h2>Spinoffs</h2>
+        <div id="games-spinoffs" class="games-spinoffs"></div>
 
-    <div id="quick-settings" class="quick-settings-modal">
-        <div class="arrow-down-qs"></div>
-        <div class="notifications">
-            <span class="notifications-text">Notifications</span>
-            <label class="switch">
-                <input type="checkbox" id="notifications-slider">
-                <span class="slider round"></span>
-            </label>
-        </div>
-        <div class="clear-games">
-            <button id="clear-games-btn" class="clear-games-btn">Clear Games</button>
-        </div>
-        <div class="wine-manager">
-            <button id="wine-manager-btn" class="wine-manager-btn">Wine Manager</button>
-        </div>
-        <div class="dosbox-manager">
-            <button id="dosbox-manager-btn" class="dosbox-manager-btn">Install Dosbox</button>
-        </div>
-    </div>
-
-    <div id="app-info" class="information-page">
-        <div class="arrow-down-info"></div>
-        <div class="info-page">
-            <div class="computer-info">
-                <h3 class="info-header">Information</h3>
-                <p class="version-info" id="version-info">Version: 1.0.0</p>
-                <p class="os-info" id="os-info"></p>
-                <p class="kernel-info" id="kernel-info"></p>
-                <p class="arch-info" id="arch-info"></p>
-                <button class="copy-info" id="copy-info">Copy Info</button>
+        <div id="quick-settings" class="quick-settings-modal">
+            <div class="arrow-down-qs"></div>
+            <div class="notifications">
+                <span class="notifications-text">Notifications</span>
+                <label class="switch">
+                    <input type="checkbox" id="notifications-slider">
+                    <span class="slider round"></span>
+                </label>
             </div>
-            
-            <div class="links">
-                <div class="link-container">
-                    <a href="https://github.com/#" target="_blank" rel="noreferrer noopener"><i class="fa-brands fa-github"></i></a>
-                    <a href="https://discord.com/#" target="_blank" rel="noreferrer noopener"><i class="fa-brands fa-discord"></i></a>
+            <div class="clear-games">
+                <button id="clear-games-btn" class="clear-games-btn">Clear Games</button>
+            </div>
+            <div class="wine-manager">
+                <button id="wine-manager-btn" class="wine-manager-btn">Wine Manager</button>
+            </div>
+            <div class="dosbox-manager">
+                <button id="dosbox-manager-btn" class="dosbox-manager-btn">Install Dosbox</button>
+            </div>
+        </div>
+
+        <div id="app-info" class="information-page">
+            <div class="arrow-down-info"></div>
+            <div class="info-page">
+                <div class="computer-info">
+                    <h3 class="info-header">Information</h3>
+                    <p class="version-info" id="version-info">Version: 1.0.0</p>
+                    <p class="os-info" id="os-info"></p>
+                    <p class="kernel-info" id="kernel-info"></p>
+                    <p class="arch-info" id="arch-info"></p>
+                    <button class="copy-info" id="copy-info">Copy Info</button>
                 </div>
-                <div class="touhou-character">
-                    <div id="inconspicuous"><img id="inconspicous-character" src="/src/assets/flandre.png" alt="Flandre Scarlet"></div>
+                
+                <div class="links">
+                    <div class="link-container">
+                        <a href="https://github.com/#" target="_blank" rel="noreferrer noopener"><i class="fa-brands fa-github"></i></a>
+                        <a href="https://discord.com/#" target="_blank" rel="noreferrer noopener"><i class="fa-brands fa-discord"></i></a>
+                    </div>
+                    <div class="touhou-character">
+                        <div id="inconspicuous"><img id="inconspicous-character" src="/src/assets/flandre.png" alt="Flandre Scarlet"></div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="bottom-banner">
-        <div class="left-section">
-            <div id="settings-icn" class="settings-icn">
-                <i id="settings-gear" class="fa-regular fa-gear"></i>
+        <div class="bottom-banner">
+            <div class="left-section">
+                <div id="settings-icn" class="settings-icn">
+                    <i id="settings-gear" class="fa-regular fa-gear"></i>
+                </div>
+            </div>
+            <div class="right-section">
+                <div class="info-icn">
+                    <i id="info-page" class="fa-solid fa-question"></i>
+                </div>
             </div>
         </div>
-        <div class="right-section">
-            <div class="info-icn">
-                <i id="info-page" class="fa-solid fa-question"></i>
-            </div>
-        </div>
-    </div>
 
-    <script type="module" src="/src/ts/dashboard.ts"></script>
-    <script type="module" src="/src/ts/lib/bottombar.ts"></script>
-</body>
+        <script type="module" src="/src/ts/dashboard.ts"></script>
+        <script type="module" src="/src/ts/lib/bottombar.ts"></script>
+    </body>
 </html>

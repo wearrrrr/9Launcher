@@ -3,7 +3,6 @@ import games from '../assets/games.json';
 import { WebviewWindow } from "@tauri-apps/api/window"
 import modalManager from './lib/modalManager';
 import * as pc98manager from './lib/pc98manager';
-import downloadDosbox from './lib/pc98manager';
 // TODO: Support for .5 games
 
 // const pc98Games = ['th01', 'th02', 'th03', 'th04', 'th05']

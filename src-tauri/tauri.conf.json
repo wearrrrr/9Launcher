@@ -65,6 +65,7 @@
         "exists": true,
         "removeFile": true,
         "copyFile": true,
+        "writeFile": true,
         "scope": ["$APPDATA/wine/", "$APPDATA/wine/**", "$APPDATA/*", "$APPDATA/dosbox/*", "$APPDATA/dosbox/**"]
       },
       "path": {
