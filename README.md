@@ -15,5 +15,5 @@ Features:
 
 TODO: 
 * OSX Support
-~~* PC-98 Games support (Using Neko Project II)~~ ✅ DONE!
-~~* Getting an actually functional build (loading resources with vite is gonna drive me crazy)~~ ✅ DONE!
+* ~~PC-98 Games support (Using Neko Project II)~~ ✅ DONE!
+* ~~Getting an actually functional build (loading resources with vite is gonna drive me crazy)~~ ✅ DONE!
