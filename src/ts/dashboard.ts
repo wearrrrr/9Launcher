@@ -123,7 +123,7 @@ function wineResetProgressBar() {
 
 function openWineManager() {
     new WebviewWindow('wine-manager', {
-        url: 'wine-manager.html',
+        url: 'wine-manager/',
         title: 'Wine Manager',
         width: 500,
         height: 400,

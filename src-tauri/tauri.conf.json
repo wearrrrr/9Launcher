@@ -7,8 +7,8 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "touhou_launcher_reborn",
-    "version": "1.0.0"
+    "productName": "9launcher",
+    "version": "1.1.0"
   },
   "tauri": {
     "allowlist": {
@@ -95,7 +95,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "dev.wearr.TLR",
+      "identifier": "dev.wearr.9launcher",
       "targets": "all",
       "copyright": "MIT"
     },
@@ -109,7 +109,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "Touhou Launcher Reborn",
+        "title": "9Launcher",
         "width": 1000,
         "height": 800,
         "minWidth": 1000,

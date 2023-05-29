@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import { resolve } from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
@@ -20,5 +21,11 @@ export default defineConfig(async () => ({
     minify: !process.env.TAURI_DEBUG ? "esbuild" : false,
     // produce sourcemaps for debug builds
     sourcemap: !!process.env.TAURI_DEBUG,
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        winemanager: resolve(__dirname, 'wine-manager/index.html'),
+      },
+    },
   },
 }));
