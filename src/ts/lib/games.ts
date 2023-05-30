@@ -8,6 +8,7 @@ import infoManager from './infoManager';
 import { download } from "tauri-plugin-upload-api";
 import progressBar from '../dashboard';
 import { logger } from './logging';
+import { WebviewWindow } from "@tauri-apps/api/window"
 
 type gameObject = {
     "long_title": string,
@@ -242,7 +243,7 @@ function addGame(name: string, value: gameObject, gamesElement: HTMLDivElement) 
     const gameCard = document.createElement("div");
     gameCard.classList.add('game-card');
     gameCard.dataset.added = value.img;
-    gameCard.id = name;
+    gameCard.id = value.game_id;
     gameCard.style.background = `url(assets/game-images/${value.img_unset})`;
     gameCard.innerHTML = `
         <div class="game-card__info ${name}">
@@ -252,12 +253,16 @@ function addGame(name: string, value: gameObject, gamesElement: HTMLDivElement) 
     const checkInstallStatus = installedGames.includes(name);
     if (checkInstallStatus) {
         gameCard.style.background = `url(assets/game-images/${value.img})`;
+        gameCard.addEventListener('contextmenu', async (e) => {
+            e.preventDefault();
+            gameConfigurator(value.game_id)
+        });
+    } else {
+        gameCard.addEventListener('contextmenu', async (e) => {
+            e.preventDefault();
+        })
     }
     gamesElement.appendChild(gameCard);
-    gameCard.addEventListener('contextmenu', async (e) => {
-        e.preventDefault();
-        removeGame(name, value, gameCard);
-    })
     if (checkInstallStatus) {
         gameCard.style.background = `url(assets/game-images/${value.img})`;
         gameCard.addEventListener('click', async () => {
@@ -286,6 +291,16 @@ async function removeGame(name: string, value: gameObject, gameCard: HTMLElement
     } else {
         logger("Game not installed!", "error")
     }
+}
+
+async function gameConfigurator(id: string) {
+    new WebviewWindow('configure-game', {
+        url: 'configure-game/?id=' + id,
+        title: 'Configure Game',
+        width: 500,
+        height: 400,
+        resizable: false,
+    })
 }
 
 const funcs = {
