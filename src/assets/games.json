@@ -3,8 +3,8 @@
     "th01": {
       "long_title": "東方靈異伝　～ Highly Responsive to Prayers",
       "short_title": "Highly Responsive to Prayers",
-      "img": "th01.png",
-      "img_unset": "th01_unset.png",
+      "img": "th01.webp",
+      "img_unset": "th01_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th01dl.html",
       "release_year": 1996,
       "game_id": "th01"
@@ -12,8 +12,8 @@
     "th02": {
       "long_title": "東方封魔録　～ the Story of Eastern Wonderland",
       "short_title": "Story of Eastern Wonderland",
-      "img": "th02.png",
-      "img_unset": "th02_unset.png",
+      "img": "th02.webp",
+      "img_unset": "th02_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th02dl.html",
       "release_year": 1997,
       "game_id": "th02"
@@ -21,8 +21,8 @@
     "th03": {
       "long_title": "東方夢時空　～ Phantasmagoria of Dim.Dream",
       "short_title": "Phantasmagoria of Dim.Dream",
-      "img": "th03.png",
-      "img_unset": "th03_unset.png",
+      "img": "th03.webp",
+      "img_unset": "th03_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th03dl.html",
       "release_year": 1997,
       "game_id": "th03"
@@ -30,8 +30,8 @@
     "th04": {
       "long_title": "東方幻想郷　～ Lotus Land Story",
       "short_title": "Lotus Land Story",
-      "img": "th04.png",
-      "img_unset": "th04_unset.png",
+      "img": "th04.webp",
+      "img_unset": "th04_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th04dl.html",
       "release_year": 1998,
       "game_id": "th04"
@@ -39,8 +39,8 @@
     "th05": {
       "long_title": "東方怪綺談　～ Mystic Square",
       "short_title": "Mystic Square",
-      "img": "th05.png",
-      "img_unset": "th05_unset.png",
+      "img": "th05.webp",
+      "img_unset": "th05_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th05dl.html",
       "release_year": 1998,
       "game_id": "th05"
@@ -50,8 +50,8 @@
     "th06": {
       "long_title": "東方紅魔郷　～ The Embodiment of Scarlet Devil",
       "short_title": "Embodiment of Scarlet Devil",
-      "img": "th06.png",
-      "img_unset": "th06_unset.png",
+      "img": "th06.webp",
+      "img_unset": "th06_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th06dl.html",
       "release_year": 2002,
       "game_id": "th06"
@@ -59,8 +59,8 @@
     "th07": {
       "long_title": "東方妖々夢　～ Perfect Cherry Blossom",
       "short_title": "Perfect Cherry Blossom",
-      "img": "th07.png",
-      "img_unset": "th07_unset.png",
+      "img": "th07.webp",
+      "img_unset": "th07_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th07dl.html",
       "release_year": 2003,
       "game_id": "th07"
@@ -68,8 +68,8 @@
     "th08": {
       "long_title": "東方永夜抄　～ Imperishable Night",
       "short_title": "Imperishable Night",
-      "img": "th08.png",
-      "img_unset": "th08_unset.png",
+      "img": "th08.webp",
+      "img_unset": "th08_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th08dl.html",
       "release_year": 2004,
       "game_id": "th08"
@@ -77,8 +77,8 @@
     "th09": {
       "long_title": "東方花映塚　～ Phantasmagoria of Flower View",
       "short_title": "Phantasmagoria of Flower View",
-      "img": "th09.png",
-      "img_unset": "th09_unset.png",
+      "img": "th09.webp",
+      "img_unset": "th09_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th09dl.html",
       "release_year": 2005,
       "game_id": "th09"
@@ -86,8 +86,8 @@
     "th10": {
       "long_title": "東方風神録　～ Mountain of Faith",
       "short_title": "Mountain of Faith",
-      "img": "th10.png",
-      "img_unset": "th10_unset.png",
+      "img": "th10.webp",
+      "img_unset": "th10_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th10dl.html",
       "release_year": 2007,
       "game_id": "th10"
@@ -95,8 +95,8 @@
     "th11": {
       "long_title": "東方地霊殿　～ Subterranean Animism",
       "short_title": "Subterranean Animism",
-      "img": "th11.png",
-      "img_unset": "th11_unset.png",
+      "img": "th11.webp",
+      "img_unset": "th11_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th11dl.html",
       "release_year": 2008,
       "game_id": "th11"
@@ -104,8 +104,8 @@
     "th12": {
       "long_title": "東方星蓮船　～ Undefined Fantastic Object",
       "short_title": "Undefined Fantastic Object",
-      "img": "th12.png",
-      "img_unset": "th12_unset.png",
+      "img": "th12.webp",
+      "img_unset": "th12_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th12dl.html",
       "release_year": 2009,
       "game_id": "th12"
@@ -113,8 +113,8 @@
     "th13": {
       "long_title": "東方神霊廟　～ Ten Desires",
       "short_title": "Ten Desires",
-      "img": "th13.png",
-      "img_unset": "th13_unset.png",
+      "img": "th13.webp",
+      "img_unset": "th13_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th13dl.html",
       "release_year": 2011,
       "game_id": "th13"
@@ -122,8 +122,8 @@
     "th14": {
       "long_title": "東方輝針城　～ Double Dealing Character",
       "short_title": "Double Dealing Character",
-      "img": "th14.png",
-      "img_unset": "th14_unset.png",
+      "img": "th14.webp",
+      "img_unset": "th14_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th14dl.html",
       "release_year": 2013,
       "game_id": "th14"
@@ -131,8 +131,8 @@
     "th15": {
       "long_title": "東方紺珠伝　～ Legacy of Lunatic Kingdom",
       "short_title": "Legacy of Lunatic Kingdom",
-      "img": "th15.png",
-      "img_unset": "th15_unset.png",
+      "img": "th15.webp",
+      "img_unset": "th15_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th15dl.html",
       "release_year": 2015,
       "game_id": "th15"
@@ -140,8 +140,8 @@
     "th16": {
       "long_title": "東方天空璋　～ Hidden Star in Four Seasons",
       "short_title": "Hidden Star in Four Seasons",
-      "img": "th16.png",
-      "img_unset": "th16_unset.png",
+      "img": "th16.webp",
+      "img_unset": "th16_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th16dl.html",
       "release_year": 2017,
       "game_id": "th16"
@@ -149,8 +149,8 @@
     "th17": {
       "long_title": "東方鬼形獣　～ Wily Beast and Weakest Creature",
       "short_title": "Wily Beast and Weakest Creature",
-      "img": "th17.png",
-      "img_unset": "th17_unset.png",
+      "img": "th17.webp",
+      "img_unset": "th17_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th17dl.html",
       "release_year": 2019,
       "game_id": "th17"
@@ -158,8 +158,8 @@
     "th18": {
       "long_title": "東方虹龍洞　～ Unconnected Marketeers",
       "short_title": "Unconnected Marketeers",
-      "img": "th18.png",
-      "img_unset": "th18_unset.png",
+      "img": "th18.webp",
+      "img_unset": "th18_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th18dl.html",
       "release_year": 2021,
       "game_id": "th18"
@@ -167,8 +167,8 @@
     "th19": {
       "long_title": "東方獣王園　～ Unfinished Dream of All Living Ghost.",
       "short_title": "Unfinished Dream of All Living Ghost",
-      "img": "th19.png",
-      "img_unset": "th19_unset.png",
+      "img": "th19.webp",
+      "img_unset": "th19_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th19dl.html",
       "release_year": 2023,
       "game_id": "th19"
@@ -178,8 +178,8 @@
     "th09.5": {
       "long_title": "東方文花帖　～ Shoot the Bullet",
       "short_title": "Shoot the Bullet",
-      "img": "th09.5.png",
-      "img_unset": "th09.5_unset.png",
+      "img": "th09.5.webp",
+      "img_unset": "th09.5_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th095dl.html",
       "release_year": 2005,
       "game_id": "th09.5"
@@ -187,8 +187,8 @@
     "th12.5": {
       "long_title": "ダブルスポイラー　～ Double Spoiler",
       "short_title": "Double Spoiler",
-      "img": "th12.5.png",
-      "img_unset": "th12.5_unset.png",
+      "img": "th12.5.webp",
+      "img_unset": "th12.5_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th125dl.html",
       "release_year": 2010,
       "game_id": "th12.5"
@@ -196,8 +196,8 @@
     "th12.8": {
       "long_title": "妖精大戦争　～ Great Fairy Wars",
       "short_title": "Great Fairy Wars",
-      "img": "th12.8.png",
-      "img_unset": "th12.8_unset.png",
+      "img": "th12.8.webp",
+      "img_unset": "th12.8_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th128dl.html",
       "release_year": 2010,
       "game_id": "th12.8"
@@ -205,8 +205,8 @@
     "th14.3": {
       "long_title": "弾幕アマノジャク　～ Impossible Spell Card",
       "short_title": "Impossible Spell Card",
-      "img": "th14.3.png",
-      "img_unset": "th14.3_unset.png",
+      "img": "th14.3.webp",
+      "img_unset": "th14.3_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th143dl.html",
       "release_year": 2014,
       "game_id": "th14.3"
@@ -214,8 +214,8 @@
     "th16.5": {
       "long_title": "秘封ナイトメアダイアリー　～ Violet Detector",
       "short_title": "Violet Detector",
-      "img": "th16.5.png",
-      "img_unset": "th16.5_unset.png",
+      "img": "th16.5.webp",
+      "img_unset": "th16.5_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th165dl.html",
       "release_year": 2018,
       "game_id": "th16.5"
@@ -223,8 +223,8 @@
     "th18.5": {
       "long_title": "秘封ナイトメアダイアリー　～ 100th Black Market",
       "short_title": "100th Black Market",
-      "img": "th18.5.png",
-      "img_unset": "th18.5_unset.png",
+      "img": "th18.5.webp",
+      "img_unset": "th18.5_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th185dl.html",
       "release_year": 2022,
       "game_id": "th18.5"
@@ -234,8 +234,8 @@
     "th10.5": {
       "long_title": "東方緋想天　～ Scarlet Weather Rhapsody",
       "short_title": "Scarlet Weather Rhapsody",
-      "img": "th10.5.png",
-      "img_unset": "th10.5_unset.png",
+      "img": "th10.5.webp",
+      "img_unset": "th10.5_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th105dl.html",
       "release_year": 2008,
       "game_id": "th10.5"
@@ -245,8 +245,8 @@
     "th01": {
       "long_title": "東方靈異伝　～ Highly Responsive to Prayers",
       "short_title": "Highly Responsive to Prayers",
-      "img": "th01.png",
-      "img_unset": "th01_unset.png",
+      "img": "th01.webp",
+      "img_unset": "th01_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th01dl.html",
       "release_year": 1996,
       "game_id": "th01"
@@ -254,8 +254,8 @@
     "th02": {
       "long_title": "東方封魔録　～ the Story of Eastern Wonderland",
       "short_title": "Story of Eastern Wonderland",
-      "img": "th02.png",
-      "img_unset": "th02_unset.png",
+      "img": "th02.webp",
+      "img_unset": "th02_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th02dl.html",
       "release_year": 1997,
       "game_id": "th02"
@@ -263,8 +263,8 @@
     "th03": {
       "long_title": "東方夢時空　～ Phantasmagoria of Dim.Dream",
       "short_title": "Phantasmagoria of Dim.Dream",
-      "img": "th03.png",
-      "img_unset": "th03_unset.png",
+      "img": "th03.webp",
+      "img_unset": "th03_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th03dl.html",
       "release_year": 1997,
       "game_id": "th03"
@@ -272,8 +272,8 @@
     "th04": {
       "long_title": "東方幻想郷　～ Lotus Land Story",
       "short_title": "Lotus Land Story",
-      "img": "th04.png",
-      "img_unset": "th04_unset.png",
+      "img": "th04.webp",
+      "img_unset": "th04_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th04dl.html",
       "release_year": 1998,
       "game_id": "th04"
@@ -281,8 +281,8 @@
     "th05": {
       "long_title": "東方怪綺談　～ Mystic Square",
       "short_title": "Mystic Square",
-      "img": "th05.png",
-      "img_unset": "th05_unset.png",
+      "img": "th05.webp",
+      "img_unset": "th05_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th05dl.html",
       "release_year": 1998,
       "game_id": "th05"
@@ -290,8 +290,8 @@
     "th06": {
       "long_title": "東方紅魔郷　～ The Embodiment of Scarlet Devil",
       "short_title": "Embodiment of Scarlet Devil",
-      "img": "th06.png",
-      "img_unset": "th06_unset.png",
+      "img": "th06.webp",
+      "img_unset": "th06_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th06dl.html",
       "release_year": 2002,
       "game_id": "th06"
@@ -299,8 +299,8 @@
     "th07": {
       "long_title": "東方妖々夢　～ Perfect Cherry Blossom",
       "short_title": "Perfect Cherry Blossom",
-      "img": "th07.png",
-      "img_unset": "th07_unset.png",
+      "img": "th07.webp",
+      "img_unset": "th07_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th07dl.html",
       "release_year": 2003,
       "game_id": "th07"
@@ -308,8 +308,8 @@
     "th08": {
       "long_title": "東方永夜抄　～ Imperishable Night",
       "short_title": "Imperishable Night",
-      "img": "th08.png",
-      "img_unset": "th08_unset.png",
+      "img": "th08.webp",
+      "img_unset": "th08_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th08dl.html",
       "release_year": 2004,
       "game_id": "th08"
@@ -317,8 +317,8 @@
     "th09": {
       "long_title": "東方花映塚　～ Phantasmagoria of Flower View",
       "short_title": "Phantasmagoria of Flower View",
-      "img": "th09.png",
-      "img_unset": "th09_unset.png",
+      "img": "th09.webp",
+      "img_unset": "th09_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th09dl.html",
       "release_year": 2005,
       "game_id": "th09"
@@ -326,8 +326,8 @@
     "th09.5": {
       "long_title": "東方文花帖　～ Shoot the Bullet",
       "short_title": "Shoot the Bullet",
-      "img": "th09.5.png",
-      "img_unset": "th09.5_unset.png",
+      "img": "th09.5.webp",
+      "img_unset": "th09.5_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th095dl.html",
       "release_year": 2005,
       "game_id": "th09.5"
@@ -335,8 +335,8 @@
     "th10": {
       "long_title": "東方風神録　～ Mountain of Faith",
       "short_title": "Mountain of Faith",
-      "img": "th10.png",
-      "img_unset": "th10_unset.png",
+      "img": "th10.webp",
+      "img_unset": "th10_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th10dl.html",
       "release_year": 2007,
       "game_id": "th10"
@@ -344,8 +344,8 @@
     "th11": {
       "long_title": "東方地霊殿　～ Subterranean Animism",
       "short_title": "Subterranean Animism",
-      "img": "th11.png",
-      "img_unset": "th11_unset.png",
+      "img": "th11.webp",
+      "img_unset": "th11_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th11dl.html",
       "release_year": 2008,
       "game_id": "th11"
@@ -353,17 +353,26 @@
     "th12": {
       "long_title": "東方星蓮船　～ Undefined Fantastic Object",
       "short_title": "Undefined Fantastic Object",
-      "img": "th12.png",
-      "img_unset": "th12_unset.png",
+      "img": "th12.webp",
+      "img_unset": "th12_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th12dl.html",
       "release_year": 2009,
       "game_id": "th12"
     },
+    "th12.5": {
+      "long_title": "ダブルスポイラー　～ Double Spoiler",
+      "short_title": "Double Spoiler",
+      "img": "th12.5.webp",
+      "img_unset": "th12.5_unset.webp",
+      "url_trial": "http://www16.big.or.jp/~zun/html/th125dl.html",
+      "release_year": 2010,
+      "game_id": "th12.5"
+    },
     "th12.8": {
       "long_title": "妖精大戦争　～ Great Fairy Wars",
       "short_title": "Great Fairy Wars",
-      "img": "th12.8.png",
-      "img_unset": "th12.8_unset.png",
+      "img": "th12.8.webp",
+      "img_unset": "th12.8_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th128dl.html",
       "release_year": 2010,
       "game_id": "th12.8"
@@ -371,8 +380,8 @@
     "th13": {
       "long_title": "東方神霊廟　～ Ten Desires",
       "short_title": "Ten Desires",
-      "img": "th13.png",
-      "img_unset": "th13_unset.png",
+      "img": "th13.webp",
+      "img_unset": "th13_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th13dl.html",
       "release_year": 2011,
       "game_id": "th13"
@@ -380,8 +389,8 @@
     "th14": {
       "long_title": "東方輝針城　～ Double Dealing Character",
       "short_title": "Double Dealing Character",
-      "img": "th14.png",
-      "img_unset": "th14_unset.png",
+      "img": "th14.webp",
+      "img_unset": "th14_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th14dl.html",
       "release_year": 2013,
       "game_id": "th14"
@@ -389,8 +398,8 @@
     "th14.3": {
       "long_title": "弾幕アマノジャク　～ Impossible Spell Card",
       "short_title": "Impossible Spell Card",
-      "img": "th14.3.png",
-      "img_unset": "th14.3_unset.png",
+      "img": "th14.3.webp",
+      "img_unset": "th14.3_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th143dl.html",
       "release_year": 2014,
       "game_id": "th14.3"
@@ -398,8 +407,8 @@
     "th15": {
       "long_title": "東方紺珠伝　～ Legacy of Lunatic Kingdom",
       "short_title": "Legacy of Lunatic Kingdom",
-      "img": "th15.png",
-      "img_unset": "th15_unset.png",
+      "img": "th15.webp",
+      "img_unset": "th15_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th15dl.html",
       "release_year": 2015,
       "game_id": "th15"
@@ -407,8 +416,8 @@
     "th16": {
       "long_title": "東方天空璋　～ Hidden Star in Four Seasons",
       "short_title": "Hidden Star in Four Seasons",
-      "img": "th16.png",
-      "img_unset": "th16_unset.png",
+      "img": "th16.webp",
+      "img_unset": "th16_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th16dl.html",
       "release_year": 2017,
       "game_id": "th16"
@@ -416,8 +425,8 @@
     "th16.5": {
       "long_title": "秘封ナイトメアダイアリー　～ Violet Detector",
       "short_title": "Violet Detector",
-      "img": "th16.5.png",
-      "img_unset": "th16.5_unset.png",
+      "img": "th16.5.webp",
+      "img_unset": "th16.5_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th165dl.html",
       "release_year": 2018,
       "game_id": "th16.5"
@@ -425,8 +434,8 @@
     "th17": {
       "long_title": "東方鬼形獣　～ Wily Beast and Weakest Creature",
       "short_title": "Wily Beast and Weakest Creature",
-      "img": "th17.png",
-      "img_unset": "th17_unset.png",
+      "img": "th17.webp",
+      "img_unset": "th17_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th17dl.html",
       "release_year": 2019,
       "game_id": "th17"
@@ -434,8 +443,8 @@
     "th18": {
       "long_title": "東方虹龍洞　～ Unconnected Marketeers",
       "short_title": "Unconnected Marketeers",
-      "img": "th18.png",
-      "img_unset": "th18_unset.png",
+      "img": "th18.webp",
+      "img_unset": "th18_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th18dl.html",
       "release_year": 2021,
       "game_id": "th18"
@@ -443,8 +452,8 @@
     "th18.5": {
       "long_title": "秘封ナイトメアダイアリー　～ 100th Black Market",
       "short_title": "100th Black Market",
-      "img": "th18.5.png",
-      "img_unset": "th18.5_unset.png",
+      "img": "th18.5.webp",
+      "img_unset": "th18.5_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th185dl.html",
       "release_year": 2022,
       "game_id": "th18.5"
@@ -452,8 +461,8 @@
     "th19": {
       "long_title": "東方獣王園　～ Unfinished Dream of All Living Ghost.",
       "short_title": "Unfinished Dream of All Living Ghost",
-      "img": "th19.png",
-      "img_unset": "th19_unset.png",
+      "img": "th19.webp",
+      "img_unset": "th19_unset.webp",
       "url_trial": "http://www16.big.or.jp/~zun/html/th19dl.html",
       "release_year": 2023,
       "game_id": "th19"
