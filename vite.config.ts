@@ -16,7 +16,7 @@ export default defineConfig(async () => ({
   envPrefix: ["VITE_", "TAURI_"],
   build: {
     // Tauri supports es2021
-    target: process.env.TAURI_PLATFORM == "windows" ? "chrome105" : "safari13",
+    target: process.env.TAURI_PLATFORM == "windows" ? "chrome105" : "safari15",
     // don't minify for debug builds
     minify: !process.env.TAURI_DEBUG ? "esbuild" : false,
     // produce sourcemaps for debug builds
@@ -25,6 +25,7 @@ export default defineConfig(async () => ({
       input: {
         main: resolve(__dirname, 'index.html'),
         winemanager: resolve(__dirname, 'wine-manager/index.html'),
+        configuregame: resolve(__dirname, 'configure-game/index.html'),
       },
     },
   },

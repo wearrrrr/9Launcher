@@ -15,6 +15,7 @@ function getLocalStorageObject(name: string) {
     if (retrieve === null) {
         return null;
     }
+    return name;
 }
 
 function createLocalStorageObject(key: string) {
@@ -22,12 +23,14 @@ function createLocalStorageObject(key: string) {
         logger("localStorage object already exists!", "error");
         return null;
     }
+    return key;
 }
 
 const funcs = {
     parseLSObject,
     getLocalStorageObject,
-    createLocalStorageObject
+    createLocalStorageObject,
+
 }
 
 export default funcs;

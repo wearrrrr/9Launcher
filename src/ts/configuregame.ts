@@ -1,4 +1,3 @@
-import gamesManager from "./lib/games"
 import games from '../assets/games.json';
 import * as dialog from "@tauri-apps/api/dialog"
 import * as fs from "@tauri-apps/api/fs"
@@ -14,21 +13,24 @@ if (!gameID || games.validIDs.includes(gameID) === false) {
 
 const game = games.all[gameID as keyof typeof games.all]
 
-
-
+let customImagesDir: string;
 let title = document.getElementById('game-title')
-if (title === null) throw new Error("Couldn't find game title element")
-title.textContent += game.short_title + ": "
 let gameImage = document.getElementById('game-image')
-if (gameImage === null) throw new Error("Couldn't find game image element")
-if (game.img === null) throw new Error("Game image is null")
-gameImage.setAttribute('src', "/assets/game-images/" + game.img)
-let customImagesDir = await path.appDataDir() + 'custom-img/'
-let deleteGame = document.getElementById('delete-game')
-if (deleteGame === null) throw new Error("Couldn't find delete game element")
-deleteGame.addEventListener('click', async () => {
-    removeGame()
-})
+
+async function setupConfigureMenu() {
+    if (title === null) throw new Error("Couldn't find game title element")
+    title.textContent += game.short_title + ": "
+    if (gameImage === null) throw new Error("Couldn't find game image element")
+    if (game.img === null) throw new Error("Game image is null")
+    gameImage.setAttribute('src', "/assets/game-images/" + game.img)
+    customImagesDir = await path.appDataDir() + 'custom-img/'
+    let deleteGame = document.getElementById('delete-game')
+    if (deleteGame === null) throw new Error("Couldn't find delete game element")
+    deleteGame.addEventListener('click', async () => {
+        removeGame()
+    })
+}
+setupConfigureMenu()
 async function removeGame() {
             let confirm = await dialog.confirm("This will remove the game from your library, but will not delete the game files.", `Remove ${game.short_title}?`);
             if (confirm) {
@@ -83,6 +85,6 @@ async function resetImage() {
 document.getElementById('image-setting-change')?.addEventListener('click', setNewImage)
 document.getElementById('image-setting-reset')?.addEventListener('click', resetImage)
 let showText = document.getElementById('show-text') as HTMLInputElement
-showText?.addEventListener('click', async (e) => {
+showText?.addEventListener('click', async () => {
     await fs.writeTextFile(game.game_id + "-show-text", showText.checked.toString(), { dir: fs.BaseDirectory.AppData })
 })
