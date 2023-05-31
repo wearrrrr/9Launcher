@@ -239,23 +239,58 @@ async function installGamePrompt(name: string, value: gameObject, gameCard: HTML
 
 let installedGames = installedGamesIterator();
 
-function addGame(name: string, value: gameObject, gamesElement: HTMLDivElement) {
+async function gameConfigurator(id: string) {
+    let configurePage = new WebviewWindow('configure-game', {
+        url: 'configure-game/?id=' + id,
+        title: 'Configure Game',
+        width: 450,
+        height: 300,
+        resizable: false,
+        center: true,
+        fileDropEnabled: false,
+        focus: true,
+        
+    })
+    configurePage.listen('close', () => {
+        window.location.reload();
+    });
+}
+
+async function checkForCustomImage(id: string) {
+    if (!await fs.exists(await path.appDataDir() + "custom-img/" + id + ".png")) return false;
+    const retrievedImage = await fs.readBinaryFile(await path.appDataDir() + "custom-img/" + id + ".png");
+    try {
+        return retrievedImage;
+    } catch {
+        return false;
+    }
+}
+
+async function addGame(name: string, value: gameObject, gamesElement: HTMLDivElement) {
     const gameCard = document.createElement("div");
     gameCard.classList.add('game-card');
     gameCard.dataset.added = value.img;
     gameCard.id = value.game_id;
     gameCard.style.background = `url(assets/game-images/${value.img_unset})`;
+    let title = value.short_title;
+    if (await fs.exists(await path.appDataDir() + value.game_id + "-show-text")) {
+        let showTitle = await fs.readTextFile(value.game_id + "-show-text", { dir: fs.BaseDirectory.AppData });
+        if (showTitle == "false") {
+            title = ""
+        }
+    }
     gameCard.innerHTML = `
         <div class="game-card__info ${name}">
-            <p class="game-card__title">${value.short_title}</p>
+            <p class="game-card__title">${title}</p>
         </div>
     `;
     const checkInstallStatus = installedGames.includes(name);
     if (checkInstallStatus) {
+        console.log("setting image")
         gameCard.style.background = `url(assets/game-images/${value.img})`;
         gameCard.addEventListener('contextmenu', async (e) => {
             e.preventDefault();
-            gameConfigurator(value.game_id)
+            gameConfigurator(value.game_id);
         });
     } else {
         gameCard.addEventListener('contextmenu', async (e) => {
@@ -264,7 +299,6 @@ function addGame(name: string, value: gameObject, gamesElement: HTMLDivElement) 
     }
     gamesElement.appendChild(gameCard);
     if (checkInstallStatus) {
-        gameCard.style.background = `url(assets/game-images/${value.img})`;
         gameCard.addEventListener('click', async () => {
             launchGame(games.all[name as keyof typeof games.all]);
         })
@@ -272,6 +306,19 @@ function addGame(name: string, value: gameObject, gamesElement: HTMLDivElement) 
         gameCard.addEventListener('click', async () => {
             installGamePrompt(name, value, gameCard);
         });
+    }
+    if (checkInstallStatus) {
+        if (await checkForCustomImage(value.game_id)) {
+            console.log("Custom image found!")
+            const customImage = await checkForCustomImage(value.game_id);
+            console.log(customImage)
+            if (customImage !== false) {
+                let blob = new Blob([customImage], { type: 'image/png' });
+                let url = URL.createObjectURL(blob);
+                console.log(url)
+                gameCard.style.background = `url(${url})`;
+            }
+        }
     }
 }
 
@@ -293,16 +340,6 @@ async function removeGame(name: string, value: gameObject, gameCard: HTMLElement
     }
 }
 
-async function gameConfigurator(id: string) {
-    new WebviewWindow('configure-game', {
-        url: 'configure-game/?id=' + id,
-        title: 'Configure Game',
-        width: 500,
-        height: 400,
-        resizable: false,
-    })
-}
-
 const funcs = {
     gameIterator,
     installedGamesIterator,
@@ -313,8 +350,9 @@ const funcs = {
     addGame,
     unzip,
     downloadWine,
+    checkForCustomImage,
 }
 export var totalBytesDownloaded: any;
 export var total: any;
+export { removeGame }
 export default funcs;
-export type { gameObject }

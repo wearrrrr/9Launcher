@@ -422,3 +422,24 @@ input:checked + .slider:before {
 .wine:hover {
   background-color: #1a1a1a;
 }
+.game-image-container {
+  text-align: center;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 12px;
+  width: 120px;
+  height: 44px;
+  cursor: pointer;
+  overflow: hidden;
+}
+.game-image {
+  text-align: center;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 12px;
+  cursor: pointer;
+}
+
+.delete-game {
+  width: 68%; /* we love magic numbers */
+}

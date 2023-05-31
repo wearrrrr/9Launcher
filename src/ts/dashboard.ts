@@ -14,15 +14,15 @@ const gameGrid = document.getElementById("games") as HTMLDivElement;
 const gamesGridSpinoffs = document.getElementById("games-spinoffs") as HTMLDivElement;
 
 for (const [name, value] of Object.entries(games["pc-98"])) {
-    gamesManager.addGame(name, value, gameGrid)
+    await gamesManager.addGame(name, value, gameGrid)
 };
 
 for (const [name, value] of Object.entries(games.modern)) {
-    gamesManager.addGame(name, value, gameGrid);
+    await gamesManager.addGame(name, value, gameGrid);
 }
 
 for (const [name, value] of Object.entries(games.spinoffs)) {
-    gamesManager.addGame(name, value, gamesGridSpinoffs);
+    await gamesManager.addGame(name, value, gamesGridSpinoffs);
 }
 
 var wineModal = modalManager.createNewModal({
