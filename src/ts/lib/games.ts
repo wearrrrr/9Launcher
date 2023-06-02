@@ -130,15 +130,15 @@ async function checkWineExists() {
     }
 }
 
-async function checkDosboxExists() {
-    let dosboxExists = await fs.exists(await path.appDataDir() + "dosbox/dosbox-x");
-    if (dosboxExists == false) {
-        if (progressBar !== null || progressBar !== undefined) {
-            progressBar.dosboxOpenModal();
-        }
-    }
-}
-checkDosboxExists();
+// async function checkDosboxExists() {
+//     let dosboxExists = await fs.exists(await path.appDataDir() + "dosbox/dosbox-x");
+//     if (dosboxExists == false) {
+//         if (progressBar !== undefined ) {
+//             progressBar.dosboxOpenModal();
+//         }
+//     }
+// }
+// checkDosboxExists();
 
 const checkIfWineIsNeeded = async () => {
     const platform = await infoManager.getPlatform();
