@@ -9,6 +9,8 @@ import { download } from "tauri-plugin-upload-api";
 import progressBar from '../dashboard';
 import { logger } from './logging';
 import { WebviewWindow } from "@tauri-apps/api/window"
+import { listen } from '@tauri-apps/api/event';
+import { invoke } from '@tauri-apps/api/tauri';
 
 type gameObject = {
     "long_title": string,
@@ -198,8 +200,10 @@ async function launchGame(gameObj: gameObject) {
                 break;
             }
     }
+    setGameRichPresence("Playing", gameObj.short_title);
     command?.on('close', data => {
         console.log(`command finished with code ${data.code} and signal ${data.signal}`)
+        setGameRichPresence("Browsing Library");
     });
     command?.on('error', error => console.error(`command error: "${error}"`));
     command?.stdout.on('data', line => console.log(`command stdout: "${line}"`));
@@ -240,7 +244,7 @@ async function installGamePrompt(name: string, value: gameObject, gameCard: HTML
 let installedGames = installedGamesIterator();
 
 async function gameConfigurator(id: string) {
-    let configurePage = new WebviewWindow('configure-game', {
+    new WebviewWindow('configure-game', {
         url: 'configure-game/?id=' + id,
         title: 'Configure Game',
         width: 450,
@@ -249,12 +253,19 @@ async function gameConfigurator(id: string) {
         center: true,
         fileDropEnabled: false,
         focus: true,
-        
-    })
-    configurePage.listen('close', () => {
-        window.location.reload();
     });
 }
+
+await listen("refresh-page", (event) => {
+    console.log(event)
+    window.location.reload();
+})
+
+await listen("delete-game", async (event) => {
+    if (!installedGamesIterator().includes(<string>event.payload)) return logger("Game not found!", "error");
+    localStorage.removeItem(<string>event.payload);
+    window.location.reload();
+})
 
 async function checkForCustomImage(id: string) {
     if (!await fs.exists(await path.appDataDir() + "custom-img/" + id + ".png")) return false;
@@ -339,6 +350,26 @@ async function removeGame(name: string, value: gameObject, gameCard: HTMLElement
         logger("Game not installed!", "error")
     }
 }
+
+async function setGameRichPresence(state: string = "Browsing Library", game_name: string = "") {
+    
+    let appstate;
+    if (state == "Playing") {
+        appstate = `Playing ${game_name}`;
+        await invoke("set_activity_game", {
+            state: `${appstate}`,
+            details: `           `, // Not sure why details needs to be a large empty string, but it does :)
+        })
+    } else {
+        appstate = "Browsing Library"
+        await invoke("set_activity_generic", {
+            state: `${appstate}`,
+            details: `           `, // Not sure why details needs to be a large empty string, but it does :)
+        })
+    }
+
+}
+setGameRichPresence("Browsing Library");
 
 const funcs = {
     gameIterator,
