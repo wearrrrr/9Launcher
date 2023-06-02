@@ -66,6 +66,7 @@ fn main() {
               app.manage(discord_ipc_client);
               Ok(())
         })
+        .plugin(tauri_plugin_upload::init())
         .invoke_handler(tauri::generate_handler![set_activity_generic, set_activity_game])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
