@@ -1,6 +1,6 @@
 import * as path from '@tauri-apps/api/path';
 import * as fs from '@tauri-apps/api/fs';
-import { download } from 'tauri-plugin-upload-api';
+import { download } from "tauri-plugin-upload-api"
 import { logger } from './logging';
 import { Command } from '@tauri-apps/api/shell';
 import wineDownloadsFrontend from '../wineDownloadsManager';
