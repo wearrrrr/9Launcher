@@ -2,12 +2,16 @@ import { message } from '@tauri-apps/api/dialog';
 import { dialog } from '@tauri-apps/api';
 import infoManager from './infoManager';
 import dashboard from '../dashboard';
+import { invoke } from '@tauri-apps/api';
+import { setGameRichPresence } from './games';
 
 const settingsDiv = document.getElementById('settings-icn') as HTMLDivElement;
 const infoPageIcon = document.getElementById('info-page') as HTMLDivElement;
 const appInfo = document.getElementById('app-info') as HTMLDivElement;
 const quickSettings = document.getElementById('quick-settings') as HTMLDivElement;
 const notificationSlider = document.getElementById('notifications-slider') as HTMLInputElement;
+const rpcSlider = document.getElementById('discord-rpc-slider') as HTMLInputElement;
+const rpcSliderRound = document.getElementById('rpc-slider-round') as HTMLDivElement;
 const clearGames = document.getElementById('clear-games-btn') as HTMLButtonElement;
 const wineManager = document.getElementById('wine-manager-btn') as HTMLButtonElement;
 const dosboxManager = document.getElementById('dosbox-manager-btn') as HTMLButtonElement;
@@ -30,6 +34,13 @@ function setSliderState(element: HTMLInputElement, state: boolean) {
     }
 }
 setSliderState(notificationSlider, localStorage.getItem("libraryUpdateAlerts") === "enabled" ? true : false)
+setSliderState(rpcSlider, localStorage.getItem("discordRPC") === "enabled" ? true : false)
+
+if (localStorage.getItem("discordRPC") === null) {
+    localStorage.setItem("discordRPC", "enabled")
+    setGameRichPresence();
+    window.location.reload();
+}
 
 if (settingsDiv !== null) {
     settingsDiv.addEventListener('click', () => {
@@ -55,6 +66,22 @@ if (settingsDiv !== null) {
             localStorage.setItem("libraryUpdateAlerts", "disabled")
         }
     });
+    rpcSlider.addEventListener("change", (event) => {
+        if (rpcSliderRound == null) return;
+        rpcSliderRound.dataset.tempDisabled = "enabled";
+        rpcSlider.disabled = true;
+        setTimeout(() => {
+            delete rpcSliderRound.dataset.tempDisabled;
+            rpcSlider.disabled = false;
+        }, 1500)
+        if ((<HTMLInputElement>event.currentTarget).checked == true) {
+            localStorage.setItem("discordRPC", "enabled")
+            setGameRichPresence()
+        } else {
+            localStorage.setItem("discordRPC", "disabled")
+            invoke("clear_activity")
+        }
+    })
     clearGames.addEventListener('click', async () => {
         return await dialog.confirm(
             "Are you sure you want to clear your library? This will remove all games from your library, and you will have to re-add them.", 

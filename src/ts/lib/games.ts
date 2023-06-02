@@ -200,10 +200,14 @@ async function launchGame(gameObj: gameObject) {
                 break;
             }
     }
-    setGameRichPresence("Playing", gameObj.short_title);
+    if (localStorage.getItem("discordRPC") == "enabled") {
+        setGameRichPresence("Playing", gameObj.short_title);
+    }
     command?.on('close', data => {
         console.log(`command finished with code ${data.code} and signal ${data.signal}`)
-        setGameRichPresence("Browsing Library");
+        if (localStorage.getItem("discordRPC") == "enabled") {
+            setGameRichPresence("Browsing Library");
+        }
     });
     command?.on('error', error => console.error(`command error: "${error}"`));
     command?.stdout.on('data', line => console.log(`command stdout: "${line}"`));
@@ -369,7 +373,10 @@ async function setGameRichPresence(state: string = "Browsing Library", game_name
     }
 
 }
-setGameRichPresence("Browsing Library");
+if (localStorage.getItem("discordRPC") == "enabled") {
+    setGameRichPresence("Browsing Library");
+}
+
 
 const funcs = {
     gameIterator,
@@ -385,5 +392,5 @@ const funcs = {
 }
 export var totalBytesDownloaded: any;
 export var total: any;
-export { removeGame }
+export { removeGame, setGameRichPresence }
 export default funcs;

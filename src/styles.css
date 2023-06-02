@@ -225,7 +225,7 @@ button {
   opacity: 0;
 }
 
-.notifications, .large-cards {
+.notifications, .discord-rpc {
   display: flex;
   flex-direction: row;
   margin-top: 10px;
@@ -257,6 +257,11 @@ button {
   -webkit-transition: .4s;
   transition: .4s;
 }
+.slider[data-temp-disabled="enabled"] {
+  cursor: not-allowed;
+  filter: brightness(0.75);
+}
+
 
 .slider:before {
   position: absolute;

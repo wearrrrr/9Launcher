@@ -49,6 +49,13 @@ fn set_activity_game(discord_ipc_client: State<'_, DeclarativeDiscordIpcClient>,
       }
 }
 
+#[tauri::command]
+fn clear_activity(discord_ipc_client: State<'_, DeclarativeDiscordIpcClient>) {
+    if let Err(why) = discord_ipc_client.clear_activity() {
+        println!("Failed to clear presence: {}", why);
+    }
+}
+
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
@@ -67,7 +74,7 @@ fn main() {
               Ok(())
         })
         .plugin(tauri_plugin_upload::init())
-        .invoke_handler(tauri::generate_handler![set_activity_generic, set_activity_game])
+        .invoke_handler(tauri::generate_handler![set_activity_generic, set_activity_game, clear_activity])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
