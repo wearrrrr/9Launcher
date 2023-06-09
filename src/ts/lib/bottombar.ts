@@ -1,5 +1,5 @@
 import { message } from '@tauri-apps/api/dialog';
-import { dialog } from '@tauri-apps/api';
+import { app, dialog } from '@tauri-apps/api';
 import infoManager from './infoManager';
 import dashboard from '../dashboard';
 import { invoke } from '@tauri-apps/api';
@@ -12,6 +12,7 @@ const quickSettings = document.getElementById('quick-settings') as HTMLDivElemen
 const notificationSlider = document.getElementById('notifications-slider') as HTMLInputElement;
 const rpcSlider = document.getElementById('discord-rpc-slider') as HTMLInputElement;
 const rpcSliderRound = document.getElementById('rpc-slider-round') as HTMLDivElement;
+const fileLoggingSlider = document.getElementById('file-logging-slider') as HTMLInputElement;
 const clearGames = document.getElementById('clear-games-btn') as HTMLButtonElement;
 const wineManager = document.getElementById('wine-manager-btn') as HTMLButtonElement;
 const dosboxManager = document.getElementById('dosbox-manager-btn') as HTMLButtonElement;
@@ -19,6 +20,7 @@ const dosboxManager = document.getElementById('dosbox-manager-btn') as HTMLButto
 const osInfo = document.getElementById('os-info') as HTMLParagraphElement;
 const kernelInfo = document.getElementById('kernel-info') as HTMLParagraphElement;
 const archInfo = document.getElementById('arch-info') as HTMLParagraphElement;
+const versionInfo = document.getElementById('version-info') as HTMLParagraphElement;
 
 const copyInfoBtn = document.getElementById('copy-info') as HTMLButtonElement;
 
@@ -27,19 +29,20 @@ let quickSettingsToggle = 0;
 let infoPageToggle = 0;
 
 function setSliderState(element: HTMLInputElement, state: boolean) {
-    if (state == true) {
-        element.checked = true;
-    } else {
-        element.checked = false;
-    }
+    if (state) element.checked = state
 }
 setSliderState(notificationSlider, localStorage.getItem("libraryUpdateAlerts") === "enabled" ? true : false)
 setSliderState(rpcSlider, localStorage.getItem("discordRPC") === "enabled" ? true : false)
+setSliderState(fileLoggingSlider, localStorage.getItem("file-logging") === "enabled" ? true : false)
 
 if (localStorage.getItem("discordRPC") === null) {
     localStorage.setItem("discordRPC", "enabled")
     setGameRichPresence();
     window.location.reload();
+}
+
+if (localStorage.getItem("file-logging") === null) {
+    localStorage.setItem("file-logging", "enabled")
 }
 
 if (settingsDiv !== null) {
@@ -82,6 +85,13 @@ if (settingsDiv !== null) {
             invoke("clear_activity")
         }
     })
+    fileLoggingSlider.addEventListener("change", (event) => {
+        if ((<HTMLInputElement>event.currentTarget).checked == true) {
+            localStorage.setItem("file-logging", "enabled")
+        } else {
+            localStorage.setItem("file-logging", "disabled")
+        }
+    });
     clearGames.addEventListener('click', async () => {
         return await dialog.confirm(
             "Are you sure you want to clear your library? This will remove all games from your library, and you will have to re-add them.", 
@@ -129,13 +139,15 @@ addInfoPageEvents();
 
 async function addInfoPageDetails() {
     let os = await infoManager.getOSType();
-    let version = await infoManager.getKernelVersion();
+    let kernelVersion = await infoManager.getKernelVersion();
     let arch = await infoManager.getArch();
+    let appVersion = await app.getVersion();
+    versionInfo.textContent = "Version: " + appVersion;
     osInfo.textContent = "OS: " + os;
-    kernelInfo.textContent = "Kernel Version: " + version;
+    kernelInfo.textContent = "Kernel Version: " + kernelVersion;
     archInfo.textContent = "Architecture: " + arch;
     copyInfoBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText(`OS: ${os}\nKernel Version: ${version}\nArchitecture: ${arch}`);
+        navigator.clipboard.writeText(`OS: ${os}\nKernel Version: ${kernelVersion}\nArchitecture: ${arch}\nVersion: ${appVersion}`);
         messageBox("Copied device info to clipboard!", "Success!");
     })
 }

@@ -74,7 +74,7 @@ function getGamePath(gameID: string) {
 function unzip(wineArchive: string, wineDir: string) {
     let unzip = new Command('tar', ['xvf', wineArchive, '-C', wineDir], { cwd: wineDir });
     unzip.execute().then(() => {
-        logger("Wine unzipped!", "success");
+        logger.success("Wine unzipped!")
     })
 }
 
@@ -203,8 +203,11 @@ async function launchGame(gameObj: gameObject) {
     if (localStorage.getItem("discordRPC") == "enabled") {
         setGameRichPresence("Playing", gameObj.short_title);
     }
+    if (command === undefined || command === null) {
+        logger.error("Command is undefined or null!")
+    }
     command?.on('close', data => {
-        console.log(`command finished with code ${data.code} and signal ${data.signal}`)
+        console.log(`Game closed with code ${data.code} and signal ${data.signal}`)
         if (localStorage.getItem("discordRPC") == "enabled") {
             setGameRichPresence("Browsing Library");
         }
@@ -222,7 +225,7 @@ async function installGamePrompt(name: string, value: gameObject, gameCard: HTML
         directory: false,
         filters: [{
             name: `${name} Executable`,
-            extensions: ['exe', 'hdi']
+            extensions: ['exe', 'hdi', 'lnk']
         }]
     }).then(async (file) => {
         if (file !== null) {
@@ -240,7 +243,7 @@ async function installGamePrompt(name: string, value: gameObject, gameCard: HTML
             localStorage.setItem(name, JSON.stringify(gameObject));
             window.location.reload();
         } else {
-            logger("No File Selected!", "error")
+            logger.info("No file selected!")
         }
     })
 }
@@ -266,7 +269,7 @@ await listen("refresh-page", (event) => {
 })
 
 await listen("delete-game", async (event) => {
-    if (!installedGamesIterator().includes(<string>event.payload)) return logger("Game not found!", "error");
+    if (!installedGamesIterator().includes(<string>event.payload)) return logger.error("Game not found!");
     localStorage.removeItem(<string>event.payload);
     window.location.reload();
 })
@@ -301,7 +304,6 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
     `;
     const checkInstallStatus = installedGames.includes(name);
     if (checkInstallStatus) {
-        console.log("setting image")
         gameCard.style.background = `url(assets/game-images/${value.img})`;
         gameCard.addEventListener('contextmenu', async (e) => {
             e.preventDefault();
@@ -348,10 +350,10 @@ async function removeGame(name: string, value: gameObject, gameCard: HTMLElement
                 installGamePrompt(name, value, gameCard);
             });
         } else {
-            logger("Cancelled game removal!", "info")
+            return;
         }
     } else {
-        logger("Game not installed!", "error")
+        return logger.error("Game not found!");
     }
 }
 

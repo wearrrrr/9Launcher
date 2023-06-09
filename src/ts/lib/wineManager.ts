@@ -16,7 +16,7 @@ type wineObject = {
 
 async function wineIterator() {
     let installedWineVers = []
-    for (const [name, value] of Object.entries(winelist["linux-wine"])) {
+    for (const [name] of Object.entries(winelist["linux-wine"])) {
         if (await checkIfVersionExists(name)) {
             installedWineVers.push(name)
         }
@@ -28,12 +28,9 @@ async function unzip(wineArchive: string, wineDir: string) {
     console.log(wineDir)
     let unzip = new Command('tar', ['xvf', wineArchive, '-C', wineDir], { cwd: wineDir });
     unzip.stderr.on('data', data => console.error(`command stderr: "${data}"`));
-    unzip.on('close', data => {
-        console.log(`command finished with code ${data.code} and signal ${data.signal}`)
-    });
     unzip.on('error', error => console.error(`command error: "${error}"`));
     await unzip.execute().then(() => {
-        logger("Wine unzipped!", "success");
+        logger.success("Wine unzipped!")
     })
 }
 
@@ -99,7 +96,7 @@ async function setPrimaryWine(name: string, value: wineObject) {
     console.log(linkPath)
     let createLink = new Command('ln', ['-sf', winePath, linkPath]);
     await createLink.execute();
-    logger(`Set ${name} as primary wine!`, "success");
+    logger.success(`Primary wine set to ${name}!`)
     window.location.reload();
     localStorage.setItem('primary-wine', name);
 }

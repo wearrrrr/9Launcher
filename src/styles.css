@@ -170,7 +170,7 @@ button {
   height: 20px;
   transform: rotate(45deg);
   position: fixed;
-  margin-top: 28.7vh;
+  margin-top: 33.7vh;
   left: 15px;
   border-radius: 3px;
   background-color: var(--bottom-banner-color);
@@ -181,7 +181,7 @@ button {
   height: 20px;
   transform: rotate(45deg);
   position: fixed;
-  margin-top: 36.5vh;
+  margin-top: 31.5vh;
   left: 96.5%;
   border-radius: 3px;
   background-color: var(--bottom-banner-color);
@@ -191,9 +191,9 @@ button {
   background-color: var(--bottom-banner-color);
   width: 30%;
   position: fixed;
-  top: 63%;
+  top: 58%;
   left: 5px;
-  height: 30vh;
+  height: 35vh;
   margin: 0;
   padding: 0;
   opacity: 0;
@@ -205,9 +205,9 @@ button {
   background-color: var(--bottom-banner-color);
   width: 40%;
   position: fixed;
-  top: 55%;
+  top: 60%;
   left: 59.5%;
-  height: 38vh;
+  height: 33vh;
   margin: 0;
   padding: 0;
   transition: opacity 250ms ease-in-out;
@@ -225,7 +225,7 @@ button {
   opacity: 0;
 }
 
-.notifications, .discord-rpc {
+.slider-container {
   display: flex;
   flex-direction: row;
   margin-top: 10px;

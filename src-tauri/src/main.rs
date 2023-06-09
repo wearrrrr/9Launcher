@@ -56,12 +56,13 @@ fn clear_activity(discord_ipc_client: State<'_, DeclarativeDiscordIpcClient>) {
     }
 }
 
+
+
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
 
             let discord_ipc_client = DeclarativeDiscordIpcClient::new("1113926701735493664");
-
             discord_ipc_client.enable();
         
             if let Err(why) = discord_ipc_client.set_activity(

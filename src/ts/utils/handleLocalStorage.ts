@@ -5,7 +5,7 @@ function parseLSObject(item: string) {
     try {
         return JSON.parse(item);
     } catch {
-        logger("error", "Failed to deserialize local storage object! Is it valid JSON?");
+        logger.error("Failed to parse local storage object!");
         return null;
     }
 }
@@ -20,7 +20,7 @@ function getLocalStorageObject(name: string) {
 
 function createLocalStorageObject(key: string) {
     if (!localStorage.getItem(key) === null) {
-        logger("localStorage object already exists!", "error");
+        logger.error("Failed to create local storage object! It already exists!");
         return null;
     }
     return key;

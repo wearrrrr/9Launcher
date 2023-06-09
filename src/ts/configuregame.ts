@@ -2,7 +2,6 @@ import games from '../assets/games.json';
 import * as dialog from "@tauri-apps/api/dialog"
 import * as fs from "@tauri-apps/api/fs"
 import * as path from "@tauri-apps/api/path"
-import { logger } from "./lib/logging";
 import { emit } from "@tauri-apps/api/event"
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -37,7 +36,7 @@ async function removeGame() {
                 emit("delete-game", game.game_id)
                 window.close();
             } else {
-                logger("Cancelled game removal!", "info")
+                return;
             }
 }
 

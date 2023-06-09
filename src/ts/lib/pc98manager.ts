@@ -39,7 +39,7 @@ async function downloadDosbox() {
             dashboard.dosboxFinalizeProgressBar();
             setTimeout(() => {
                 new Command("chmod", ["+x", appData + 'dosbox/dosbox-x']).execute().then(() => {
-                    logger("Dosbox permissions changed, hopefully it's an executable now :)", "info");
+                    logger.success("Dosbox chmodded successfully, should work now!")
                 });
                 window.location.reload();
             }, 1000);
@@ -56,7 +56,7 @@ function unzipWindows(archive: string, unzipDir: string) {
     console.log(unzipDir)
     let unzip = new Command('powershell', ['Expand-Archive', "-Force", archive, unzipDir], { cwd: unzipDir });
     unzip.execute().then(() => {
-        logger("Wine unzipped!", "success");
+        logger.success("Dosbox unzipped!");
         dashboard.dosboxFinalizeProgressBar();
     })
 }
