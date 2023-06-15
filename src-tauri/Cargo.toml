@@ -1,6 +1,6 @@
 [package]
 name = "ninelauncher"
-version = "1.2.3"
+version = "1.2.2"
 description = "A Tauri App"
 authors = ["wearr"]
 license = "MIT"

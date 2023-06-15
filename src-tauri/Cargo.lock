@@ -1733,7 +1733,7 @@ checksum = "e4a24736216ec316047a1fc4252e27dabb04218aa4a3f37c6e7ddbf1f9782b54"
 
 [[package]]
 name = "ninelauncher"
-version = "1.2.3"
+version = "1.2.2"
 dependencies = [
  "chrono",
  "declarative-discord-rich-presence",
