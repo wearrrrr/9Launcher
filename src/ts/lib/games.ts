@@ -162,8 +162,8 @@ async function launchGame(gameObj: gameObject) {
             case "win32":
                 // TODO: Add PC-98 support for Windows
                 console.log("Windows is in very early beta for PC-98 support! There be dragons!")
-                console.log(`${await path.appDataDir() + '"bin\\x64\\Release SDL2\\dosbox-x.exe"'}`)
-                command = new Command("cmd", ["/C", `${await path.appDataDir() + 'bin\\x64\\Release SDL2\\dosbox-x.exe'}`, "-set", "machine=pc98", "-c", `IMGMOUNT A: ${gamePath}`, "-c", "A:", "-c", "game", "-nopromptfolder"])
+                console.log(gamePath.replaceAll("\\", "/").replace(":\\", "/"))
+                command = new Command("cmd", ["/C", `${await path.appDataDir() + 'bin\\x64\\Release\\dosbox-x.exe'}`, "-set", "machine=pc98", "-c", `IMGMOUNT A: ${gamePath}`, "-c", "A:", "-c", "game", "-nopromptfolder"])
                 break;
             case "linux":
                 console.log("Linux detected, running with dosbox-x!")
