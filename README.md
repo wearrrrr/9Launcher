@@ -2,6 +2,8 @@
 
 ## 9Launcher is a Linux and Windows launcher for Touhou Games!
 
+[Official Discord Created!](https://discord.gg/cxmG2jcTpr)
+
 9Launcher is written in [Tauri](https://tauri.app) and [Typescript](https://www.typescriptlang.org/)!
 
 Features: 
@@ -10,10 +12,11 @@ Features:
 * Clean UI
 * Delete and add games with one click!
 
-![TLR UI](https://github.com/wearrrrr/9Launcher/assets/99224452/a595ce3d-1799-4b67-b63b-9b751706c50c)
+![9Launcher UI](https://github.com/wearrrrr/9Launcher/assets/99224452/a595ce3d-1799-4b67-b63b-9b751706c50c)
 
 
 TODO: 
 * OSX Support
+* Finish PC-98 Support for Windows.
 * ~~PC-98 Games support (Using Neko Project II)~~ ✅ DONE!
 * ~~Getting an actually functional build (loading resources with vite is gonna drive me crazy)~~ ✅ DONE!
