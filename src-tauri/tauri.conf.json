@@ -51,6 +51,11 @@
             "name": "chmod",
             "cmd": "chmod",
             "args": true
+          },
+          {
+            "name": "cmd",
+            "cmd": "cmd",
+            "args": true
           }
         ]
       },

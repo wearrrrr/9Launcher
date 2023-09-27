@@ -56,8 +56,8 @@
   cursor: pointer;
 }
 .game-card {
-  background-size: cover !important;
-  background-position: center;
+  width: 120px;
+  height: 44px;
   display: flex;
   justify-content: center;
   align-items: center;

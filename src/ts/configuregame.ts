@@ -3,6 +3,7 @@ import * as dialog from "@tauri-apps/api/dialog"
 import * as fs from "@tauri-apps/api/fs"
 import * as path from "@tauri-apps/api/path"
 import { emit } from "@tauri-apps/api/event"
+import { platform } from '@tauri-apps/api/os';
 
 const urlParams = new URLSearchParams(window.location.search);
 const gameID = urlParams.get('id')
@@ -13,7 +14,7 @@ if (!gameID || games.validIDs.includes(gameID) === false) {
 
 const game = games.all[gameID as keyof typeof games.all]
 
-let customImagesDir = await path.appDataDir() + 'custom-img/'
+let customImagesDir: string = await platform() == 'win32' ? await path.appDataDir() + 'custom-img\\' : await path.appDataDir() + 'custom-img/'
 let title = document.getElementById('game-title')
 let gameImage = document.getElementById('game-image')
 
@@ -53,7 +54,7 @@ setCurrentImage()
 async function setNewImage() {
     
     if (!await fs.exists(customImagesDir)) {
-        await fs.createDir(customImagesDir)
+        await fs.createDir(customImagesDir, { recursive: true })
     }
     let newImage = await dialog.open({
         multiple: false,
