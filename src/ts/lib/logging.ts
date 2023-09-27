@@ -34,12 +34,12 @@ export class logger {
             "type": type
         }
         if (!await fs.exists(await path.appDataDir() + "9Launcher.log")) {
-            await fs.writeTextFile("9Launcher.log", "!! 9Launcher Log File !!\n", { dir: fs.BaseDirectory.AppLocalData })
+            await fs.writeTextFile("9Launcher.log", "!! 9Launcher Log File !!\n", { dir: fs.BaseDirectory.AppData })
             let currentContents = await fs.readTextFile(await path.appDataDir() + "9Launcher.log")
-            await fs.writeTextFile("9Launcher.log", currentContents + `${log.type}: ${log.message} \n`, { dir: fs.BaseDirectory.AppLocalData })
+            await fs.writeTextFile("9Launcher.log", currentContents + `${log.type}: ${log.message} \n`, { dir: fs.BaseDirectory.AppData })
         } else {
             let currentContents = await fs.readTextFile(await path.appDataDir() + "9Launcher.log")
-            await fs.writeTextFile("9Launcher.log", currentContents + `${log.type}: ${log.message} \n`, { dir: fs.BaseDirectory.AppLocalData })
+            await fs.writeTextFile("9Launcher.log", currentContents + `${log.type}: ${log.message} \n`, { dir: fs.BaseDirectory.AppData })
         }
     }
 }

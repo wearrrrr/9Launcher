@@ -11,6 +11,7 @@ import { logger } from './logging';
 import { WebviewWindow } from "@tauri-apps/api/window"
 import { listen } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/tauri';
+import { platform } from '@tauri-apps/api/os';
 
 type gameObject = {
     "long_title": string,
@@ -162,7 +163,6 @@ async function launchGame(gameObj: gameObject) {
             case "win32":
                 // TODO: Add PC-98 support for Windows
                 console.log("Windows is in very early beta for PC-98 support! There be dragons!")
-                console.log(gamePath.replaceAll("\\", "/").replace(":\\", "/"))
                 command = new Command("cmd", ["/C", `${await path.appDataDir() + 'bin\\x64\\Release\\dosbox-x.exe'}`, "-set", "machine=pc98", "-c", `IMGMOUNT A: ${gamePath}`, "-c", "A:", "-c", "game", "-nopromptfolder"])
                 break;
             case "linux":
@@ -179,7 +179,10 @@ async function launchGame(gameObj: gameObject) {
         switch (await infoManager.getPlatform()) {
             case "win32":
                 console.log("Windows detected, running with cmd!")
-                command = new Command('cmd', ['/c', gamePath], { cwd: getGamePath(gameObj.game_id) });
+                console.log(gamePath)
+                console.log(getGamePath(gameObj.game_id))
+                command = new Command("cmd", ["/c", gamePath], { cwd: getGamePath(gameObj.game_id) });
+                console.log(command)
                 break;
             case "linux":
                 console.log("Linux detected, running with wine!")
@@ -230,9 +233,16 @@ async function installGamePrompt(name: string, value: gameObject, gameCard: HTML
         }]
     }).then(async (file) => {
         if (file !== null) {
-            const pathComponents: string[] = file.toString().split("/");
-            pathComponents.pop();
-            const filePath: string = pathComponents.join("/");
+            let filePath: string;
+            if (await platform() == "win32") {
+                const pathComponents: string[] = file.toString().split("\\");
+                pathComponents.pop();
+                filePath = pathComponents.join("\\");
+            } else {
+                const pathComponents: string[] = file.toString().split("/");
+                pathComponents.pop();
+                filePath = pathComponents.join("/");
+            }
             gameCard.style.background = `url(assets/game-images/${value.img})`;
             let gameObject = {
                 name: name,
