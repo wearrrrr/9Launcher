@@ -23,6 +23,8 @@ type gameObject = {
     "game_id": string
 }
 
+let info = await infoManager.gatherInformation();
+
 function gameIterator() {
     for (const [name, value] of Object.entries(games.modern)) {
         if (localStorage.getItem(name) !== null) {
@@ -142,7 +144,7 @@ async function checkWineExists() {
 // checkDosboxExists();
 
 const checkIfWineIsNeeded = async () => {
-    const platform = await infoManager.getPlatform();
+    const platform = info.platform;
     if (platform == "win32") {
         console.log("Windows detected, skipping wine check!")
     } else {
@@ -156,27 +158,26 @@ let pc98 = ["th01", "th02", "th03", "th04", "th05"]
 async function launchGame(gameObj: gameObject) {
     let gamePath = getGameFile(gameObj.game_id);
     let gameLocation = getGameLocation(gameObj.game_id);
-    let fileExtenion = await path.extname(gamePath);
+    let fileExtension = await path.extname(gamePath);
     let command;
     if (pc98.includes(gameObj.game_id)) {
-        switch (await infoManager.getPlatform()) {
+        switch ((await infoManager.gatherInformation()).platform) {
             case "win32":
-                // TODO: Add PC-98 support for Windows
                 console.log("Windows is in very early beta for PC-98 support! There be dragons!")
                 command = new Command("cmd", ["/C", `${await path.appDataDir() + 'bin\\x64\\Release\\dosbox-x.exe'}`, "-set", "machine=pc98", "-c", `IMGMOUNT A: ${gamePath}`, "-c", "A:", "-c", "game", "-nopromptfolder"])
                 break;
             case "linux":
                 console.log("Linux detected, running with dosbox-x!")
-                if (fileExtenion == "hdi") {
+                if (fileExtension == "hdi") {
                     command = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gamePath}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
                 }
-                if (fileExtenion == "exe") {
+                if (fileExtension == "exe") {
                     command = new Command("dosbox-x", ["-c", `MOUNT C: ${gameLocation}`, "-c", "C:", "-c", `${gamePath}`, "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
                 }
                 break;
         }
     } else {
-        switch (await infoManager.getPlatform()) {
+        switch (info.platform) {
             case "win32":
                 console.log("Windows detected, running with cmd!")
                 console.log(gamePath)

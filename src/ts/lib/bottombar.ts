@@ -24,6 +24,9 @@ const versionInfo = document.getElementById('version-info') as HTMLParagraphElem
 
 const copyInfoBtn = document.getElementById('copy-info') as HTMLButtonElement;
 
+let info = await infoManager.gatherInformation();
+console.log(info)
+
 
 let quickSettingsToggle = 0;
 let infoPageToggle = 0;
@@ -138,9 +141,9 @@ function addInfoPageEvents() {
 addInfoPageEvents();
 
 async function addInfoPageDetails() {
-    let os = await infoManager.getOSType();
-    let kernelVersion = await infoManager.getKernelVersion();
-    let arch = await infoManager.getArch();
+    let os = info.OS;
+    let kernelVersion = info.kernelVersion;
+    let arch = info.architecture;
     let appVersion = await app.getVersion();
     versionInfo.textContent = "Version: " + appVersion;
     osInfo.textContent = "OS: " + os;

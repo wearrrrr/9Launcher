@@ -6,8 +6,10 @@ import { logger } from "./logging";
 import { Command } from "@tauri-apps/api/shell";
 import { fs } from "@tauri-apps/api";
 
+let info = await infoManager.gatherInformation();
+
 async function downloadDosbox() {
-    const platform = await infoManager.getPlatform();
+    const platform = info.platform;
     const dosboxURLWindows = 'https://github.com/joncampbell123/dosbox-x/releases/download/dosbox-x-v2023.05.01/dosbox-x-vsbuild-win64-20230501103911.zip';
     const dosboxURLUnix = "https://wearr.dev/files/dosbox-x"
     const appData = await path.appDataDir();
