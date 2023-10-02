@@ -3,29 +3,29 @@ import * as fs from "@tauri-apps/api/fs";
 
 export class logger {
     constructor() {}
-    public static async error(message: string) {
+    public static async error(message: string, fileLog: boolean = true) {
         console.error("[9L] " + message);
-        await this.sendToLogs(message, "error");
+        if (fileLog) await this.sendToLogs(message, "error");
     }
-    public static async warn(message: string) {
+    public static async warn(message: string, fileLog: boolean = true) {
         console.warn("[9L] " + message);
-        await this.sendToLogs(message, "warn");
+        if (fileLog) await this.sendToLogs(message, "warn");
     }
-    public static async info(message: string) {
+    public static async info(message: string, fileLog: boolean = true) {
         console.info("%c[9L] " + message, "color: #63d3ff; font-weight: bold");
-        await this.sendToLogs(message, "info");
+        if (fileLog) await this.sendToLogs(message, "info");
     }
-    public static async debug(message: string) {
+    public static async debug(message: string, fileLog: boolean = true) {
         console.debug("[9L] " + message);
-        await this.sendToLogs(message, "debug");
+        if (fileLog) await this.sendToLogs(message, "debug");
     }
-    public static async success(message: string) {
+    public static async success(message: string, fileLog: boolean = true) {
         console.log("%c[9L] " + message, "color: limegreen; font-weight: bold");
-        await this.sendToLogs(message, "success");
+        if (fileLog) await this.sendToLogs(message, "success");
     }
-    public static async fatal(message: string) {
+    public static async fatal(message: string, fileLog: boolean = true) {
         console.error("%c[9L] Critical Error: " + message, "font-weight: bold; font-size: 150%");
-        await this.sendToLogs(message, "fatal-error");
+        if (fileLog) await this.sendToLogs(message, "fatal-error");
     }
     private static async sendToLogs(message: string, type: string) {
         if (localStorage.getItem("file-logging") != "enabled") return

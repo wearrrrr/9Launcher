@@ -99,7 +99,7 @@ const downloadWine = async (archiveName: string) => {
             }
         }
     ).then(async () => {
-        console.log("Download complete... Unzipping wine!")
+        logger.info("Download complete... Unzipping wine!")
         if (progressBar !== null || progressBar !== undefined) {
             progressBar.wineUnzipBegin();
         }
@@ -137,7 +137,7 @@ async function checkWineExists() {
 const checkIfWineIsNeeded = async () => {
     const platform = info.platform;
     if (platform == "win32") {
-        console.log("Windows detected, skipping wine check!")
+        logger.info("Windows detected, skipping wine check!", false)
     } else {
         await checkWineExists();
     }
@@ -173,7 +173,6 @@ async function launchGame(gameObj: gameObject) {
             case "win32":
                 logger.info("Windows detected, running with cmd!")
                 command = new Command("cmd", ["/c", gamePath], { cwd: gameLocation });
-                console.log(command)
                 break;
             case "linux":
                 logger.info("Linux detected, running with wine!")
@@ -267,7 +266,6 @@ async function gameConfigurator(id: string) {
 }
 
 await listen("refresh-page", (event) => {
-    console.log(event)
     window.location.reload();
 })
 
@@ -329,13 +327,11 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
     }
     if (checkInstallStatus) {
         if (await checkForCustomImage(value.game_id)) {
-            console.log("Custom image found!")
+            logger.info("Custom image found!")
             const customImage = await checkForCustomImage(value.game_id);
-            console.log(customImage)
             if (customImage !== false) {
                 let blob = new Blob([customImage], { type: 'image/png' });
                 let url = URL.createObjectURL(blob);
-                console.log(url)
                 gameCard.style.background = `url(${url})`;
             }
         }

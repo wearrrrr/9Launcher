@@ -200,6 +200,7 @@ button {
   transition: opacity 250ms ease-in-out;
   z-index: 2;
   border-radius: 5px;
+  pointer-events: none;
 }
 .information-page {
   background-color: var(--bottom-banner-color);
@@ -212,6 +213,11 @@ button {
   padding: 0;
   transition: opacity 250ms ease-in-out;
   border-radius: 5px;
+  opacity: 0;
+}
+.modal-active {
+  opacity: 1;
+  pointer-events: all;
 }
 @media (min-height: 900px) {
   .quick-settings-modal {
@@ -220,9 +226,6 @@ button {
   .information-page {
     top: 64%;
   }
-}
-#app-info {
-  opacity: 0;
 }
 
 .slider-container {

@@ -52,11 +52,10 @@ if (localStorage.getItem("file-logging") === null) {
 if (settingsDiv !== null) {
     settingsDiv.addEventListener('click', () => {
         if (quickSettingsToggle == 0) {
-            quickSettings.style.opacity = "1";
+            quickSettings.classList.add('modal-active')
             quickSettingsToggle = 1;
-            quickSettings.focus();
         } else {
-            quickSettings.style.opacity = "0";
+            quickSettings.classList.remove('modal-active')
             quickSettingsToggle = 0
         }
     });
@@ -124,11 +123,10 @@ function addInfoPageEvents() {
     if (infoPageIcon == null || infoPageIcon == undefined) return;
     infoPageIcon.addEventListener('click', () => {
         if (infoPageToggle == 0) {
-            appInfo.style.opacity = "1";
+            appInfo.classList.add('modal-active')
             infoPageToggle = 1;
-            appInfo.focus();
         } else {
-            appInfo.style.opacity = "0";
+            appInfo.classList.remove('modal-active')
             infoPageToggle = 0
         }
     })

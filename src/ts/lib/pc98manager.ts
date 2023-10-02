@@ -36,12 +36,13 @@ async function downloadDosbox() {
             break;
     }
     let totalBytesDownloaded = 0;
+    logger.info("Downloading dosbox...")
     await download(determinedURL, dosboxPath, (progress, total) => {
         totalBytesDownloaded += progress;
         total = total;
         dashboard.dosboxUpdateProgressBar(totalBytesDownloaded, total);
     }).then(async () => {
-        console.log('Downloaded dosbox!');
+        logger.info('Downloaded dosbox!');
         if (platform === 'win32') {
             // This is the only reason I have to have powershell made invokable. this better not trip up windows defender or something
             unzipWindows(dosboxPath, appData); 
@@ -69,6 +70,7 @@ async function downloadDosbox() {
 
 function unzipWindows(archive: string, unzipDir: string) {
     let unzip = new Command('powershell', ['Expand-Archive', "-Force", archive, unzipDir], { cwd: unzipDir });
+    logger.info("Unzipping dosbox...")
     dashboard.dosboxUnzipBegin();
     unzip.execute().then(() => {
         logger.success("Dosbox unzipped!");
