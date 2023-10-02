@@ -65,31 +65,6 @@ function getGameInformation(gameID: string) {
     return gamePathParsed as gameInformation
 }
 
-
-function getGameFile(gameID: string) {
-    if (games.validIDs.includes(gameID) == false) throw new Error("Invalid game ID! Valid game IDs are: " + games.validIDs.join(", "));
-    let gamePath = localStorage.getItem(gameID);
-    let gamePathParsed = JSON.parse(gamePath as string)
-    if (gamePath == null) throw new Error("Game path not found! Try clearing localStorage.")
-    return gamePathParsed.file
-}
-
-function getGameLocation(gameID: string) {
-    if (games.validIDs.includes(gameID) == false) throw new Error("Invalid game ID! Valid game IDs are: " + games.validIDs.join(", "));
-    let gamePath = localStorage.getItem(gameID);
-    let gamePathParsed = JSON.parse(gamePath as string)
-    if (gamePath == null) throw new Error("Game path not found! Try clearing localStorage.")
-    return gamePathParsed.path
-}
-
-function getGamePath(gameID: string) {
-    if (games.validIDs.includes(gameID) == false) throw new Error("Invalid game ID! Valid game IDs are: " + games.validIDs.join(", "));
-    let gamePath = localStorage.getItem(gameID);
-    let gamePathParsed = JSON.parse(gamePath as string)
-    if (gamePath == null) throw new Error("Game path not found! Try clearing localStorage.")
-    return gamePathParsed.path
-}
-
 function unzip(wineArchive: string, wineDir: string) {
     let unzip = new Command('tar', ['xvf', wineArchive, '-C', wineDir], { cwd: wineDir });
     unzip.execute().then(() => {
@@ -198,26 +173,24 @@ async function launchGame(gameObj: gameObject) {
             case "win32":
                 console.log("Windows detected, running with cmd!")
                 console.log(gamePath)
-                console.log(getGamePath(gameObj.game_id))
-                command = new Command("cmd", ["/c", gamePath], { cwd: getGamePath(gameObj.game_id) });
+                command = new Command("cmd", ["/c", gamePath], { cwd: gameLocation });
                 console.log(command)
                 break;
             case "linux":
                 console.log("Linux detected, running with wine!")
-                console.log(getGamePath(gameObj.game_id))
                 console.log(gamePath)
-                command = new Command('wine', gamePath, { cwd: getGamePath(gameObj.game_id) });
+                command = new Command('wine', gamePath, { cwd: gameLocation });
                 break;
             case "darwin":
                 console.log("MacOS detected, running with wine!")
                 setTimeout(() => {
-                    command = new Command('wine', gamePath, { cwd: getGamePath(gameObj.game_id) });
+                    command = new Command('wine', gamePath, { cwd: gameLocation });
                 }, 500);
                 break;
             default:
                 console.log("Unknown OS detected, attempting to run with wine! (assuming POSIX based OS)")
                 setTimeout(() => {
-                    command = new Command('wine', gamePath, { cwd: getGamePath(gameObj.game_id) });
+                    command = new Command('wine', gamePath, { cwd: gameLocation });
                 }, 500);
                 break;
             }
@@ -412,8 +385,6 @@ if (localStorage.getItem("discordRPC") == "enabled") {
 const funcs = {
     gameIterator,
     installedGamesIterator,
-    getGameFile,
-    getGamePath,
     launchGame,
     installGamePrompt,
     addGame,

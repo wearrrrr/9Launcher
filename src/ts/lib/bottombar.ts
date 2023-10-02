@@ -25,11 +25,12 @@ const versionInfo = document.getElementById('version-info') as HTMLParagraphElem
 const copyInfoBtn = document.getElementById('copy-info') as HTMLButtonElement;
 
 let info = await infoManager.gatherInformation();
-console.log(info)
-
-
 let quickSettingsToggle = 0;
 let infoPageToggle = 0;
+
+if (info.platform == "win32") {
+    document.getElementById('wine-manager')?.remove();
+}
 
 function setSliderState(element: HTMLInputElement, state: boolean) {
     if (state) element.checked = state
@@ -80,7 +81,7 @@ if (settingsDiv !== null) {
             delete rpcSliderRound.dataset.tempDisabled;
             rpcSlider.disabled = false;
         }, 1500)
-        if ((<HTMLInputElement>event.currentTarget).checked == true) {
+        if ((event.currentTarget as HTMLInputElement).checked == true) {
             localStorage.setItem("discordRPC", "enabled")
             setGameRichPresence()
         } else {
@@ -89,7 +90,7 @@ if (settingsDiv !== null) {
         }
     })
     fileLoggingSlider.addEventListener("change", (event) => {
-        if ((<HTMLInputElement>event.currentTarget).checked == true) {
+        if ((event.currentTarget as HTMLInputElement).checked == true) {
             localStorage.setItem("file-logging", "enabled")
         } else {
             localStorage.setItem("file-logging", "disabled")
@@ -150,7 +151,12 @@ async function addInfoPageDetails() {
     kernelInfo.textContent = "Kernel Version: " + kernelVersion;
     archInfo.textContent = "Architecture: " + arch;
     copyInfoBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText(`OS: ${os}\nKernel Version: ${kernelVersion}\nArchitecture: ${arch}\nVersion: ${appVersion}`);
+        navigator.clipboard.writeText(`
+        OS: ${os}\n
+        Kernel Version: ${kernelVersion}\n
+        Architecture: ${arch}\n
+        Version: ${appVersion}
+        `);
         messageBox("Copied device info to clipboard!", "Success!");
     })
 }

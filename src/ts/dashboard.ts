@@ -83,6 +83,10 @@ function dosboxUpdateProgressBar(totalDownloaded: number, total: number) {
     dosboxProgressBarText.textContent = percentage + "%";
 }
 
+function dosboxUnzipBegin() {
+    dosboxProgressBarText.textContent = "Unzipping..."
+}
+
 function dosboxFinalizeProgressBar() {
     dosboxProgressBarProgress.style.width = "100%"
     setTimeout(() => {
@@ -140,6 +144,7 @@ const funcs = {
     openWineManager,
     dosboxOpenModal,
     dosboxUpdateProgressBar,
+    dosboxUnzipBegin,
     dosboxFinalizeProgressBar,
     dosboxResetProgressBar,
 }

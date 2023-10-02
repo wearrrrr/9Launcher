@@ -14,12 +14,26 @@ async function downloadDosbox() {
     const dosboxURLUnix = "https://wearr.dev/files/dosbox-x"
     const appData = await path.appDataDir();
     let dosboxPath = appData + 'dosbox-x-vsbuild-win64-20230501103911.zip';
-    // Default to windows, but we will set the variable later if they are using linux or OSX.
-    let determinedURL = dosboxURLWindows; 
 
-    if (platform === 'linux' || platform === 'darwin') {
-        determinedURL = dosboxURLUnix;
-        dosboxPath = appData + 'dosbox-x';
+    let determinedURL: string; 
+    switch (platform) {
+        case 'win32':
+            determinedURL = dosboxURLWindows;
+            dosboxPath = appData + 'dosbox-x-vsbuild-win64-20230501103911.zip';
+            break;
+        case 'linux':
+            determinedURL = dosboxURLUnix;
+            dosboxPath = appData + 'dosbox-x';
+            break;
+        case 'darwin':
+            // TODO: Add macOS support
+            determinedURL = dosboxURLUnix;
+            dosboxPath = appData + 'dosbox-x';
+            break;
+        default:
+            determinedURL = dosboxURLWindows;
+            dosboxPath = appData + 'dosbox-x-vsbuild-win64-20230501103911.zip';
+            break;
     }
     let totalBytesDownloaded = 0;
     await download(determinedURL, dosboxPath, (progress, total) => {
@@ -54,9 +68,8 @@ async function downloadDosbox() {
 }
 
 function unzipWindows(archive: string, unzipDir: string) {
-    console.log(archive)
-    console.log(unzipDir)
     let unzip = new Command('powershell', ['Expand-Archive', "-Force", archive, unzipDir], { cwd: unzipDir });
+    dashboard.dosboxUnzipBegin();
     unzip.execute().then(() => {
         logger.success("Dosbox unzipped!");
         dashboard.dosboxFinalizeProgressBar();
