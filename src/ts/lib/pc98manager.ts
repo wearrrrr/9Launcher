@@ -73,6 +73,8 @@ function unzipWindows(archive: string, unzipDir: string) {
     unzip.execute().then(() => {
         logger.success("Dosbox unzipped!");
         dashboard.dosboxFinalizeProgressBar();
+        logger.info("Removing archive...")
+        fs.removeFile(archive);
     })
 }
 // function unzipUnix(archive: string, unzipDir: string, outputDir: string) {

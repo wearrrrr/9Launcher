@@ -155,11 +155,11 @@ async function launchGame(gameObj: gameObject) {
     if (pc98.includes(gameObj.game_id)) {
         switch ((await infoManager.gatherInformation()).platform) {
             case "win32":
-                console.log("Windows is in very early beta for PC-98 support! There be dragons!")
+                logger.warn("Windows is in very early beta for PC-98 support! There be dragons!")
                 command = new Command("cmd", ["/C", `${await path.appDataDir() + 'bin\\x64\\Release\\dosbox-x.exe'}`, "-set", "machine=pc98", "-c", `IMGMOUNT A: ${gamePath}`, "-c", "A:", "-c", "game", "-nopromptfolder"])
                 break;
             case "linux":
-                console.log("Linux detected, running with dosbox-x!")
+                logger.info("Linux detected, running with dosbox-x!")
                 if (fileExtension == "hdi") {
                     command = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gamePath}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
                 }
@@ -171,24 +171,22 @@ async function launchGame(gameObj: gameObject) {
     } else {
         switch (info.platform) {
             case "win32":
-                console.log("Windows detected, running with cmd!")
-                console.log(gamePath)
+                logger.info("Windows detected, running with cmd!")
                 command = new Command("cmd", ["/c", gamePath], { cwd: gameLocation });
                 console.log(command)
                 break;
             case "linux":
-                console.log("Linux detected, running with wine!")
-                console.log(gamePath)
+                logger.info("Linux detected, running with wine!")
                 command = new Command('wine', gamePath, { cwd: gameLocation });
                 break;
             case "darwin":
-                console.log("MacOS detected, running with wine!")
+                logger.info("MacOS detected, running with wine!")
                 setTimeout(() => {
                     command = new Command('wine', gamePath, { cwd: gameLocation });
                 }, 500);
                 break;
             default:
-                console.log("Unknown OS detected, attempting to run with wine! (assuming POSIX based OS)")
+                logger.warn("Unknown OS detected, attempting to run with wine! (assuming POSIX based OS)")
                 setTimeout(() => {
                     command = new Command('wine', gamePath, { cwd: gameLocation });
                 }, 500);
@@ -199,19 +197,22 @@ async function launchGame(gameObj: gameObject) {
         setGameRichPresence("Playing", gameObj.short_title);
     }
     if (command === undefined || command === null) {
-        logger.error("Command is undefined or null!")
+        logger.fatal("Command is undefined or null!")
+        return;
     }
-    command?.on('close', data => {
-        console.log(`Game closed with code ${data.code} and signal ${data.signal}`)
+    command.on('close', data => {
+        logger.info(`Game closed with code ${data.code} and signal ${data.signal}`)
         if (localStorage.getItem("discordRPC") == "enabled") {
             setGameRichPresence("Browsing Library");
         }
     });
-    command?.on('error', error => console.error(`command error: "${error}"`));
-    command?.stdout.on('data', line => console.log(`command stdout: "${line}"`));
-    command?.stderr.on('data', line => console.log(`command stderr: "${line}"`));
+    command?.on('error', error => logger.error(`command error: "${error}"`));
+    command?.stdout.on('data', line => logger.info(`command stdout: "${line}"`));
+    command?.stderr.on('data', line => logger.info(`command stderr: "${line}"`));
     const child = await command?.spawn();
-    console.log('pid:', child?.pid);
+    logger.info(`Launching ${gameObj.long_title}...`)
+    if (child == null) throw new Error("Child is null! This should never happen...");
+    logger.info('pid: ' + child.pid);
 }
 
 async function installGamePrompt(name: string, value: gameObject, gameCard: HTMLElement) {
