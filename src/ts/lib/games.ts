@@ -50,6 +50,22 @@ function installedGamesIterator() {
     return installedGames
 }
 
+type gameInformation = {
+    name: string,
+    img: string,
+    file: string,
+    path: string
+}
+
+function getGameInformation(gameID: string) {
+    if (games.validIDs.includes(gameID) == false) throw new Error("Invalid game ID! Valid game IDs are: " + games.validIDs.join(", "));
+    let gamePath = localStorage.getItem(gameID);
+    let gamePathParsed = JSON.parse(gamePath as string)
+    if (gamePath == null) throw new Error("Game path not found! Try clearing localStorage.")
+    return gamePathParsed as gameInformation
+}
+
+
 function getGameFile(gameID: string) {
     if (games.validIDs.includes(gameID) == false) throw new Error("Invalid game ID! Valid game IDs are: " + games.validIDs.join(", "));
     let gamePath = localStorage.getItem(gameID);
@@ -156,8 +172,9 @@ checkIfWineIsNeeded();
 let pc98 = ["th01", "th02", "th03", "th04", "th05"]
 
 async function launchGame(gameObj: gameObject) {
-    let gamePath = getGameFile(gameObj.game_id);
-    let gameLocation = getGameLocation(gameObj.game_id);
+    let gameInfo = getGameInformation(gameObj.game_id);
+    let gamePath = gameInfo.file;
+    let gameLocation = gameInfo.path;
     let fileExtension = await path.extname(gamePath);
     let command;
     if (pc98.includes(gameObj.game_id)) {
