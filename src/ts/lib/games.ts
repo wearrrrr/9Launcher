@@ -265,7 +265,7 @@ async function gameConfigurator(id: string) {
     })
 }
 
-await listen("refresh-page", (event) => {
+await listen("refresh-page", () => {
     window.location.reload();
 })
 
