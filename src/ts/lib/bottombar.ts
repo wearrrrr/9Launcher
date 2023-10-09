@@ -1,5 +1,5 @@
 import { message } from '@tauri-apps/api/dialog';
-import { app, dialog } from '@tauri-apps/api';
+import { dialog } from '@tauri-apps/api';
 import infoManager from './infoManager';
 import dashboard from '../dashboard';
 import { invoke } from '@tauri-apps/api';
