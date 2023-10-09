@@ -1,8 +1,14 @@
 import gamesManager from './lib/games';
 import games from '../assets/games.json';
 import { WebviewWindow } from "@tauri-apps/api/window"
+import { window } from "@tauri-apps/api";
+import { TauriEvent } from "@tauri-apps/api/event";
 import modalManager from './lib/modalManager';
 import * as pc98manager from './lib/pc98manager';
+import { logger } from './lib/logging';
+import { fs } from '@tauri-apps/api';
+import infoManager from './lib/infoManager';
+import moment from 'moment';
 // TODO: Support for .5 games
 
 // const pc98Games = ['th01', 'th02', 'th03', 'th04', 'th05']
@@ -12,6 +18,8 @@ localStorage.setItem('setupStatus', 'true');
 
 const gameGrid = document.getElementById("games") as HTMLDivElement;
 const gamesGridSpinoffs = document.getElementById("games-spinoffs") as HTMLDivElement;
+
+const info = await infoManager.gatherInformation();
 
 for (const [name, value] of Object.entries(games["pc-98"])) {
     await gamesManager.addGame(name, value, gameGrid)
@@ -134,6 +142,24 @@ function openWineManager() {
         resizable: false,
     })
 }
+
+window.getCurrent().listen(TauriEvent.WINDOW_CREATED, async () => {
+    if (!await fs.exists("9Launcher.log", { dir: fs.BaseDirectory.AppData })) {
+        await fs.writeFile({ path: "9Launcher.log", contents: "" }, { dir: fs.BaseDirectory.AppData })
+    }
+    logger.info("9Launcher started!")
+    logger.info("9Launcher version: " + info.version)
+    logger.info("9Launcher OS: " + info.OS)
+    logger.info("9Launcher Kernel Version: " + info.kernelVersion)
+    logger.info("9Launcher Architecture: " + info.architecture)
+})
+
+window.getCurrent().listen(TauriEvent.WINDOW_CLOSE_REQUESTED, async () => {
+    logger.info("Closing 9Launcher...")
+    // This should never overwrite logs unless they manage to somehow create a race condition where they save two logs at the exact same time
+    await fs.renameFile("9Launcher.log", "9Launcher-" + `${moment().format("MM-DD-mm_ss-YYYY")}` + ".log", { dir: fs.BaseDirectory.AppData })
+    window.getCurrent().close();
+});
 
 const funcs = {
     wineUpdateProgressBar,

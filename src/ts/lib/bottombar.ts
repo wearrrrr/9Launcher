@@ -143,7 +143,7 @@ async function addInfoPageDetails() {
     let os = info.OS;
     let kernelVersion = info.kernelVersion;
     let arch = info.architecture;
-    let appVersion = await app.getVersion();
+    let appVersion = info.version
     versionInfo.textContent = "Version: " + appVersion;
     osInfo.textContent = "OS: " + os;
     kernelInfo.textContent = "Kernel Version: " + kernelVersion;

@@ -1,10 +1,18 @@
+import { app } from "@tauri-apps/api";
 import { arch, platform, type, version } from "@tauri-apps/api/os";
 
 type osInformation = {
+    version: string,
     architecture: string,
     platform: string,
     kernelVersion: string,
     OS: string
+}
+
+async function getVersion() {
+    return await app.getVersion().then((version) => {
+        return version
+    })
 }
 
 async function getArch() {
@@ -32,19 +40,21 @@ async function getOSType() {
 }
 
 export async function gatherInformation() {
-    let information: osInformation = {
+    let info: osInformation = {
+        version: "Unknown",
         architecture: "Unknown",
         platform: "Unknown",
         kernelVersion: "Unknown",
         OS: "Unknown",
     };
 
-    information.architecture = await getArch()
-    information.platform = await getPlatform()
-    information.kernelVersion = await getKernelVersion()
-    information.OS = await getOSType()
+    info.version = await getVersion()
+    info.architecture = await getArch()
+    info.platform = await getPlatform()
+    info.kernelVersion = await getKernelVersion()
+    info.OS = await getOSType()
     
-    return information;
+    return info;
 }
 
 export default { gatherInformation }

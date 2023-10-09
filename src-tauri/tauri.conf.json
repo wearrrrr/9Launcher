@@ -72,6 +72,7 @@
         "copyFile": true,
         "writeFile": true,
         "readFile": true,
+        "renameFile": true,
         "scope": ["$APPDATA/*", "$APPDATA/**", "$APPDATA/wine/", "$APPDATA/wine/**", "$APPDATA/*", "$APPDATA/dosbox/*", "$APPDATA/dosbox/**", "$APPDATA/custom-img/*", "$APPDATA/custom-img/**"]
       },
       "path": {
