@@ -72,7 +72,7 @@
         "copyFile": true,
         "writeFile": true,
         "readFile": true,
-        "scope": ["$APPDATA/*", "$APPDATA/**", "$APPDATA/wine/", "$APPDATA/wine/**", "$APPDATA/*", "$APPDATA/dosbox/*", "$APPDATA/dosbox/**", "$APPDATA/custom-img/*", "$APPDATA/custom-img/**"]
+        "scope": ["$APPDATA/*", "$APPDATA/**", "$APPDATA/wine/", "$APPDATA/wine/**", "$APPDATA/*", "$APPDATA/dosbox/*", "$APPDATA/dosbox/**", "$APPDATA/custom-img/*", "$APPDATA/custom-img/**", "/dev/shm/9launcher/*"]
       },
       "path": {
         "all": true

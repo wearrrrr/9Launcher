@@ -156,7 +156,7 @@ let pc98 = ["th01", "th02", "th03", "th04", "th05"]
 async function launchGame(gameObj: gameObject) {
     let gamePath = getGameFile(gameObj.game_id);
     let gameLocation = getGameLocation(gameObj.game_id);
-    let fileExtenion = await path.extname(gamePath);
+    let fileExtension = await path.extname(gamePath);
     let command;
     if (pc98.includes(gameObj.game_id)) {
         switch (await infoManager.getPlatform()) {
@@ -167,11 +167,8 @@ async function launchGame(gameObj: gameObject) {
                 break;
             case "linux":
                 console.log("Linux detected, running with dosbox-x!")
-                if (fileExtenion == "hdi") {
+                if (fileExtension == "hdi") {
                     command = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gamePath}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
-                }
-                if (fileExtenion == "exe") {
-                    command = new Command("dosbox-x", ["-c", `MOUNT C: ${gameLocation}`, "-c", "C:", "-c", `${gamePath}`, "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
                 }
                 break;
         }
@@ -204,8 +201,11 @@ async function launchGame(gameObj: gameObject) {
                 break;
             }
     }
+    // get file extension to determine if we are likely running inside thcrap
+    // thcrap games will start with .lnk instead of .exe
+    let isThcrap = fileExtension == "lnk" ? true : false;
     if (localStorage.getItem("discordRPC") == "enabled") {
-        setGameRichPresence("Playing", gameObj.short_title);
+        smartSetRichPresence("Playing", gameObj.short_title, isThcrap);
     }
     if (command === undefined || command === null) {
         logger.error("Command is undefined or null!")
@@ -213,7 +213,7 @@ async function launchGame(gameObj: gameObject) {
     command?.on('close', data => {
         console.log(`Game closed with code ${data.code} and signal ${data.signal}`)
         if (localStorage.getItem("discordRPC") == "enabled") {
-            setGameRichPresence("Browsing Library");
+            smartSetRichPresence("Browsing Library");
         }
     });
     command?.on('error', error => console.error(`command error: "${error}"`));
@@ -368,6 +368,82 @@ async function removeGame(name: string, value: gameObject, gameCard: HTMLElement
     }
 }
 
+async function setSmartGameRichPresence(state: string, game_name: string = "") {
+    // This only applies for games, so we don't have to worry about the state being "Browsing Library"
+    // We will read from /dev/shm/9launcher/data.json to get information about the game
+    const shmPath = "/dev/shm/9launcher/data.json";
+    const shmExists = await fs.exists(shmPath);
+    let retryCount = 0;
+    if (!shmExists) {
+        if (retryCount >= 3) {
+            console.error("shm file not found after 3 retries! Falling back to generic rich presence...");
+            setGameRichPresence(state, game_name);
+        }
+        console.warn("shm file not found! Timing out for 3s to allow 9launcher to create it...");
+        retryCount++;
+        setTimeout(() => {
+            setSmartGameRichPresence(state, game_name);
+        }, 3000)
+        return;
+    } else {
+        console.log("shm file found! Reading...");
+        const shmData = await fs.readTextFile(shmPath);
+        try {
+            let shmDataParsed = JSON.parse(shmData);
+            console.log(shmDataParsed);
+            console.log("Game name: " + shmDataParsed.game);
+            recursiveUpdateSmartRichPresence(state, game_name, shmDataParsed);
+        } catch {
+            console.error("Failed to parse shm file! Could be corrupt. Falling back to generic rich presence...");
+            setGameRichPresence(state, game_name);
+        }
+    }
+}
+
+function getGameNameFromId(id: string) {
+    return games.all[id as keyof typeof games.all].short_title;
+}
+
+// TODO: add typing for shmData. It's a JSON object, but I'm lazy.
+async function recursiveUpdateSmartRichPresence(state: string, game_name: string = "", shmData: any) {
+    const shmPath = "/dev/shm/9launcher/data.json";
+    const shmExists = await fs.exists(shmPath);
+    if (localStorage.getItem("discordRPC") == "enabled") {
+        if (shmData.stage == "0" || shmData.gamestate == "1") {
+            shmData.stage = "In Menu"
+        } else {
+            shmData.stage = `Stage ${shmData.stage}`
+        }
+
+        await invoke("update_advanced_game_activity", {
+            state: `${getGameNameFromId(shmData.game)} - ${shmData.stage}`,
+            details: `${shmData.lives} lives left, ${shmData.bombs} bombs left, ${shmData.score} points`,
+            large_image: `${shmData.game}`,
+            small_image: `${shmData.game}`,
+        })
+        if (!shmExists) {
+            // Reset the initial timestamp so that elapsed time doesn't carry over to the next launch
+            await invoke("reset_initial_timestamp");
+            setGameRichPresence("Browsing Library");
+            return;
+        }
+    }
+    let newShmData = await fs.readTextFile(shmPath);
+    setTimeout(() => {
+        recursiveUpdateSmartRichPresence(state, game_name, JSON.parse(newShmData));
+    }, 300)
+}
+
+async function smartSetRichPresence(state: string, game_name: string = "", isThcrap: boolean = false) {
+    console.log(isThcrap)
+    if (!isThcrap) {
+        setGameRichPresence(state, game_name);
+    } else {
+        // We can safely assume we are running inside thcrap, so we can gather more information about the game state from lib9launcher
+        setSmartGameRichPresence(state, game_name);
+    }
+}
+
 async function setGameRichPresence(state: string = "Browsing Library", game_name: string = "") {
     
     let appstate;
@@ -375,13 +451,13 @@ async function setGameRichPresence(state: string = "Browsing Library", game_name
         appstate = `Playing ${game_name}`;
         await invoke("set_activity_game", {
             state: `${appstate}`,
-            details: `           `, // Not sure why details needs to be a large empty string, but it does :)
+            details: ``,
         })
     } else {
         appstate = "Browsing Library"
         await invoke("set_activity_generic", {
             state: `${appstate}`,
-            details: `           `, // Not sure why details needs to be a large empty string, but it does :)
+            details: ``,
         })
     }
 
