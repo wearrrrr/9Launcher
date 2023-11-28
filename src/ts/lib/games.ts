@@ -12,6 +12,7 @@ import { WebviewWindow } from "@tauri-apps/api/window"
 import { listen } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/tauri';
 import { platform } from '@tauri-apps/api/os';
+import { returnCode, payloadJSON } from './types/types';
 
 type gameObject = {
     "long_title": string,
@@ -117,7 +118,7 @@ const downloadWine = async (archiveName: string) => {
             progressBar.wineFinalizeProgressBar();
         }
     })
-    return "Wine downloaded!";
+    return returnCode.SUCCESS;
 }
 
 async function checkWineExists() {
@@ -172,7 +173,7 @@ async function launchGame(gameObj: gameObject) {
         }
     } else {
 
-        switch (currPlatform) {
+        switch (currPlatform!) {
             case "win32":
                 logger.info("Windows detected, running with cmd!")
                 command = new Command("cmd", ["/c", gamePath], { cwd: getGamePath(gameObj.game_id) });
@@ -180,12 +181,6 @@ async function launchGame(gameObj: gameObject) {
             case "linux":
                 logger.info("Linux detected, running with wine!")
                 command = new Command('wine', gamePath, { cwd: getGamePath(gameObj.game_id) });
-                break;
-            case "darwin":
-                logger.info("MacOS detected, attempting to with wine!")
-                setTimeout(() => {
-                    command = new Command('wine', gamePath, { cwd: getGamePath(gameObj.game_id) });
-                }, 500);
                 break;
             default:
                 logger.info("Unknown OS detected, attempting to run with wine! (assuming POSIX based OS)")
@@ -199,18 +194,19 @@ async function launchGame(gameObj: gameObject) {
         // Getting to this codeblock should be impossible, because the switch case has a default...
         // but I guess typescript doesn't know that.
         logger.fatal("Command is undefined or null!")
-        return;
+        return returnCode.ERROR;
     }
     command.on('close', data => {
         logger.info(`Game closed with code ${data.code} and signal ${data.signal}`)
         if (localStorage.getItem("discordRPC") == "enabled") {
             smartSetRichPresence("Browsing Library");
         }
+        return returnCode.SUCCESS;
     });
     let hasMismatched = false;
-    command?.on('error', error => console.error(`command error: "${error}"`));
-    command?.stdout.on('data', line => console.log(`command stdout: "${line}"`));
-    command?.stderr.on('data', async (line) => {
+    command.on('error', error => console.error(`command error: "${error}"`));
+    command.stdout.on('data', line => console.log(`command stdout: "${line}"`));
+    command.stderr.on('data', async (line) => {
         if (line.includes("wine client error:0: version mismatch")) {
             let shouldKillWineserver = confirm("Wine version mismatch detected! Would you like me to kill wineserver and try again?")
             hasMismatched = true;
@@ -221,25 +217,29 @@ async function launchGame(gameObj: gameObject) {
                     console.log("Wineserver killed!")
                     launchGame(gameObj);
                 })
-                return;
+                return returnCode.WARNING;
             }
         }
+        return returnCode.SUCCESS;
     });
-    const child = await command?.spawn();
-    // get file extension to determine if we are likely running inside thcrap
-    // thcrap games will start with .lnk instead of .exe
-    // If anyone who knows more about thcrap wants to improve this, please do! This system can and will be inevitably break
-    // when someone tries to use a steam shortcut to launch the game.
+    await command.spawn();
+    // this lnk support took me like 2 hours to figure out, before I realized that I could just use a pre-made rust parser. Don't be like me.
     if (!hasMismatched) {
         let isLnk = fileExtension == "lnk" ? true : false;
-        if (isLnk) determineIfLnkIsTHCrap(gamePath);
-        
-        if (localStorage.getItem("discordRPC") == "enabled") {
-            smartSetRichPresence("Playing", gameObj.short_title, isLnk);
+        if (isLnk && await determineIfLnkIsTHCrap(gamePath) == returnCode.SUCCESS) {
+            if (localStorage.getItem("discordRPC") == "enabled") {
+                smartSetRichPresence("Playing", gameObj.short_title, isLnk);
+            }
+            return returnCode.SUCCESS;
+        } else {
+            if (localStorage.getItem("discordRPC") == "enabled") {
+                setGameRichPresence("Playing", gameObj.short_title);
+            }
+            return returnCode.SUCCESS;
         }
+        
     }
-
-    console.log('pid:', child?.pid);
+    return returnCode.SUCCESS;
 }
 
 async function determineIfLnkIsTHCrap(filepath: string) {
@@ -249,19 +249,24 @@ async function determineIfLnkIsTHCrap(filepath: string) {
     });
     if (parseResults.target_full_path.includes("thcrap_loader.exe")) {
         logger.info("thcrap detected! Enabling advanced rich presence... (this may take a few seconds)")
-        return true;
+        return returnCode.SUCCESS;
     } else {
-        return false;
+        return returnCode.ERROR;
     }
 }
 
 async function installGamePrompt(name: string, value: gameObject, gameCard: HTMLElement) {
+    let currentExtensions = ["exe", "hdi"]
+    if (pc98.includes(value.game_id)) {
+        // PC-98 only reasonably supports hdi files, so we don't need to check for anything else.
+        currentExtensions = ["hdi"]
+    }
     await dialog.open({
         multiple: false,
         directory: false,
         filters: [{
             name: `${name} Executable`,
-            extensions: ['exe', 'hdi', 'lnk']
+            extensions: currentExtensions
         }]
     }).then(async (file) => {
         if (file !== null) {
@@ -286,8 +291,11 @@ async function installGamePrompt(name: string, value: gameObject, gameCard: HTML
             await messageBox(`${value.short_title} added to library!`, "Success");
             localStorage.setItem(name, JSON.stringify(gameObject));
             window.location.reload();
+            // This isn't necessary because we are reloading the page, but TS won't shut up about it.
+            return returnCode.SUCCESS;
         } else {
-            logger.info("No file selected!")
+            logger.info("No file selected!");
+            return returnCode.INFO;
         }
     })
 }
@@ -307,15 +315,12 @@ async function gameConfigurator(id: string) {
     })
 }
 
-type payloadJSON = {
-    payload: {
-        gameID: string,
-        updatedData: string,
-    }
-}
+
 
 await listen("update-game", (event: payloadJSON) => {
     localStorage.setItem(event.payload.gameID, event.payload.updatedData);
+    logger.success("Game updated!")
+    return returnCode.SUCCESS;
 })
 
 await listen("refresh-page", () => {
@@ -329,12 +334,12 @@ await listen("delete-game", async (event) => {
 })
 
 async function checkForCustomImage(id: string) {
-    if (!await fs.exists(await path.appDataDir() + "custom-img/" + id + ".png")) return false;
+    if (!await fs.exists(await path.appDataDir() + "custom-img/" + id + ".png")) return returnCode.ERROR;
     const retrievedImage = await fs.readBinaryFile(await path.appDataDir() + "custom-img/" + id + ".png");
     try {
         return retrievedImage;
     } catch {
-        return false;
+        return returnCode.ERROR;
     }
 }
 
@@ -379,14 +384,12 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
         });
     }
     if (checkInstallStatus) {
-        if (await checkForCustomImage(value.game_id)) {
-            console.log("Custom image found!")
+        if (await checkForCustomImage(value.game_id) != returnCode.ERROR) {
+            logger.success("Custom image found!")
             const customImage = await checkForCustomImage(value.game_id);
-            console.log(customImage)
-            if (customImage !== false) {
-                let blob = new Blob([customImage], { type: 'image/png' });
+            if (customImage !== returnCode.ERROR) {
+                let blob = new Blob([customImage as Uint8Array], { type: 'image/png' });
                 let url = URL.createObjectURL(blob);
-                console.log(url)
                 gameCard.style.background = `url(${url})`;
             }
         }

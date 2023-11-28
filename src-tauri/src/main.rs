@@ -1,7 +1,5 @@
 #![cfg_attr(all(not(debug_assertions), target_os = "windows"),windows_subsystem = "windows")]
 
-use std::io::Empty;
-
 use chrono::Utc;
 use lnk_parser::LNKParser;
 use tauri::{
@@ -71,7 +69,6 @@ fn reset_initial_timestamp() {
 fn parse_lnk_file(filepath: &str) -> LNKParser {
     let mut file = std::fs::File::open(filepath).unwrap();
     let lnk_file = LNKParser::from_reader(&mut file);
-    println!("{:#?}", lnk_file);
     // Return the lnk file
     return lnk_file.unwrap();
 }
