@@ -1,6 +1,9 @@
 #![cfg_attr(all(not(debug_assertions), target_os = "windows"),windows_subsystem = "windows")]
 
+use std::io::Empty;
+
 use chrono::Utc;
+use lnk_parser::LNKParser;
 use tauri::{
     Manager,
     State,
@@ -65,6 +68,15 @@ fn reset_initial_timestamp() {
 }
 
 #[tauri::command]
+fn parse_lnk_file(filepath: &str) -> LNKParser {
+    let mut file = std::fs::File::open(filepath).unwrap();
+    let lnk_file = LNKParser::from_reader(&mut file);
+    println!("{:#?}", lnk_file);
+    // Return the lnk file
+    return lnk_file.unwrap();
+}
+
+#[tauri::command]
 fn set_activity_game(discord_ipc_client: State<'_, DeclarativeDiscordIpcClient>, state: &str, details: &str) -> i64 {
     // declare a variable for the timestamp
     let return_time = chrono::Utc::now().timestamp();
@@ -112,7 +124,7 @@ fn main() {
               Ok(())
         })
         .plugin(tauri_plugin_upload::init())
-        .invoke_handler(tauri::generate_handler![set_activity_generic, set_activity_game, clear_activity, update_advanced_game_activity, reset_initial_timestamp])
+        .invoke_handler(tauri::generate_handler![set_activity_generic, set_activity_game, clear_activity, update_advanced_game_activity, reset_initial_timestamp, parse_lnk_file])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

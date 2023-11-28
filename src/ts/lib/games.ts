@@ -233,6 +233,7 @@ async function launchGame(gameObj: gameObject) {
     if (!hasMismatched) {
         let isLnk = fileExtension == "lnk" ? true : false;
         if (isLnk) determineIfLnkIsTHCrap(gamePath);
+        
         if (localStorage.getItem("discordRPC") == "enabled") {
             smartSetRichPresence("Playing", gameObj.short_title, isLnk);
         }
@@ -243,8 +244,15 @@ async function launchGame(gameObj: gameObject) {
 
 async function determineIfLnkIsTHCrap(filepath: string) {
     // Get array buffer of file, then convert to string, then check if it contains "thcrap"
-    const fileBuffer = await fs.readBinaryFile(filepath);
-    console.log(fileBuffer);
+    let parseResults: parseResults = await invoke("parse_lnk_file", {
+        filepath: filepath
+    });
+    if (parseResults.target_full_path.includes("thcrap_loader.exe")) {
+        logger.info("thcrap detected! Enabling advanced rich presence... (this may take a few seconds)")
+        return true;
+    } else {
+        return false;
+    }
 }
 
 async function installGamePrompt(name: string, value: gameObject, gameCard: HTMLElement) {
