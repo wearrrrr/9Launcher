@@ -23,6 +23,8 @@ type gameObject = {
     "game_id": string
 }
 
+let currPlatform = await infoManager.getPlatform();
+
 function gameIterator() {
     for (const [name, value] of Object.entries(games.modern)) {
         if (localStorage.getItem(name) !== null) {
@@ -56,13 +58,13 @@ function getGameFile(gameID: string) {
     return gamePathParsed.file
 }
 
-function getGameLocation(gameID: string) {
-    if (games.validIDs.includes(gameID) == false) throw new Error("Invalid game ID! Valid game IDs are: " + games.validIDs.join(", "));
-    let gamePath = localStorage.getItem(gameID);
-    let gamePathParsed = JSON.parse(gamePath as string)
-    if (gamePath == null) throw new Error("Game path not found! Try clearing localStorage.")
-    return gamePathParsed.path
-}
+// function getGameLocation(gameID: string) {
+//     if (games.validIDs.includes(gameID) == false) throw new Error("Invalid game ID! Valid game IDs are: " + games.validIDs.join(", "));
+//     let gamePath = localStorage.getItem(gameID);
+//     let gamePathParsed = JSON.parse(gamePath as string)
+//     if (gamePath == null) throw new Error("Game path not found! Try clearing localStorage.")
+//     return gamePathParsed.path
+// }
 
 function getGamePath(gameID: string) {
     if (games.validIDs.includes(gameID) == false) throw new Error("Invalid game ID! Valid game IDs are: " + games.validIDs.join(", "));
@@ -106,7 +108,7 @@ const downloadWine = async (archiveName: string) => {
             }
         }
     ).then(async () => {
-        console.log("Download complete... Unzipping wine!")
+        logger.info("Download complete... Unzipping wine!")
         if (progressBar !== null || progressBar !== undefined) {
             progressBar.wineUnzipBegin();
         }
@@ -142,11 +144,8 @@ async function checkWineExists() {
 // checkDosboxExists();
 
 const checkIfWineIsNeeded = async () => {
-    const platform = await infoManager.getPlatform();
-    if (platform == "win32") {
-        console.log("Windows detected, skipping wine check!")
-    } else {
-        await checkWineExists();
+    if (currPlatform != "win32") {
+        await checkWineExists();    
     }
 }
 checkIfWineIsNeeded();
@@ -155,72 +154,97 @@ let pc98 = ["th01", "th02", "th03", "th04", "th05"]
 
 async function launchGame(gameObj: gameObject) {
     let gamePath = getGameFile(gameObj.game_id);
-    let gameLocation = getGameLocation(gameObj.game_id);
     let fileExtension = await path.extname(gamePath);
     let command;
     if (pc98.includes(gameObj.game_id)) {
-        switch (await infoManager.getPlatform()) {
+        switch (currPlatform) {
             case "win32":
                 // TODO: Add PC-98 support for Windows
-                console.log("Windows is in very early beta for PC-98 support! There be dragons!")
+                logger.warn("Windows is in very early beta for PC-98 support! There be dragons!")
                 command = new Command("cmd", ["/C", `${await path.appDataDir() + 'bin\\x64\\Release\\dosbox-x.exe'}`, "-set", "machine=pc98", "-c", `IMGMOUNT A: ${gamePath}`, "-c", "A:", "-c", "game", "-nopromptfolder"])
                 break;
             case "linux":
-                console.log("Linux detected, running with dosbox-x!")
+                logger.info("Linux detected, running with dosbox-x!")
                 if (fileExtension == "hdi") {
                     command = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gamePath}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
                 }
                 break;
         }
     } else {
-        switch (await infoManager.getPlatform()) {
+
+        switch (currPlatform) {
             case "win32":
-                console.log("Windows detected, running with cmd!")
-                console.log(gamePath)
-                console.log(getGamePath(gameObj.game_id))
+                logger.info("Windows detected, running with cmd!")
                 command = new Command("cmd", ["/c", gamePath], { cwd: getGamePath(gameObj.game_id) });
-                console.log(command)
                 break;
             case "linux":
-                console.log("Linux detected, running with wine!")
-                console.log(getGamePath(gameObj.game_id))
-                console.log(gamePath)
+                logger.info("Linux detected, running with wine!")
                 command = new Command('wine', gamePath, { cwd: getGamePath(gameObj.game_id) });
                 break;
             case "darwin":
-                console.log("MacOS detected, running with wine!")
+                logger.info("MacOS detected, attempting to with wine!")
                 setTimeout(() => {
                     command = new Command('wine', gamePath, { cwd: getGamePath(gameObj.game_id) });
                 }, 500);
                 break;
             default:
-                console.log("Unknown OS detected, attempting to run with wine! (assuming POSIX based OS)")
+                logger.info("Unknown OS detected, attempting to run with wine! (assuming POSIX based OS)")
                 setTimeout(() => {
                     command = new Command('wine', gamePath, { cwd: getGamePath(gameObj.game_id) });
                 }, 500);
                 break;
             }
     }
-    // get file extension to determine if we are likely running inside thcrap
-    // thcrap games will start with .lnk instead of .exe
-    let isThcrap = fileExtension == "lnk" ? true : false;
-    if (localStorage.getItem("discordRPC") == "enabled") {
-        smartSetRichPresence("Playing", gameObj.short_title, isThcrap);
-    }
     if (command === undefined || command === null) {
-        logger.error("Command is undefined or null!")
+        // Getting to this codeblock should be impossible, because the switch case has a default...
+        // but I guess typescript doesn't know that.
+        logger.fatal("Command is undefined or null!")
+        return;
     }
-    command?.on('close', data => {
-        console.log(`Game closed with code ${data.code} and signal ${data.signal}`)
+    command.on('close', data => {
+        logger.info(`Game closed with code ${data.code} and signal ${data.signal}`)
         if (localStorage.getItem("discordRPC") == "enabled") {
             smartSetRichPresence("Browsing Library");
         }
     });
+    let hasMismatched = false;
     command?.on('error', error => console.error(`command error: "${error}"`));
     command?.stdout.on('data', line => console.log(`command stdout: "${line}"`));
-    command?.stderr.on('data', line => console.log(`command stderr: "${line}"`));
+    command?.stderr.on('data', async (line) => {
+        if (line.includes("wine client error:0: version mismatch")) {
+            let shouldKillWineserver = confirm("Wine version mismatch detected! Would you like me to kill wineserver and try again?")
+            hasMismatched = true;
+            // 'aWaIt' hAs nO eFfEct oN tHe tYpE oF tHiS eXpReSsIoN YES IT DOES AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa
+            if (await shouldKillWineserver) {
+                const killWineserver = new Command("killall", ["wineserver"]);
+                killWineserver.execute().then(() => {
+                    console.log("Wineserver killed!")
+                    launchGame(gameObj);
+                })
+                return;
+            }
+        }
+    });
     const child = await command?.spawn();
+    // get file extension to determine if we are likely running inside thcrap
+    // thcrap games will start with .lnk instead of .exe
+    // If anyone who knows more about thcrap wants to improve this, please do! This system can and will be inevitably break
+    // when someone tries to use a steam shortcut to launch the game.
+    if (!hasMismatched) {
+        let isLnk = fileExtension == "lnk" ? true : false;
+        if (isLnk) determineIfLnkIsTHCrap(gamePath);
+        if (localStorage.getItem("discordRPC") == "enabled") {
+            smartSetRichPresence("Playing", gameObj.short_title, isLnk);
+        }
+    }
+
     console.log('pid:', child?.pid);
+}
+
+async function determineIfLnkIsTHCrap(filepath: string) {
+    // Get array buffer of file, then convert to string, then check if it contains "thcrap"
+    const fileBuffer = await fs.readBinaryFile(filepath);
+    console.log(fileBuffer);
 }
 
 async function installGamePrompt(name: string, value: gameObject, gameCard: HTMLElement) {
@@ -248,7 +272,8 @@ async function installGamePrompt(name: string, value: gameObject, gameCard: HTML
                 name: name,
                 img: value.img,
                 file: file,
-                path: filePath
+                path: filePath,
+                showText: true,
             }
             await messageBox(`${value.short_title} added to library!`, "Success");
             localStorage.setItem(name, JSON.stringify(gameObject));
@@ -274,8 +299,18 @@ async function gameConfigurator(id: string) {
     })
 }
 
-await listen("refresh-page", (event) => {
-    console.log(event)
+type payloadJSON = {
+    payload: {
+        gameID: string,
+        updatedData: string,
+    }
+}
+
+await listen("update-game", (event: payloadJSON) => {
+    localStorage.setItem(event.payload.gameID, event.payload.updatedData);
+})
+
+await listen("refresh-page", () => {
     window.location.reload();
 })
 
@@ -302,10 +337,10 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
     gameCard.id = value.game_id;
     gameCard.style.background = `url(assets/game-images/${value.img_unset})`;
     let title = value.short_title;
-    if (await fs.exists(await path.appDataDir() + value.game_id + "-show-text")) {
-        let showTitle = await fs.readTextFile(value.game_id + "-show-text", { dir: fs.BaseDirectory.AppData });
-        if (showTitle == "false") {
-            title = ""
+    if (localStorage.getItem(name) !== null) {
+        if (JSON.parse(localStorage.getItem(name)!).showText == false) {
+            console.log("here")
+            title = "";
         }
     }
     gameCard.innerHTML = `
@@ -368,31 +403,29 @@ async function removeGame(name: string, value: gameObject, gameCard: HTMLElement
     }
 }
 
+let dataJSONRetryCount = 1;
 async function setSmartGameRichPresence(state: string, game_name: string = "") {
     // This only applies for games, so we don't have to worry about the state being "Browsing Library"
-    // We will read from /dev/shm/9launcher/data.json to get information about the game
     const shmPath = "/dev/shm/9launcher/data.json";
     const shmExists = await fs.exists(shmPath);
-    let retryCount = 0;
     if (!shmExists) {
-        if (retryCount >= 3) {
-            console.error("shm file not found after 3 retries! Falling back to generic rich presence...");
+        if (dataJSONRetryCount > 3) {
+            logger.error("Data JSON not found after 3 retries! Falling back to generic rich presence...");
             setGameRichPresence(state, game_name);
+            return;
         }
-        console.warn("shm file not found! Timing out for 3s to allow 9launcher to create it...");
-        retryCount++;
+        logger.warn(`Data JSON not found! Retrying in 5 seconds... (${dataJSONRetryCount}/3)`);
+        dataJSONRetryCount++;
         setTimeout(() => {
             setSmartGameRichPresence(state, game_name);
-        }, 3000)
+        }, 5000)
         return;
     } else {
-        console.log("shm file found! Reading...");
-        const shmData = await fs.readTextFile(shmPath);
+        logger.success("Data JSON found! Reading...");
+        const JSONData = await fs.readTextFile(shmPath);
         try {
-            let shmDataParsed = JSON.parse(shmData);
-            console.log(shmDataParsed);
-            console.log("Game name: " + shmDataParsed.game);
-            recursiveUpdateSmartRichPresence(state, game_name, shmDataParsed);
+            let JSONDataParsed = JSON.parse(JSONData);
+            recursiveUpdateSmartRichPresence(state, game_name, JSONDataParsed);
         } catch {
             console.error("Failed to parse shm file! Could be corrupt. Falling back to generic rich presence...");
             setGameRichPresence(state, game_name);

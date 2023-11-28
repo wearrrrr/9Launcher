@@ -200,6 +200,7 @@ button {
   transition: opacity 250ms ease-in-out;
   z-index: 2;
   border-radius: 5px;
+  pointer-events: none;
 }
 .information-page {
   background-color: var(--bottom-banner-color);
@@ -212,6 +213,7 @@ button {
   padding: 0;
   transition: opacity 250ms ease-in-out;
   border-radius: 5px;
+  pointer-events: none;
 }
 @media (min-height: 900px) {
   .quick-settings-modal {

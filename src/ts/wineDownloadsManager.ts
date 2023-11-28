@@ -26,7 +26,11 @@ function wineListIterator() {
         wine.dataset.url = value.downloadURL || "";
         wine.textContent = name;
         wineList.appendChild(wine);
+        let isRelativePath = true;
         wine.addEventListener('click', async () => {
+            if (name == "System Wine") {
+                isRelativePath = false;
+            }
             if (await wineManager.checkIfVersionExists(name) == false) {
                 modal.setContent(`
                 <h2 class="modal-title">Wine build ${name} not found! Download now?</h2>
@@ -55,7 +59,7 @@ function wineListIterator() {
                 if (firstLoadSecondModal == 0) {
                     firstLoadSecondModal = 1;
                     setPrimaryVersion.addFooterBtn('Set', 'tingle-btn tingle-btn--primary', async function() {
-                        await wineManager.setPrimaryWine(name, value);
+                        await wineManager.setPrimaryWine(name, value, isRelativePath);
                         setTimeout(() => {
                             setPrimaryVersion.close();
                         }, 500);

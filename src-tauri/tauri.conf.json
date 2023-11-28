@@ -23,6 +23,11 @@
             "args": true
           },
           {
+            "name": "system_wine",
+            "cmd": "/usr/bin/wine",
+            "args": true
+          },
+          {
             "name": "tar",
             "cmd": "tar",
             "args": true
@@ -56,6 +61,11 @@
             "name": "cmd",
             "cmd": "cmd",
             "args": true
+          },
+          {
+            "name": "killall",
+            "cmd": "killall",
+            "args": true
           }
         ]
       },
@@ -72,7 +82,7 @@
         "copyFile": true,
         "writeFile": true,
         "readFile": true,
-        "scope": ["$APPDATA/*", "$APPDATA/**", "$APPDATA/wine/", "$APPDATA/wine/**", "$APPDATA/*", "$APPDATA/dosbox/*", "$APPDATA/dosbox/**", "$APPDATA/custom-img/*", "$APPDATA/custom-img/**", "/dev/shm/9launcher/*"]
+        "scope": ["$APPDATA/*", "$APPDATA/**", "$APPDATA/wine/", "$APPDATA/wine/**", "$APPDATA/*", "$APPDATA/dosbox/*", "$APPDATA/dosbox/**", "$APPDATA/custom-img/*", "$APPDATA/custom-img/**", "/dev/shm/9launcher/*", "/usr/bin/wine", "/**/*"]
       },
       "path": {
         "all": true

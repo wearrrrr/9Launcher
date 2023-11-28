@@ -50,10 +50,11 @@ if (settingsDiv !== null) {
         if (quickSettingsToggle == 0) {
             quickSettings.style.opacity = "1";
             quickSettingsToggle = 1;
-            quickSettings.focus();
+            quickSettings.style.pointerEvents = "auto";
         } else {
             quickSettings.style.opacity = "0";
             quickSettingsToggle = 0
+            quickSettings.style.pointerEvents = "none";
         }
     });
     document.addEventListener("keydown", (event) => {
@@ -122,10 +123,11 @@ function addInfoPageEvents() {
         if (infoPageToggle == 0) {
             appInfo.style.opacity = "1";
             infoPageToggle = 1;
-            appInfo.focus();
+            appInfo.style.pointerEvents = "auto";
         } else {
             appInfo.style.opacity = "0";
             infoPageToggle = 0
+            appInfo.style.pointerEvents = "none";
         }
     })
     document.addEventListener("keydown", (event) => {
