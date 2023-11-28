@@ -97,7 +97,7 @@ if (settingsDiv !== null) {
         return await dialog.confirm(
             "Are you sure you want to clear your library? This will remove all games from your library, and you will have to re-add them.", 
             {
-                title: "Touhou Launcher Reborn",
+                title: "9Launcher",
             }
             ).then(async (response) => {
             if (response == true) {
