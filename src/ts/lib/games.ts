@@ -256,7 +256,7 @@ async function determineIfLnkIsTHCrap(filepath: string) {
 }
 
 async function installGamePrompt(name: string, value: gameObject, gameCard: HTMLElement) {
-    let currentExtensions = ["exe", "hdi"]
+    let currentExtensions = ["exe", "lnk", "hdi"]
     if (pc98.includes(value.game_id)) {
         // PC-98 only reasonably supports hdi files, so we don't need to check for anything else.
         currentExtensions = ["hdi"]
@@ -362,17 +362,25 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
         </div>
     `;
     const checkInstallStatus = installedGames.includes(name);
-    if (checkInstallStatus) {
-        gameCard.style.background = `url(assets/game-images/${value.img})`;
-        gameCard.addEventListener('contextmenu', async (e) => {
+    // if (checkInstallStatus) {
+    //     gameCard.style.background = `url(assets/game-images/${value.img})`;
+    //     gameCard.addEventListener('contextmenu', async (e) => {
+    //         e.preventDefault();
+    //         gameConfigurator(value.game_id);
+    //     });
+    // } else {
+    //     gameCard.addEventListener('contextmenu', async (e) => {
+    //         e.preventDefault();
+    //     })
+    // }
+    gameCard.addEventListener('contextmenu', async (e) => {
+        if (checkInstallStatus) {
             e.preventDefault();
             gameConfigurator(value.game_id);
-        });
-    } else {
-        gameCard.addEventListener('contextmenu', async (e) => {
+        } else {
             e.preventDefault();
-        })
-    }
+        }
+    })
     gamesElement.appendChild(gameCard);
     if (checkInstallStatus) {
         gameCard.addEventListener('click', async () => {
