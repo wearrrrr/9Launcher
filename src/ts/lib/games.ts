@@ -373,8 +373,10 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
     //         e.preventDefault();
     //     })
     // }
+    if (checkInstallStatus) gameCard.style.background = `url(assets/game-images/${value.img})`;
     gameCard.addEventListener('contextmenu', async (e) => {
         if (checkInstallStatus) {
+            gameCard.style.background = `url(assets/game-images/${value.img})`;
             e.preventDefault();
             gameConfigurator(value.game_id);
         } else {
