@@ -454,9 +454,12 @@ async function setSmartGameRichPresence(state: string, game_name: string = "") {
     }
 }
 
-function getGameNameFromId(id: string) {
-    return games.all[id as keyof typeof games.all].short_title;
+function getGameNameFromId(gameID: number) {
+    // This function returns a short_title from the game ID that is passed to it. GameID is a number like 0, 1, 2, etc. we will use this to get the data at the index of games.modern
+    let gameName = Object.keys(games.modern)[gameID];
+    return games.modern[gameName as keyof typeof games.modern].short_title;
 }
+
 
 // TODO: add typing for shmData. It's a JSON object, but I'm lazy.
 async function recursiveUpdateSmartRichPresence(state: string, game_name: string = "", shmData: any) {
