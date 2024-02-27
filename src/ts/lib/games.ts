@@ -12,7 +12,7 @@ import { WebviewWindow } from "@tauri-apps/api/window"
 import { listen } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/tauri';
 import { platform } from '@tauri-apps/api/os';
-import { returnCode, payloadJSON } from './types/types';
+import { returnCode } from './types/types';
 
 type gameObject = {
     "long_title": string,
@@ -51,19 +51,19 @@ function installedGamesIterator() {
     return installedGames
 }
 
-type gameInformation = {
-    name: string,
-    img: string,
-    file: string,
-    path: string
-}
+// type gameInformation = {
+//     name: string,
+//     img: string,
+//     file: string,
+//     path: string
+// }
 
 function getGameLocation(gameID: string) {
     if (games.validIDs.includes(gameID) == false) throw new Error("Invalid game ID! Valid game IDs are: " + games.validIDs.join(", "));
     let gamePath = localStorage.getItem(gameID);
     let gamePathParsed = JSON.parse(gamePath as string)
     if (gamePath == null) throw new Error("Game path not found! Try clearing localStorage.")
-    return gamePathParsed.path
+    return gamePathParsed.file
 }
 
 function getGamePath(gameID: string) {
@@ -144,8 +144,7 @@ async function checkWineExists() {
 // checkDosboxExists();
 
 const checkIfWineIsNeeded = async () => {
-    const platform = await infoManager.getPlatform();
-    if (platform == "win32") {
+    if (info.platform == "win32") {
         console.log("Windows detected, skipping wine check!")
     } else {
         await checkWineExists();
@@ -156,58 +155,56 @@ checkIfWineIsNeeded();
 let pc98 = ["th01", "th02", "th03", "th04", "th05"]
 
 async function launchGame(gameObj: gameObject) {
-    let gamePath = getGameFile(gameObj.game_id);
     let gameLocation = getGameLocation(gameObj.game_id);
-    let fileExtenion = await path.extname(gamePath);
+    console.log(gameLocation)
+    let fileExtension = await path.extname(gameLocation);
+    console.log(fileExtension)
     let command;
     if (pc98.includes(gameObj.game_id)) {
-        switch (await infoManager.getPlatform()) {
+        switch (await info.platform) {
             case "win32":
-                // TODO: Add PC-98 support for Windows
-                console.log("Windows is in very early beta for PC-98 support! There be dragons!")
-                command = new Command("cmd", ["/C", `${await path.appDataDir() + 'bin\\x64\\Release\\dosbox-x.exe'}`, "-set", "machine=pc98", "-c", `IMGMOUNT A: ${gamePath}`, "-c", "A:", "-c", "game", "-nopromptfolder"])
+                console.warn("Windows detected, running with dosbox-x!")
+                command = new Command("cmd", ["/C", `${await path.appDataDir() + 'bin\\x64\\Release\\dosbox-x.exe'}`, "-set", "machine=pc98", "-c", `IMGMOUNT A: ${gameLocation}`, "-c", "A:", "-c", "game", "-nopromptfolder"])
                 break;
             case "linux":
                 logger.info("Linux detected, running with dosbox-x!")
                 if (fileExtension == "hdi") {
-                    command = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gamePath}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
-                }
-                if (fileExtenion == "exe") {
-                    command = new Command("dosbox-x", ["-c", `MOUNT C: ${gameLocation}`, "-c", "C:", "-c", `${gamePath}`, "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
+                    command = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gameLocation}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
                 }
                 break;
+            default: 
+                logger.warn("Unknown OS detected! Support for PC-98 on this platform is not guaranteed! Attempting to run with dosbox-x!")
+                if (fileExtension == "hdi") {
+                    command = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gameLocation}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
+                }
         }
     } else {
-        switch (await infoManager.getPlatform()) {
+        switch (info.platform) {
             case "win32":
-                console.log("Windows detected, running with cmd!")
-                console.log(gamePath)
-                console.log(getGamePath(gameObj.game_id))
-                command = new Command("cmd", ["/c", gamePath], { cwd: getGamePath(gameObj.game_id) });
+                logger.info("Windows detected, running with cmd!")
+                command = new Command("cmd", ["/c", gameLocation], { cwd: getGamePath(gameObj.game_id) });
                 console.log(command)
                 break;
             case "linux":
-                console.log("Linux detected, running with wine!")
-                console.log(getGamePath(gameObj.game_id))
-                console.log(gamePath)
-                command = new Command('wine', gamePath, { cwd: getGamePath(gameObj.game_id) });
+                logger.info("Linux detected, running with wine!")
+                command = new Command('wine', gameLocation, { cwd: getGamePath(gameObj.game_id) });
                 break;
             case "darwin":
-                console.log("MacOS detected, running with wine!")
+                logger.info("MacOS detected, running with wine!")
                 setTimeout(() => {
-                    command = new Command('wine', gamePath, { cwd: getGamePath(gameObj.game_id) });
+                    command = new Command('wine', gameLocation, { cwd: getGamePath(gameObj.game_id) });
                 }, 500);
                 break;
             default:
-                console.log("Unknown OS detected, attempting to run with wine! (assuming POSIX based OS)")
+                logger.warn("Unknown OS detected, attempting to run with wine! (assuming POSIX based OS)")
                 setTimeout(() => {
-                    command = new Command('wine', gamePath, { cwd: gameLocation });
+                    command = new Command('wine', gameLocation, { cwd: gameLocation });
                 }, 500);
                 break;
             }
     }
     if (command === undefined || command === null) {
-        logger.error("Command is undefined or null!")
+        return logger.error("Command is undefined or null!")
     }
     command.on('close', data => {
         logger.info(`Game closed with code ${data.code} and signal ${data.signal}`)
@@ -359,7 +356,7 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
             console.log("Custom image found!")
             const customImage = await checkForCustomImage(value.game_id);
             console.log(customImage)
-            if (customImage !== false) {
+            if (customImage !== returnCode.ERROR) {
                 let blob = new Blob([customImage], { type: 'image/png' });
                 let url = URL.createObjectURL(blob);
                 gameCard.style.background = `url(${url})`;

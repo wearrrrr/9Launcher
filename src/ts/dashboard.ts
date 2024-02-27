@@ -143,19 +143,19 @@ function openWineManager() {
     })
 }
 
-window.getCurrent().listen(TauriEvent.WINDOW_CREATED, async () => {
+window.appWindow.listen("createLog", async () => {
     if (!await fs.exists("9Launcher.log", { dir: fs.BaseDirectory.AppData })) {
         await fs.writeFile({ path: "9Launcher.log", contents: "" }, { dir: fs.BaseDirectory.AppData })
     }
-    logger.info("9Launcher started!")
-    logger.info("9Launcher version: " + info.version)
-    logger.info("9Launcher OS: " + info.OS)
-    logger.info("9Launcher Kernel Version: " + info.kernelVersion)
-    logger.info("9Launcher Architecture: " + info.architecture)
+    await logger.info("9Launcher started!")
+    await logger.info("9Launcher version: " + info.version)
+    await logger.info("9Launcher OS: " + info.OS)
+    await logger.info("9Launcher Kernel Version: " + info.kernelVersion)
+    await logger.info("9Launcher Architecture: " + info.architecture)
 })
 
 window.getCurrent().listen(TauriEvent.WINDOW_CLOSE_REQUESTED, async () => {
-    logger.info("Closing 9Launcher...")
+    await logger.info("Closing 9Launcher...")
     // This should never overwrite logs unless they manage to somehow create a race condition where they save two logs at the exact same time
     await fs.renameFile("9Launcher.log", "9Launcher-" + `${moment().format("MM-DD-mm_ss-YYYY")}` + ".log", { dir: fs.BaseDirectory.AppData })
     window.getCurrent().close();
