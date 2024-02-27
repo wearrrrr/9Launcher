@@ -78,7 +78,7 @@
         "writeFile": true,
         "readFile": true,
         "renameFile": true,
-        "scope": ["$APPDATA/*", "$APPDATA/**", "$APPDATA/wine/", "$APPDATA/wine/**", "$APPDATA/*", "$APPDATA/dosbox/*", "$APPDATA/dosbox/**", "$APPDATA/custom-img/*", "$APPDATA/custom-img/**"]
+        "scope": ["$APPDATA/*", "$APPDATA/**", "$APPDATA/wine/", "$APPDATA/wine/**", "$APPDATA/*", "$APPDATA/dosbox/*", "$APPDATA/dosbox/**", "$APPDATA/custom-img/*", "$APPDATA/custom-img/**", "/usr/bin/wine"]
       },
       "path": {
         "all": true

@@ -121,6 +121,7 @@ const downloadWine = async (archiveName: string) => {
 }
 
 async function checkWineExists() {
+    if (localStorage.getItem("9L_beenWarned") == "true") return;
     let proton755 = await fs.exists(await path.appDataDir() + "wine/GE-Proton7-55/files/bin/wine");
     let proton81 = await fs.exists(await path.appDataDir() + "wine/GE-Proton8-1/files/bin/wine");
     let proton82 = await fs.exists(await path.appDataDir() + "wine/GE-Proton8-2/files/bin/wine");
@@ -129,9 +130,22 @@ async function checkWineExists() {
     if (proton755 == false && proton81 == false && proton82 == false && proton83 == false) {
         if (progressBar !== null || progressBar !== undefined) {
             progressBar.wineOpenModal();
+            return returnCode.SUCCESS;
         }
+    } else {
+        return returnCode.INFO;
     }
+    return returnCode.INFO
 }
+
+const checkWineNeeded = async () => {
+    if (info.platform == "win32") return;
+    checkWineExists();
+}
+setTimeout(() => {
+    checkWineNeeded();
+}, 500)
+
 
 // async function checkDosboxExists() {
 //     let dosboxExists = await fs.exists(await path.appDataDir() + "dosbox/dosbox-x");
@@ -143,15 +157,6 @@ async function checkWineExists() {
 // }
 // checkDosboxExists();
 
-const checkIfWineIsNeeded = async () => {
-    if (info.platform == "win32") {
-        console.log("Windows detected, skipping wine check!")
-    } else {
-        await checkWineExists();
-    }
-}
-checkIfWineIsNeeded();
-
 let pc98 = ["th01", "th02", "th03", "th04", "th05"]
 
 async function launchGame(gameObj: gameObject) {
@@ -161,7 +166,7 @@ async function launchGame(gameObj: gameObject) {
     console.log(fileExtension)
     let command;
     if (pc98.includes(gameObj.game_id)) {
-        switch (await info.platform) {
+        switch (info.platform) {
             case "win32":
                 console.warn("Windows detected, running with dosbox-x!")
                 command = new Command("cmd", ["/C", `${await path.appDataDir() + 'bin\\x64\\Release\\dosbox-x.exe'}`, "-set", "machine=pc98", "-c", `IMGMOUNT A: ${gameLocation}`, "-c", "A:", "-c", "game", "-nopromptfolder"])

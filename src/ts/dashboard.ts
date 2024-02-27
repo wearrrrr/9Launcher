@@ -48,9 +48,11 @@ wineModal.setContent(`
 </div>`);
 wineModal.addFooterBtn('Download', 'tingle-btn tingle-btn--primary', function() {
     openWineManager()
+    localStorage.setItem("9L_beenWarned", "true");
     modalManager.closeModal(wineModal)
 });
 wineModal.addFooterBtn(`Don't Download (Games won't launch!)`, 'tingle-btn tingle-btn--danger', function() {
+    localStorage.setItem("9L_beenWarned", "true");
     modalManager.closeModal(wineModal)
 });
 
