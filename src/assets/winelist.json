@@ -1,5 +1,11 @@
 {
     "linux-wine": {
+        "System Wine": {
+            "prefix": "system_wine",
+            "description": "System Wine",
+            "downloadURL": "",
+            "path": "/usr/bin/wine"
+        },
         "GE-Proton8-3": {
             "prefix": "GE-Proton8.3.tar.gz",
             "description": "GE-Proton8.3",

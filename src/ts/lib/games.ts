@@ -12,6 +12,7 @@ import { WebviewWindow } from "@tauri-apps/api/window"
 import { listen } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/tauri';
 import { platform } from '@tauri-apps/api/os';
+import { returnCode, payloadJSON } from './types/types';
 
 type gameObject = {
     "long_title": string,
@@ -57,12 +58,20 @@ type gameInformation = {
     path: string
 }
 
-function getGameInformation(gameID: string) {
+function getGameLocation(gameID: string) {
     if (games.validIDs.includes(gameID) == false) throw new Error("Invalid game ID! Valid game IDs are: " + games.validIDs.join(", "));
     let gamePath = localStorage.getItem(gameID);
     let gamePathParsed = JSON.parse(gamePath as string)
     if (gamePath == null) throw new Error("Game path not found! Try clearing localStorage.")
-    return gamePathParsed as gameInformation
+    return gamePathParsed.path
+}
+
+function getGamePath(gameID: string) {
+    if (games.validIDs.includes(gameID) == false) throw new Error("Invalid game ID! Valid game IDs are: " + games.validIDs.join(", "));
+    let gamePath = localStorage.getItem(gameID);
+    let gamePathParsed = JSON.parse(gamePath as string)
+    if (gamePath == null) throw new Error("Game path not found! Try clearing localStorage.")
+    return gamePathParsed.path
 }
 
 function unzip(wineArchive: string, wineDir: string) {
@@ -108,7 +117,7 @@ const downloadWine = async (archiveName: string) => {
             progressBar.wineFinalizeProgressBar();
         }
     })
-    return "Wine downloaded!";
+    return returnCode.SUCCESS;
 }
 
 async function checkWineExists() {
@@ -135,9 +144,9 @@ async function checkWineExists() {
 // checkDosboxExists();
 
 const checkIfWineIsNeeded = async () => {
-    const platform = info.platform;
+    const platform = await infoManager.getPlatform();
     if (platform == "win32") {
-        logger.info("Windows detected, skipping wine check!", false)
+        console.log("Windows detected, skipping wine check!")
     } else {
         await checkWineExists();
     }
@@ -147,15 +156,15 @@ checkIfWineIsNeeded();
 let pc98 = ["th01", "th02", "th03", "th04", "th05"]
 
 async function launchGame(gameObj: gameObject) {
-    let gameInfo = getGameInformation(gameObj.game_id);
-    let gamePath = gameInfo.file;
-    let gameLocation = gameInfo.path;
-    let fileExtension = await path.extname(gamePath);
+    let gamePath = getGameFile(gameObj.game_id);
+    let gameLocation = getGameLocation(gameObj.game_id);
+    let fileExtenion = await path.extname(gamePath);
     let command;
     if (pc98.includes(gameObj.game_id)) {
-        switch ((await infoManager.gatherInformation()).platform) {
+        switch (await infoManager.getPlatform()) {
             case "win32":
-                logger.warn("Windows is in very early beta for PC-98 support! There be dragons!")
+                // TODO: Add PC-98 support for Windows
+                console.log("Windows is in very early beta for PC-98 support! There be dragons!")
                 command = new Command("cmd", ["/C", `${await path.appDataDir() + 'bin\\x64\\Release\\dosbox-x.exe'}`, "-set", "machine=pc98", "-c", `IMGMOUNT A: ${gamePath}`, "-c", "A:", "-c", "game", "-nopromptfolder"])
                 break;
             case "linux":
@@ -163,64 +172,69 @@ async function launchGame(gameObj: gameObject) {
                 if (fileExtension == "hdi") {
                     command = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gamePath}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
                 }
-                if (fileExtension == "exe") {
+                if (fileExtenion == "exe") {
                     command = new Command("dosbox-x", ["-c", `MOUNT C: ${gameLocation}`, "-c", "C:", "-c", `${gamePath}`, "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
                 }
                 break;
         }
     } else {
-        switch (info.platform) {
+        switch (await infoManager.getPlatform()) {
             case "win32":
-                logger.info("Windows detected, running with cmd!")
-                command = new Command("cmd", ["/c", gamePath], { cwd: gameLocation });
+                console.log("Windows detected, running with cmd!")
+                console.log(gamePath)
+                console.log(getGamePath(gameObj.game_id))
+                command = new Command("cmd", ["/c", gamePath], { cwd: getGamePath(gameObj.game_id) });
+                console.log(command)
                 break;
             case "linux":
-                logger.info("Linux detected, running with wine!")
-                command = new Command('wine', gamePath, { cwd: gameLocation });
+                console.log("Linux detected, running with wine!")
+                console.log(getGamePath(gameObj.game_id))
+                console.log(gamePath)
+                command = new Command('wine', gamePath, { cwd: getGamePath(gameObj.game_id) });
                 break;
             case "darwin":
-                logger.info("MacOS detected, running with wine!")
+                console.log("MacOS detected, running with wine!")
                 setTimeout(() => {
-                    command = new Command('wine', gamePath, { cwd: gameLocation });
+                    command = new Command('wine', gamePath, { cwd: getGamePath(gameObj.game_id) });
                 }, 500);
                 break;
             default:
-                logger.warn("Unknown OS detected, attempting to run with wine! (assuming POSIX based OS)")
+                console.log("Unknown OS detected, attempting to run with wine! (assuming POSIX based OS)")
                 setTimeout(() => {
                     command = new Command('wine', gamePath, { cwd: gameLocation });
                 }, 500);
                 break;
             }
     }
-    if (localStorage.getItem("discordRPC") == "enabled") {
-        setGameRichPresence("Playing", gameObj.short_title);
-    }
     if (command === undefined || command === null) {
-        logger.fatal("Command is undefined or null!")
-        return;
+        logger.error("Command is undefined or null!")
     }
     command.on('close', data => {
         logger.info(`Game closed with code ${data.code} and signal ${data.signal}`)
         if (localStorage.getItem("discordRPC") == "enabled") {
-            setGameRichPresence("Browsing Library");
+            smartSetRichPresence("Browsing Library");
         }
+        return returnCode.SUCCESS;
     });
-    command?.on('error', error => logger.error(`command error: "${error}"`));
-    command?.stdout.on('data', line => logger.info(`command stdout: "${line}"`));
-    command?.stderr.on('data', line => logger.info(`command stderr: "${line}"`));
+    command?.on('error', error => console.error(`command error: "${error}"`));
+    command?.stdout.on('data', line => console.log(`command stdout: "${line}"`));
+    command?.stderr.on('data', line => console.log(`command stderr: "${line}"`));
     const child = await command?.spawn();
-    logger.info(`Launching ${gameObj.long_title}...`)
-    if (child == null) throw new Error("Child is null! This should never happen...");
-    logger.info('pid: ' + child.pid);
+    console.log('pid:', child?.pid);
 }
 
 async function installGamePrompt(name: string, value: gameObject, gameCard: HTMLElement) {
+    let currentExtensions = ["exe", "lnk", "hdi"]
+    if (pc98.includes(value.game_id)) {
+        // PC-98 only reasonably supports hdi files, so we don't need to check for anything else.
+        currentExtensions = ["hdi"]
+    }
     await dialog.open({
         multiple: false,
         directory: false,
         filters: [{
             name: `${name} Executable`,
-            extensions: ['exe', 'hdi', 'lnk']
+            extensions: currentExtensions
         }]
     }).then(async (file) => {
         if (file !== null) {
@@ -239,13 +253,17 @@ async function installGamePrompt(name: string, value: gameObject, gameCard: HTML
                 name: name,
                 img: value.img,
                 file: file,
-                path: filePath
+                path: filePath,
+                showText: true,
             }
             await messageBox(`${value.short_title} added to library!`, "Success");
             localStorage.setItem(name, JSON.stringify(gameObject));
             window.location.reload();
+            // This isn't necessary because we are reloading the page, but TS won't shut up about it.
+            return returnCode.SUCCESS;
         } else {
-            logger.info("No file selected!")
+            logger.info("No file selected!");
+            return returnCode.INFO;
         }
     })
 }
@@ -265,7 +283,8 @@ async function gameConfigurator(id: string) {
     })
 }
 
-await listen("refresh-page", () => {
+await listen("refresh-page", (event) => {
+    console.log(event)
     window.location.reload();
 })
 
@@ -276,12 +295,12 @@ await listen("delete-game", async (event) => {
 })
 
 async function checkForCustomImage(id: string) {
-    if (!await fs.exists(await path.appDataDir() + "custom-img/" + id + ".png")) return false;
+    if (!await fs.exists(await path.appDataDir() + "custom-img/" + id + ".png")) return returnCode.ERROR;
     const retrievedImage = await fs.readBinaryFile(await path.appDataDir() + "custom-img/" + id + ".png");
     try {
         return retrievedImage;
     } catch {
-        return false;
+        return returnCode.ERROR;
     }
 }
 
@@ -292,10 +311,10 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
     gameCard.id = value.game_id;
     gameCard.style.background = `url(assets/game-images/${value.img_unset})`;
     let title = value.short_title;
-    if (await fs.exists(await path.appDataDir() + value.game_id + "-show-text")) {
-        let showTitle = await fs.readTextFile(value.game_id + "-show-text", { dir: fs.BaseDirectory.AppData });
-        if (showTitle == "false") {
-            title = ""
+    if (localStorage.getItem(name) !== null) {
+        if (JSON.parse(localStorage.getItem(name)!).showText == false) {
+            console.log("here")
+            title = "";
         }
     }
     gameCard.innerHTML = `
@@ -304,17 +323,27 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
         </div>
     `;
     const checkInstallStatus = installedGames.includes(name);
-    if (checkInstallStatus) {
-        gameCard.style.background = `url(assets/game-images/${value.img})`;
-        gameCard.addEventListener('contextmenu', async (e) => {
+    // if (checkInstallStatus) {
+    //     gameCard.style.background = `url(assets/game-images/${value.img})`;
+    //     gameCard.addEventListener('contextmenu', async (e) => {
+    //         e.preventDefault();
+    //         gameConfigurator(value.game_id);
+    //     });
+    // } else {
+    //     gameCard.addEventListener('contextmenu', async (e) => {
+    //         e.preventDefault();
+    //     })
+    // }
+    if (checkInstallStatus) gameCard.style.background = `url(assets/game-images/${value.img})`;
+    gameCard.addEventListener('contextmenu', async (e) => {
+        if (checkInstallStatus) {
+            gameCard.style.background = `url(assets/game-images/${value.img})`;
             e.preventDefault();
             gameConfigurator(value.game_id);
-        });
-    } else {
-        gameCard.addEventListener('contextmenu', async (e) => {
+        } else {
             e.preventDefault();
-        })
-    }
+        }
+    })
     gamesElement.appendChild(gameCard);
     if (checkInstallStatus) {
         gameCard.addEventListener('click', async () => {
@@ -327,8 +356,9 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
     }
     if (checkInstallStatus) {
         if (await checkForCustomImage(value.game_id)) {
-            logger.info("Custom image found!")
+            console.log("Custom image found!")
             const customImage = await checkForCustomImage(value.game_id);
+            console.log(customImage)
             if (customImage !== false) {
                 let blob = new Blob([customImage], { type: 'image/png' });
                 let url = URL.createObjectURL(blob);
@@ -356,6 +386,83 @@ async function removeGame(name: string, value: gameObject, gameCard: HTMLElement
     }
 }
 
+let dataJSONRetryCount = 1;
+async function setSmartGameRichPresence(state: string, game_name: string = "") {
+    // This only applies for games, so we don't have to worry about the state being "Browsing Library"
+    const shmPath = "/dev/shm/9launcher/data.json";
+    const shmExists = await fs.exists(shmPath);
+    if (!shmExists) {
+        if (dataJSONRetryCount > 3) {
+            logger.error("Data JSON not found after 3 retries! Falling back to generic rich presence...");
+            setGameRichPresence(state, game_name);
+            return;
+        }
+        logger.warn(`Data JSON not found! Retrying in 5 seconds... (${dataJSONRetryCount}/3)`);
+        dataJSONRetryCount++;
+        setTimeout(() => {
+            setSmartGameRichPresence(state, game_name);
+        }, 5000)
+        return;
+    } else {
+        logger.success("Data JSON found! Reading...");
+        const JSONData = await fs.readTextFile(shmPath);
+        try {
+            let JSONDataParsed = JSON.parse(JSONData);
+            recursiveUpdateSmartRichPresence(state, game_name, JSONDataParsed);
+        } catch {
+            console.error("Failed to parse shm file! Could be corrupt. Falling back to generic rich presence...");
+            setGameRichPresence(state, game_name);
+        }
+    }
+}
+
+function getGameNameFromId(gameID: number) {
+    // This function returns a short_title from the game ID that is passed to it. GameID is a number like 0, 1, 2, etc. we will use this to get the data at the index of games.modern
+    let gameName = Object.keys(games.modern)[gameID];
+    return games.modern[gameName as keyof typeof games.modern].short_title;
+}
+
+
+// TODO: add typing for shmData. It's a JSON object, but I'm lazy.
+async function recursiveUpdateSmartRichPresence(state: string, game_name: string = "", shmData: any) {
+    const shmPath = "/dev/shm/9launcher/data.json";
+    const shmExists = await fs.exists(shmPath);
+    if (localStorage.getItem("discordRPC") == "enabled") {
+        if (shmData.stage == "0" || shmData.gamestate == "1") {
+            shmData.stage = "In Menu"
+        } else {
+            shmData.stage = `Stage ${shmData.stage}`
+        }
+
+        await invoke("update_advanced_game_activity", {
+            state: `${getGameNameFromId(shmData.game)} - ${shmData.stage}`,
+            details: `${shmData.lives} lives left, ${shmData.bombs} bombs left, ${shmData.score} points`,
+            large_image: `${shmData.game}`,
+            small_image: `${shmData.game}`,
+        })
+        if (!shmExists) {
+            // Reset the initial timestamp so that elapsed time doesn't carry over to the next launch
+            await invoke("reset_initial_timestamp");
+            setGameRichPresence("Browsing Library");
+            return;
+        }
+    }
+    let newShmData = await fs.readTextFile(shmPath);
+    setTimeout(() => {
+        recursiveUpdateSmartRichPresence(state, game_name, JSON.parse(newShmData));
+    }, 300)
+}
+
+async function smartSetRichPresence(state: string, game_name: string = "", isThcrap: boolean = false) {
+    console.log(isThcrap)
+    if (!isThcrap) {
+        setGameRichPresence(state, game_name);
+    } else {
+        // We can safely assume we are running inside thcrap, so we can gather more information about the game state from lib9launcher
+        setSmartGameRichPresence(state, game_name);
+    }
+}
+
 async function setGameRichPresence(state: string = "Browsing Library", game_name: string = "") {
     
     let appstate;
@@ -363,13 +470,13 @@ async function setGameRichPresence(state: string = "Browsing Library", game_name
         appstate = `Playing ${game_name}`;
         await invoke("set_activity_game", {
             state: `${appstate}`,
-            details: `           `, // Not sure why details needs to be a large empty string, but it does :)
+            details: ``,
         })
     } else {
         appstate = "Browsing Library"
         await invoke("set_activity_generic", {
             state: `${appstate}`,
-            details: `           `, // Not sure why details needs to be a large empty string, but it does :)
+            details: ``,
         })
     }
 

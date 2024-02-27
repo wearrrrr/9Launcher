@@ -74,6 +74,17 @@ async function downloadWine(url: string, archiveName: string) {
 }
 
 async function checkIfVersionExists(wineVersion: string) {
+    console.log(wineVersion)
+    if (wineVersion == "System Wine") {
+        // Check if /usr/bin/wine exists
+        const wineExists = await fs.exists("/usr/bin/wine");
+        console.log(wineExists)
+        if (wineExists) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     const wineDir = await path.appDataDir() + "/wine/";
     const wineFolder = await path.appDataDir() + "wine/" + wineVersion + "/";
     const wineDirExists = await fs.exists(wineDir);
@@ -83,18 +94,21 @@ async function checkIfVersionExists(wineVersion: string) {
         return true;
     } else {
         return false;
-        // return downloadWine(url, wineVersion)
     }
 }
 
-async function setPrimaryWine(name: string, value: wineObject) {
+async function setPrimaryWine(name: string, value: wineObject, relativePath: boolean = true) {
     let appData = await path.appDataDir();
     let linkPath = await path.join(appData, "wine/wine")
     fs.removeFile(appData + "wine/wine")
-    let winePath = appData + value.path;
-    console.log(winePath)
-    console.log(linkPath)
+    let winePath
+    if (relativePath == false) {
+        winePath = value.path;
+    } else {
+        winePath = appData + value.path;
+    }
     let createLink = new Command('ln', ['-sf', winePath, linkPath]);
+    console.log(createLink)
     await createLink.execute();
     logger.success(`Primary wine set to ${name}!`)
     window.location.reload();

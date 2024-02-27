@@ -14,6 +14,11 @@ if (!gameID || games.validIDs.includes(gameID) === false) {
 
 const game = games.all[gameID as keyof typeof games.all]
 
+let gameData: any = null;
+if (localStorage.getItem(game.game_id) !== null) {
+    gameData = JSON.parse(localStorage.getItem(game.game_id) as string);
+}
+
 let customImagesDir: string = await platform() == 'win32' ? await path.appDataDir() + 'custom-img\\' : await path.appDataDir() + 'custom-img/'
 let title = document.getElementById('game-title')
 let gameImage = document.getElementById('game-image')
@@ -88,6 +93,18 @@ async function resetImage() {
 document.getElementById('image-setting-change')?.addEventListener('click', setNewImage)
 document.getElementById('image-setting-reset')?.addEventListener('click', resetImage)
 let showText = document.getElementById('show-text') as HTMLInputElement
+
+showText.checked = gameData.showText
+
 showText?.addEventListener('click', async () => {
-    await fs.writeTextFile(game.game_id + "-show-text", showText.checked.toString(), { dir: fs.BaseDirectory.AppData })
+    let gameData = localStorage.getItem(game.game_id);
+    if (gameData === null) throw new Error("Couldn't find game data in local storage")
+    let gameDataJSON = JSON.parse(gameData)
+    gameDataJSON.showText = showText.checked
+    let payload = {
+        gameID: game.game_id,
+        updatedData: JSON.stringify(gameDataJSON),
+    }
+    await emit("update-game", payload);
+    await emit("refresh-page");
 })
