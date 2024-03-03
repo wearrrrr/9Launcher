@@ -223,6 +223,9 @@ async function launchGame(gameObj: gameObject) {
     command?.stderr.on('data', line => console.log(`command stderr: "${line}"`));
     const child = await command?.spawn();
     console.log('pid:', child?.pid);
+    if (localStorage.getItem("discordRPC") == "enabled") {
+        smartSetRichPresence("Playing", gameObj.short_title, fileExtension == "lnk");
+    }
 }
 
 async function installGamePrompt(name: string, value: gameObject, gameCard: HTMLElement) {

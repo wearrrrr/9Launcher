@@ -5,64 +5,41 @@
 }
 #modern-era, .installed-games {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   gap: 0.5rem;
   font-size: 15px;
-  width: 97%;
+  width: 100%;
   margin: 0 auto;
 }
 .games-spinoffs {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   margin-top: 20px;
   margin-left: 1.5%;
   font-size: 15px;
   gap: 0.5rem;
-  width: 250px;
+  width: 30%;
 }
-@media (min-width: 1200px) {
-  #modern-era, .installed-games {
-    grid-template-columns: repeat(9, 1fr);
-  }
-}
-@media (min-width: 1350px) {
-  #modern-era, .installed-games {
-    grid-template-columns: repeat(10, 1fr);
-  }
-}
-@media (min-width: 1500px) {
-  #modern-era, .installed-games {
-    grid-template-columns: repeat(11, 1fr);
-  }
-}
-@media (min-width: 1650px) {
-  #modern-era, .installed-games {
-    grid-template-columns: repeat(12, 1fr);
-  }
-}
-@media (min-width: 1800px) {
-  #modern-era, .installed-games {
-    grid-template-columns: repeat(13, 1fr);
-  }
-}
-#modern-era > div, .installed-games > div, .games-spinoffs > div {
+.game-card {
   border: 1px solid #ccc;
   text-align: center;
   border-radius: 10px;
   font-size: 12px;
   line-height: 12px;
-  width: 120px;
-  height: 44px;
+  width: 135px;
+  height: 50px;
   cursor: pointer;
-}
-.game-card {
-  width: 120px;
-  height: 44px;
   display: flex;
   justify-content: center;
   align-items: center;
+  /* CSS I hate you. */
+  background-size: cover !important;
+}
+.game-card__info {
+  width: inherit;
 }
 .game-card__title {
   font-weight: 500;
   background-color: rgba(0, 0, 0, 0.582);
+  width: 100%;
 }

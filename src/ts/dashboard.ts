@@ -9,12 +9,6 @@ import { logger } from './lib/logging';
 import { fs } from '@tauri-apps/api';
 import infoManager from './lib/infoManager';
 import moment from 'moment';
-// TODO: Support for .5 games
-
-// const pc98Games = ['th01', 'th02', 'th03', 'th04', 'th05']
-// const modernGames = ['th06', 'th07', 'th08', 'th09', 'th10', 'th11', 'th12', 'th13', 'th14', 'th15', 'th16', 'th17', 'th18', 'th19']
-
-localStorage.setItem('setupStatus', 'true');
 
 const gameGrid = document.getElementById("games") as HTMLDivElement;
 const gamesGridSpinoffs = document.getElementById("games-spinoffs") as HTMLDivElement;
