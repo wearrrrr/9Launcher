@@ -16,7 +16,7 @@ import { returnCode } from './types/types';
 
 type gameObject = {
     "long_title": string,
-    "short_title": string
+    "en_title": string
     "img": string,
     "img_unset": string,
     "url_trial": string,
@@ -35,6 +35,8 @@ function gameIterator() {
         }
     }
 }
+
+const allGames: Record<string, gameObject> = { ...games["pc-98"], ...games.modern };
 
 function installedGamesIterator() {
     let installedGames = []
@@ -224,7 +226,7 @@ async function launchGame(gameObj: gameObject) {
     const child = await command?.spawn();
     console.log('pid:', child?.pid);
     if (localStorage.getItem("discordRPC") == "enabled") {
-        smartSetRichPresence("Playing", gameObj.short_title, fileExtension == "lnk");
+        smartSetRichPresence("Playing", gameObj.en_title, fileExtension == "lnk");
     }
 }
 
@@ -261,7 +263,7 @@ async function installGamePrompt(name: string, value: gameObject, gameCard: HTML
                 path: filePath,
                 showText: true,
             }
-            await messageBox(`${value.short_title} added to library!`, "Success");
+            await messageBox(`${value.en_title} added to library!`, "Success");
             localStorage.setItem(name, JSON.stringify(gameObject));
             window.location.reload();
             // This isn't necessary because we are reloading the page, but TS won't shut up about it.
@@ -300,12 +302,12 @@ await listen("delete-game", async (event) => {
 })
 
 async function checkForCustomImage(id: string) {
-    if (!await fs.exists(await path.appDataDir() + "custom-img/" + id + ".png")) return returnCode.ERROR;
+    if (!await fs.exists(await path.appDataDir() + "custom-img/" + id + ".png")) return returnCode.FALSE;
     const retrievedImage = await fs.readBinaryFile(await path.appDataDir() + "custom-img/" + id + ".png");
     try {
         return retrievedImage;
     } catch {
-        return returnCode.ERROR;
+        return returnCode.FALSE;
     }
 }
 
@@ -315,7 +317,7 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
     gameCard.dataset.added = value.img;
     gameCard.id = value.game_id;
     gameCard.style.background = `url(assets/game-images/${value.img_unset})`;
-    let title = value.short_title;
+    let title = value.en_title;
     if (localStorage.getItem(name) !== null) {
         if (JSON.parse(localStorage.getItem(name)!).showText == false) {
             console.log("here")
@@ -352,7 +354,7 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
     gamesElement.appendChild(gameCard);
     if (checkInstallStatus) {
         gameCard.addEventListener('click', async () => {
-            launchGame(games.all[name as keyof typeof games.all]);
+            launchGame(allGames[name as keyof typeof allGames]);
         })
     } else {
         gameCard.addEventListener('click', async () => {
@@ -360,11 +362,11 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
         });
     }
     if (checkInstallStatus) {
-        if (await checkForCustomImage(value.game_id)) {
-            console.log("Custom image found!")
+        if (await checkForCustomImage(value.game_id) != returnCode.FALSE) {
             const customImage = await checkForCustomImage(value.game_id);
             console.log(customImage)
-            if (customImage !== returnCode.ERROR) {
+            console.log(returnCode.FALSE)
+            if (customImage != returnCode.FALSE) {
                 let blob = new Blob([customImage], { type: 'image/png' });
                 let url = URL.createObjectURL(blob);
                 gameCard.style.background = `url(${url})`;
@@ -376,7 +378,7 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
 async function removeGame(name: string, value: gameObject, gameCard: HTMLElement) {
     const checkInstallStatus = installedGames.includes(name);
     if (checkInstallStatus) {
-        let confirm = await dialog.confirm("This will remove the game from your library, but will not delete the game files.", `Remove ${value.short_title}?`);
+        let confirm = await dialog.confirm("This will remove the game from your library, but will not delete the game files.", `Remove ${value.en_title}?`);
         if (confirm) {
             localStorage.removeItem(name);
             gameCard.style.background = `url(assets/game-images/${value.img_unset})`;
@@ -422,9 +424,9 @@ async function setSmartGameRichPresence(state: string, game_name: string = "") {
 }
 
 function getGameNameFromId(gameID: number) {
-    // This function returns a short_title from the game ID that is passed to it. GameID is a number like 0, 1, 2, etc. we will use this to get the data at the index of games.modern
+    // This function returns a en_title from the game ID that is passed to it. GameID is a number like 0, 1, 2, etc. we will use this to get the data at the index of games.modern
     let gameName = Object.keys(games.modern)[gameID];
-    return games.modern[gameName as keyof typeof games.modern].short_title;
+    return games.modern[gameName as keyof typeof games.modern].en_title;
 }
 
 

@@ -12,5 +12,7 @@ export enum returnCode {
     INFO = 3,
     DEBUG = 4,
     FATAL = 5,
+    TRUE = 6,
+    FALSE = 7,
 }
 

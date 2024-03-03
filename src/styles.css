@@ -152,6 +152,8 @@ button {
   margin-left: 20px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
 }
 .info-page > .info-header {
   line-height: 15px;

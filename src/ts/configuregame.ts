@@ -1,18 +1,19 @@
-import games from '../assets/games.json';
+import { allGames, isGameIDValid } from "./gamesInterface";
 import * as dialog from "@tauri-apps/api/dialog"
 import * as fs from "@tauri-apps/api/fs"
 import * as path from "@tauri-apps/api/path"
 import { emit } from "@tauri-apps/api/event"
 import { platform } from '@tauri-apps/api/os';
+import { returnCode } from "./lib/types/types";
 
 const urlParams = new URLSearchParams(window.location.search);
-const gameID = urlParams.get('id')
+const gameID = urlParams.get('id') as string;
 
-if (!gameID || games.validIDs.includes(gameID) === false) {
-    throw new Error('No game ID provided')
+if (isGameIDValid(gameID) === returnCode.FALSE) {
+    throw new Error("Invalid game ID!");
 }
 
-const game = games.all[gameID as keyof typeof games.all]
+const game = allGames[gameID as keyof typeof allGames]
 
 let gameData: any = null;
 if (localStorage.getItem(game.game_id) !== null) {
@@ -25,7 +26,7 @@ let gameImage = document.getElementById('game-image')
 
 async function setupConfigureMenu() {
     if (title === null) throw new Error("Couldn't find game title element")
-    title.textContent += game.short_title + ": "
+    title.textContent += game.en_title + ": "
     if (gameImage === null) throw new Error("Couldn't find game image element")
     if (game.img === null) throw new Error("Game image is null")
     gameImage.setAttribute('src', "/assets/game-images/" + game.img)
@@ -37,7 +38,7 @@ async function setupConfigureMenu() {
 }
 setupConfigureMenu()
 async function removeGame() {
-            let confirm = await dialog.confirm("This will remove the game from your library, but will not delete the game files.", `Remove ${game.short_title}?`);
+            let confirm = await dialog.confirm("This will remove the game from your library, but will not delete the game files.", `Remove ${game.en_title}?`);
             if (confirm) {
                 emit("delete-game", game.game_id)
                 window.close();
