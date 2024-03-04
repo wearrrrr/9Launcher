@@ -27,10 +27,10 @@ export class logger {
         if (fileLog) await this.sendToLogs(message, "success");
         this.sendToConsole(message, "success");
     }
-    public static async fatal(message: string, fileLog: boolean = true) {
-        console.error("%c[9L] Critical Error: " + message, "font-weight: bold; font-size: 150%");
-        if (fileLog) await this.sendToLogs(message, "fatal-error");
-        this.sendToConsole(message, "fatal-error");
+    public static async fatal(message: string | unknown, fileLog: boolean = true) {
+        if (fileLog) await this.sendToLogs(message as string, "fatal");
+        this.sendToConsole(message as string, "fatal");
+        throw new Error("[9L] " + message);
     }
     private static async sendToConsole(message: string, type: string) {
         let console = document.getElementById("console-output");
@@ -39,6 +39,17 @@ export class logger {
             log.classList.add(`log-${type}`);
             log.innerText = `[9L] ${message}\n`;
             console.appendChild(log);
+        }
+    }
+
+    public static async clearConsole() {
+        let internalConsole = document.getElementById("console-output");
+        if (internalConsole) {
+            [...internalConsole.getElementsByTagName("span")].forEach((element: HTMLSpanElement) => {
+                element.remove()
+            })
+        } else {
+            console.error("Internal Console not found!")
         }
     }
 
@@ -57,4 +68,14 @@ export class logger {
             await fs.writeTextFile("9Launcher.log", currentContents + `${log.type}: ${log.message} \n`, { dir: fs.BaseDirectory.AppData })
         }
     }
+}
+
+export async function attachOnError() {
+    window.onerror = function(message, source, lineno, colno, error) {
+        // You can customize this part to send errors to your custom logger
+        logger.fatal(`Error: ${message} \n Source: ${source} \n Line: ${lineno} \n Col: ${colno} \n Error: ${error}`)
+    
+        // Return true to prevent the default browser error handling
+        return true;
+    };
 }

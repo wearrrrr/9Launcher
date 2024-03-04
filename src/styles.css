@@ -172,8 +172,8 @@ button {
   height: 20px;
   transform: rotate(45deg);
   position: fixed;
-  margin-top: 31%;
-  left: 15px;
+  margin-top: 25%;
+  left: 13px;
   background-color: var(--bottom-banner-color);
   z-index: 1;
 }
@@ -182,8 +182,8 @@ button {
   height: 20px;
   transform: rotate(45deg);
   position: fixed;
-  margin-top: 31.5vh;
-  left: 97%;
+  margin-top: 245px;
+  right: 15px;
   background-color: var(--bottom-banner-color);
   z-index: 1;
   top: 61%;
@@ -191,10 +191,10 @@ button {
 .quick-settings-modal {
   background-color: var(--bottom-banner-color);
   width: 30%;
-  position: fixed;
-  top: 54%;
+  position: absolute;
+  top: 60.5%;
   left: 5px;
-  height: 40%;
+  height: 33%;
   margin: 0;
   padding: 0;
   opacity: 0;
@@ -202,12 +202,13 @@ button {
   z-index: 2;
   border-radius: 5px;
   pointer-events: none;
+  box-shadow: -3px 3px 12px 0px #101010;
 }
 .information-page {
   background-color: var(--bottom-banner-color);
   width: 40%;
-  position: fixed;
-  top: 57%;
+  position: absolute;
+  top: 56.5%;
   left: 59.5%;
   height: 37%;
   margin: 0;
@@ -216,6 +217,7 @@ button {
   border-radius: 5px;
   pointer-events: none;
   opacity: 0;
+  box-shadow: 3px 3px 12px 0px #101010;
 }
 .modal-active {
   opacity: 1;
@@ -235,6 +237,8 @@ button {
   flex-direction: row;
   margin-top: 10px;
   margin-left: 20px;
+  width: 150px;
+  justify-content: space-around;
 }
 
 .switch {
@@ -471,10 +475,37 @@ input:checked + .slider:before {
 #console-output {
   height: 275px;
   width: 100%;
-  background-color: #202020;
-  border-radius: 15px;
-  padding-inline: 10px;
+  background-color: #292929;
+  padding: 5px 10px 10px 15px;
   font-family: monospace;
+  position: relative;
+  overflow-y: scroll;
+}
+
+/* Scrollbar styling */
+#console-output::-webkit-scrollbar {
+  width: 8px;
+}
+
+#console-output::-webkit-scrollbar-track {
+  background-color: #292929;
+}
+
+#console-output::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 4px;
+}
+
+#console-output::-webkit-scrollbar-thumb:hover {
+  background-color: #777;
+}
+
+
+#clear-console {
+  position: absolute;
+  top: 82%;
+  width: 19%;
+  left: 80%;
 }
 
 .log-info {

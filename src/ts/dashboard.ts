@@ -5,10 +5,12 @@ import { window } from "@tauri-apps/api";
 import { TauriEvent } from "@tauri-apps/api/event";
 import modalManager from './lib/modalManager';
 import * as pc98manager from './lib/pc98manager';
-import { logger } from './lib/logging';
+import { logger, attachOnError } from './lib/logging';
 import { fs } from '@tauri-apps/api';
 import infoManager from './lib/infoManager';
 import moment from 'moment';
+
+await attachOnError();
 
 const gameGrid = document.getElementById("games") as HTMLDivElement;
 const gamesGridSpinoffs = document.getElementById("games-spinoffs") as HTMLDivElement;
@@ -139,9 +141,16 @@ function openWineManager() {
     })
 }
 
+
+
 window.appWindow.listen("createLog", async () => {
     if (!await fs.exists("9Launcher.log", { dir: fs.BaseDirectory.AppData })) {
-        await fs.writeFile({ path: "9Launcher.log", contents: "" }, { dir: fs.BaseDirectory.AppData })
+        try {
+            await fs.writeFile({ path: "9Launcher.log", contents: "" }, { dir: fs.BaseDirectory.AppData })
+        } catch {
+            throw logger.fatal("Couldn't create log file")
+        }
+        
     }
     await logger.info("9Launcher started!")
     await logger.info("9Launcher version: " + info.version)
@@ -166,6 +175,8 @@ window.getCurrent().listen(TauriEvent.WINDOW_CLOSE_REQUESTED, async () => {
 if (localStorage.getItem("console-logging") !== "enabled") {
     document.getElementById("console")?.remove();
 }
+
+document.getElementById('clear-console')?.addEventListener('click', logger.clearConsole);
 
 const funcs = {
     wineUpdateProgressBar,

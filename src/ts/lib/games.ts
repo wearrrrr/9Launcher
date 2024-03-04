@@ -12,19 +12,8 @@ import { WebviewWindow } from "@tauri-apps/api/window"
 import { listen } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/tauri';
 import { platform } from '@tauri-apps/api/os';
-import { returnCode } from './types/types';
+import { returnCode, gameObject } from './types/types';
 import { allGames, isGameIDValid, validGames } from '../gamesInterface';
-
-type gameObject = {
-    "long_title": string,
-    "en_title": string,
-    "jp_title": string,
-    "img": string,
-    "img_unset": string,
-    "url_trial": string,
-    "release_year": number,
-    "game_id": string
-}
 
 let info = await infoManager.gatherInformation();
 
@@ -37,6 +26,8 @@ function gameIterator() {
         }
     }
 }
+
+
 
 function installedGamesIterator() {
     let installedGames = []
@@ -141,70 +132,63 @@ setTimeout(() => {
     checkWineNeeded();
 }, 500)
 
-
-// async function checkDosboxExists() {
-//     let dosboxExists = await fs.exists(await path.appDataDir() + "dosbox/dosbox-x");
-//     if (dosboxExists == false) {
-//         if (progressBar !== undefined ) {
-//             progressBar.dosboxOpenModal();
-//         }
-//     }
-// }
-// checkDosboxExists();
-
 let pc98 = ["th01", "th02", "th03", "th04", "th05"]
 
 async function launchGame(gameObj: gameObject) {
-    let gameLocation = getGameLocation(gameObj.game_id);
-    let fileExtension = await path.extname(gameLocation);
-    let command;
-    if (pc98.includes(gameObj.game_id)) {
-        logger.info(`Running ${gameObj.en_title} with dosbox-x!`)
-        switch (info.platform) {
-            case "win32":
-                command = new Command("cmd", ["/C", `${await path.appDataDir() + 'bin\\x64\\Release\\dosbox-x.exe'}`, "-set", "machine=pc98", "-c", `IMGMOUNT A: ${gameLocation}`, "-c", "A:", "-c", "game", "-nopromptfolder"])
-                break;
-            case "linux":
-                command = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gameLocation}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
-                break;
-            default: 
-                logger.warn("Unknown OS detected! Support for PC-98 on this platform is not guaranteed! Attempting to run with dosbox-x!")
-                command = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gameLocation}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
-        }
-    } else {
-        logger.info(`Running ${gameObj.en_title}!`);
-        const wineCommand = new Command('wine', gameLocation, { cwd: getGamePath(gameObj.game_id) });
-        switch (info.platform) {
-            case "win32":
-                command = new Command("cmd", ["/c", gameLocation], { cwd: getGamePath(gameObj.game_id) });
-                break;
-            case "linux":
-                command = wineCommand;
-                break;
-            case "darwin":
-                command = wineCommand;
-                break;
-            default:
-                command = wineCommand;
-                break;
+    try {
+        let gameLocation = getGameLocation(gameObj.game_id);
+        let fileExtension = await path.extname(gameLocation);
+        let command;
+        if (pc98.includes(gameObj.game_id)) {
+            logger.info(`Running ${gameObj.en_title} with dosbox-x!`)
+            switch (info.platform) {
+                case "win32":
+                    command = new Command("cmd", ["/C", `${await path.appDataDir() + 'bin\\x64\\Release\\dosbox-x.exe'}`, "-set", "machine=pc98", "-c", `IMGMOUNT A: ${gameLocation}`, "-c", "A:", "-c", "game", "-nopromptfolder"])
+                    break;
+                case "linux":
+                    command = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gameLocation}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
+                    break;
+                default: 
+                    logger.warn("Unknown OS detected! Support for PC-98 on this platform is not guaranteed! Attempting to run with dosbox-x!")
+                    command = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gameLocation}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
             }
-    }
-    if (command === undefined || command === null) {
-        return logger.error("Command is undefined or null!")
-    }
-    command.on('close', data => {
-        logger.info(`${gameObj.en_title} closed with code ${data.code}`)
-        if (localStorage.getItem("discordRPC") == "enabled") {
-            smartSetRichPresence("Browsing Library");
+        } else {
+            logger.info(`Running ${gameObj.en_title}!`);
+            const wineCommand = new Command('wine', gameLocation, { cwd: getGamePath(gameObj.game_id) });
+            switch (info.platform) {
+                case "win32":
+                    command = new Command("cmd", ["/c", gameLocation], { cwd: getGamePath(gameObj.game_id) });
+                    break;
+                case "linux":
+                    command = wineCommand;
+                    break;
+                case "darwin":
+                    command = wineCommand;
+                    break;
+                default:
+                    command = wineCommand;
+                    break;
+                }
         }
-        return returnCode.SUCCESS;
-    });
-    command?.on('error', error => console.error(`command error: "${error}"`));
-    command?.stdout.on('data', line => console.log(`command stdout: "${line}"`));
-    command?.stderr.on('data', line => console.log(`command stderr: "${line}"`));
-    await command?.spawn();
-    if (localStorage.getItem("discordRPC") == "enabled") {
-        smartSetRichPresence("Playing", gameObj.en_title, fileExtension == "lnk");
+        if (command === undefined || command === null) {
+            return logger.error("Command is undefined or null!")
+        }
+        command.on('close', data => {
+            logger.info(`${gameObj.en_title} closed with code ${data.code}`)
+            if (localStorage.getItem("discordRPC") == "enabled") {
+                smartSetRichPresence("Browsing Library");
+            }
+            return returnCode.SUCCESS;
+        });
+        command?.on('error', error => console.error(`command error: "${error}"`));
+        command?.stdout.on('data', line => console.log(`command stdout: "${line}"`));
+        command?.stderr.on('data', line => console.log(`command stderr: "${line}"`));
+        await command?.spawn();
+        if (localStorage.getItem("discordRPC") == "enabled") {
+            smartSetRichPresence("Playing", gameObj.en_title, fileExtension == "lnk");
+        }
+    } catch (err) {
+        return logger.error(`Issue launching ${gameObj.en_title}! Error: ${err}`)
     }
 }
 
@@ -435,7 +419,6 @@ async function recursiveUpdateSmartRichPresence(state: string, game_name: string
 }
 
 async function smartSetRichPresence(state: string, game_name: string = "", isThcrap: boolean = false) {
-    console.log(isThcrap)
     if (!isThcrap) {
         setGameRichPresence(state, game_name);
     } else {
