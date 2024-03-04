@@ -13,7 +13,7 @@ if (isGameIDValid(gameID) === returnCode.FALSE) {
     throw new Error("Invalid game ID!");
 }
 
-const game = allGames[gameID as keyof typeof allGames]
+const game = allGames[gameID as keyof typeof allGames];
 
 let gameData: any = null;
 if (localStorage.getItem(game.game_id) !== null) {

@@ -13,6 +13,7 @@ import { listen } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/tauri';
 import { platform } from '@tauri-apps/api/os';
 import { returnCode } from './types/types';
+import { allGames, isGameIDValid, validGames } from '../gamesInterface';
 
 type gameObject = {
     "long_title": string,
@@ -37,8 +38,6 @@ function gameIterator() {
     }
 }
 
-const allGames: Record<string, gameObject> = { ...games["pc-98"], ...games.modern };
-
 function installedGamesIterator() {
     let installedGames = []
     for (const [name] of Object.entries(games["pc-98"])) {
@@ -55,7 +54,7 @@ function installedGamesIterator() {
 }
 
 function getGameLocation(gameID: string) {
-    if (games.validIDs.includes(gameID) == false) throw new Error("Invalid game ID! Valid game IDs are: " + games.validIDs.join(", "));
+    if (isGameIDValid(gameID) == returnCode.FALSE) throw new Error("Invalid game ID! Valid game IDs are: " + validGames.join(", "));
     let gamePath = localStorage.getItem(gameID);
     let gamePathParsed = JSON.parse(gamePath as string)
     if (gamePath == null) throw new Error("Game path not found! Try clearing localStorage.")
@@ -63,7 +62,7 @@ function getGameLocation(gameID: string) {
 }
 
 function getGamePath(gameID: string) {
-    if (games.validIDs.includes(gameID) == false) throw new Error("Invalid game ID! Valid game IDs are: " + games.validIDs.join(", "));
+    if (isGameIDValid(gameID) == returnCode.FALSE) throw new Error("Invalid game ID! Valid game IDs are: " + validGames.join(", "));
     let gamePath = localStorage.getItem(gameID);
     let gamePathParsed = JSON.parse(gamePath as string)
     if (gamePath == null) throw new Error("Game path not found! Try clearing localStorage.")
@@ -269,7 +268,7 @@ async function gameConfigurator(id: string) {
     })
 }
 
-await listen("refresh-page", (event) => {
+await listen("refresh-page", () => {
     window.location.reload();
 })
 
