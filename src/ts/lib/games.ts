@@ -16,7 +16,8 @@ import { returnCode } from './types/types';
 
 type gameObject = {
     "long_title": string,
-    "en_title": string
+    "en_title": string,
+    "jp_title": string,
     "img": string,
     "img_unset": string,
     "url_trial": string,
@@ -53,13 +54,6 @@ function installedGamesIterator() {
     return installedGames
 }
 
-// type gameInformation = {
-//     name: string,
-//     img: string,
-//     file: string,
-//     path: string
-// }
-
 function getGameLocation(gameID: string) {
     if (games.validIDs.includes(gameID) == false) throw new Error("Invalid game ID! Valid game IDs are: " + games.validIDs.join(", "));
     let gamePath = localStorage.getItem(gameID);
@@ -95,7 +89,7 @@ const downloadWine = async (archiveName: string) => {
     const wineFolderExists = await fs.exists(wineFolder);
     if (!wineDirExists) await fs.createDir(wineDir);
     if (wineArchiveExists) {
-        if (wineFolderExists) return console.log("Wine already unzipped... nothing to do!")
+        if (wineFolderExists) return logger.debug("Wine already unzipped... nothing to do!")
         else unzip(wineArchive, wineDir);
     };
     let totalBytesDownloaded = 0;
@@ -163,50 +157,36 @@ let pc98 = ["th01", "th02", "th03", "th04", "th05"]
 
 async function launchGame(gameObj: gameObject) {
     let gameLocation = getGameLocation(gameObj.game_id);
-    console.log(gameLocation)
     let fileExtension = await path.extname(gameLocation);
-    console.log(fileExtension)
     let command;
     if (pc98.includes(gameObj.game_id)) {
+        logger.info(`Running ${gameObj.en_title} with dosbox-x!`)
         switch (info.platform) {
             case "win32":
-                console.warn("Windows detected, running with dosbox-x!")
                 command = new Command("cmd", ["/C", `${await path.appDataDir() + 'bin\\x64\\Release\\dosbox-x.exe'}`, "-set", "machine=pc98", "-c", `IMGMOUNT A: ${gameLocation}`, "-c", "A:", "-c", "game", "-nopromptfolder"])
                 break;
             case "linux":
-                logger.info("Linux detected, running with dosbox-x!")
-                if (fileExtension == "hdi") {
-                    command = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gameLocation}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
-                }
+                command = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gameLocation}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
                 break;
             default: 
                 logger.warn("Unknown OS detected! Support for PC-98 on this platform is not guaranteed! Attempting to run with dosbox-x!")
-                if (fileExtension == "hdi") {
-                    command = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gameLocation}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
-                }
+                command = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gameLocation}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
         }
     } else {
+        logger.info(`Running ${gameObj.en_title}!`);
+        const wineCommand = new Command('wine', gameLocation, { cwd: getGamePath(gameObj.game_id) });
         switch (info.platform) {
             case "win32":
-                logger.info("Windows detected, running with cmd!")
                 command = new Command("cmd", ["/c", gameLocation], { cwd: getGamePath(gameObj.game_id) });
-                console.log(command)
                 break;
             case "linux":
-                logger.info("Linux detected, running with wine!")
-                command = new Command('wine', gameLocation, { cwd: getGamePath(gameObj.game_id) });
+                command = wineCommand;
                 break;
             case "darwin":
-                logger.info("MacOS detected, running with wine!")
-                setTimeout(() => {
-                    command = new Command('wine', gameLocation, { cwd: getGamePath(gameObj.game_id) });
-                }, 500);
+                command = wineCommand;
                 break;
             default:
-                logger.warn("Unknown OS detected, attempting to run with wine! (assuming POSIX based OS)")
-                setTimeout(() => {
-                    command = new Command('wine', gameLocation, { cwd: gameLocation });
-                }, 500);
+                command = wineCommand;
                 break;
             }
     }
@@ -214,7 +194,7 @@ async function launchGame(gameObj: gameObject) {
         return logger.error("Command is undefined or null!")
     }
     command.on('close', data => {
-        logger.info(`Game closed with code ${data.code} and signal ${data.signal}`)
+        logger.info(`${gameObj.en_title} closed with code ${data.code}`)
         if (localStorage.getItem("discordRPC") == "enabled") {
             smartSetRichPresence("Browsing Library");
         }
@@ -223,8 +203,7 @@ async function launchGame(gameObj: gameObject) {
     command?.on('error', error => console.error(`command error: "${error}"`));
     command?.stdout.on('data', line => console.log(`command stdout: "${line}"`));
     command?.stderr.on('data', line => console.log(`command stderr: "${line}"`));
-    const child = await command?.spawn();
-    console.log('pid:', child?.pid);
+    await command?.spawn();
     if (localStorage.getItem("discordRPC") == "enabled") {
         smartSetRichPresence("Playing", gameObj.en_title, fileExtension == "lnk");
     }
@@ -291,7 +270,6 @@ async function gameConfigurator(id: string) {
 }
 
 await listen("refresh-page", (event) => {
-    console.log(event)
     window.location.reload();
 })
 
@@ -320,7 +298,6 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
     let title = value.en_title;
     if (localStorage.getItem(name) !== null) {
         if (JSON.parse(localStorage.getItem(name)!).showText == false) {
-            console.log("here")
             title = "";
         }
     }
@@ -364,8 +341,6 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
     if (checkInstallStatus) {
         if (await checkForCustomImage(value.game_id) != returnCode.FALSE) {
             const customImage = await checkForCustomImage(value.game_id);
-            console.log(customImage)
-            console.log(returnCode.FALSE)
             if (customImage != returnCode.FALSE) {
                 let blob = new Blob([customImage], { type: 'image/png' });
                 let url = URL.createObjectURL(blob);

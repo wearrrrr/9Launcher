@@ -13,10 +13,14 @@
 </head>
     <body>
         <h2 class="dashboard-title">Mainline Games</h2>
-
         <div id="games" class="installed-games"></div>
+
         <h2>Spinoffs</h2>
         <div id="games-spinoffs" class="games-spinoffs"></div>
+
+        <div id="console">
+            <div id="console-output"></div>
+        </div>
 
         <div id="quick-settings" class="quick-settings-modal">
             <div class="arrow-down-qs"></div>
@@ -29,7 +33,7 @@
                 </label>
             </div>
             <div class="discord-rpc slider-container">
-                <span class="discord-rpc-text">Discord Rich Presence</span>
+                <span class="discord-rpc-text">Discord RPC</span>
                 <label class="switch">
                     <input type="checkbox" id="discord-rpc-slider">
                     <span id="rpc-slider-round" class="slider round"></span>
@@ -40,6 +44,13 @@
                 <label class="switch">
                     <input type="checkbox" id="file-logging-slider">
                     <span id="file-logging-slider-round" class="slider round"></span>
+                </label>
+            </div>
+            <div class="console slider-container">
+                <span class="console-text">Launch Info</span>
+                <label class="switch">
+                    <input type="checkbox" id="console-slider">
+                    <span id="console-slider-round" class="slider round"></span>
                 </label>
             </div>
 

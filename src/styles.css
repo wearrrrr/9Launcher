@@ -374,17 +374,17 @@ input:checked + .slider:before {
   text-align: center;
 }
 .tingle-modal {
-  background-color: #0f0f0f;
+  background-color: #0f0f0fcc;
 }
 .tingle-modal-box {
-  background-color: #0f0f0f;
+  background-color: #0f0f0fcc;
 }
 .tingle-modal-box__content {
-  background-color: #0f0f0f;
+  background-color: #0f0f0fcc;
   padding-bottom: 0;
 }
 .tingle-modal-box__footer {
-  background-color: #0f0f0f !important;
+  background-color: #0f0f0fcc !important;
 }
 .tingle-btn {
   width: 100%;
@@ -460,4 +460,32 @@ input:checked + .slider:before {
 
 .delete-game {
   width: 68%; /* we love magic numbers */
+}
+#console {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+}
+
+#console-output {
+  height: 275px;
+  width: 100%;
+  background-color: #202020;
+  border-radius: 15px;
+  padding-inline: 10px;
+  font-family: monospace;
+}
+
+.log-info {
+  color: #63d3ff;
+}
+.log-warn {
+  color: #ff9f00;
+}
+.log-error {
+  color: #ff3d3d;
+}
+.log-success {
+  color: #00ff00;
 }

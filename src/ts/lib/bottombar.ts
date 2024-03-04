@@ -13,6 +13,7 @@ const notificationSlider = document.getElementById('notifications-slider') as HT
 const rpcSlider = document.getElementById('discord-rpc-slider') as HTMLInputElement;
 const rpcSliderRound = document.getElementById('rpc-slider-round') as HTMLDivElement;
 const fileLoggingSlider = document.getElementById('file-logging-slider') as HTMLInputElement;
+const consoleInfoSlider = document.getElementById('console-slider') as HTMLInputElement;
 const clearGames = document.getElementById('clear-games-btn') as HTMLButtonElement;
 const wineManager = document.getElementById('wine-manager-btn') as HTMLButtonElement;
 const dosboxManager = document.getElementById('dosbox-manager-btn') as HTMLButtonElement;
@@ -38,6 +39,8 @@ function setSliderState(element: HTMLInputElement, state: boolean) {
 setSliderState(notificationSlider, localStorage.getItem("libraryUpdateAlerts") === "enabled" ? true : false)
 setSliderState(rpcSlider, localStorage.getItem("discordRPC") === "enabled" ? true : false)
 setSliderState(fileLoggingSlider, localStorage.getItem("file-logging") === "enabled" ? true : false)
+setSliderState(consoleInfoSlider, localStorage.getItem("console-logging") === "enabled" ? true : false)
+
 
 if (localStorage.getItem("discordRPC") === null) {
     localStorage.setItem("discordRPC", "enabled")
@@ -47,6 +50,14 @@ if (localStorage.getItem("discordRPC") === null) {
 
 if (localStorage.getItem("file-logging") === null) {
     localStorage.setItem("file-logging", "enabled")
+}
+
+if (localStorage.getItem("libraryUpdateAlerts") === null) {
+    localStorage.setItem("libraryUpdateAlerts", "enabled")
+}
+
+if (localStorage.getItem("console-logging") === null) {
+    localStorage.setItem("console-logging", "enabled")
 }
 
 if (settingsDiv !== null) {
@@ -95,6 +106,13 @@ if (settingsDiv !== null) {
             localStorage.setItem("file-logging", "enabled")
         } else {
             localStorage.setItem("file-logging", "disabled")
+        }
+    });
+    consoleInfoSlider.addEventListener("change", (event) => {
+        if ((event.currentTarget as HTMLInputElement).checked == true) {
+            localStorage.setItem("console-logging", "enabled")
+        } else {
+            localStorage.setItem("console-logging", "disabled")
         }
     });
     clearGames.addEventListener('click', async () => {

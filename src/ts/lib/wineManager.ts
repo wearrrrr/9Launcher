@@ -25,7 +25,6 @@ async function wineIterator() {
 }
 
 async function unzip(wineArchive: string, wineDir: string) {
-    console.log(wineDir)
     let unzip = new Command('tar', ['xvf', wineArchive, '-C', wineDir], { cwd: wineDir });
     unzip.stderr.on('data', data => console.error(`command stderr: "${data}"`));
     unzip.on('error', error => console.error(`command error: "${error}"`));
@@ -45,7 +44,7 @@ async function downloadWine(url: string, archiveName: string) {
     const wineFolderExists = await fs.exists(wineFolder);
     if (!wineDirExists) await fs.createDir(wineDir);
     if (wineArchiveExists) {
-        if (wineFolderExists) return console.log("Wine already unzipped... nothing to do!")
+        if (wineFolderExists) return logger.info("Wine already unzipped... nothing to do!")
         else return unzip(wineArchive, wineDir);
     };
     let totalBytesDownloaded = 0;
@@ -58,7 +57,7 @@ async function downloadWine(url: string, archiveName: string) {
             wineDownloadsFrontend.updateWineProgressBar(totalBytesDownloaded, total);
         }
     ).then(async () => {
-        console.log("Download complete... Unzipping wine!")
+        logger.info("Download complete... Unzipping wine!")
         wineDownloadsFrontend.finalizeWineProgressBar();
         await unzip(wineArchive, wineDir);
         wineDownloadsFrontend.wineDownloadComplete();
@@ -73,11 +72,9 @@ async function downloadWine(url: string, archiveName: string) {
 }
 
 async function checkIfVersionExists(wineVersion: string) {
-    console.log(wineVersion)
     if (wineVersion == "System Wine") {
         // Check if /usr/bin/wine exists
         const wineExists = await fs.exists("/usr/bin/wine");
-        console.log(wineExists)
         if (wineExists) {
             return true;
         } else {
@@ -107,7 +104,6 @@ async function setPrimaryWine(name: string, value: wineObject, relativePath: boo
         winePath = appData + value.path;
     }
     let createLink = new Command('ln', ['-sf', winePath, linkPath]);
-    console.log(createLink)
     await createLink.execute();
     logger.success(`Primary wine set to ${name}!`)
     window.location.reload();

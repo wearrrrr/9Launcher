@@ -163,6 +163,10 @@ window.getCurrent().listen(TauriEvent.WINDOW_CLOSE_REQUESTED, async () => {
 
 });
 
+if (localStorage.getItem("console-logging") !== "enabled") {
+    document.getElementById("console")?.remove();
+}
+
 const funcs = {
     wineUpdateProgressBar,
     wineFinalizeProgressBar,
