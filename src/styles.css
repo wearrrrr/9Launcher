@@ -373,15 +373,18 @@ input:checked + .slider:before {
 .modal-title {
   text-align: center;
 }
+.tingle-modal {
+  background-color: #0f0f0f;
+}
 .tingle-modal-box {
-  background: #0f0f0f;
+  background-color: #0f0f0f;
 }
 .tingle-modal-box__content {
-  background: #0f0f0f;
+  background-color: #0f0f0f;
   padding-bottom: 0;
 }
 .tingle-modal-box__footer {
-  background: #0f0f0f !important;
+  background-color: #0f0f0f !important;
 }
 .tingle-btn {
   width: 100%;

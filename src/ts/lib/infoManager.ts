@@ -9,36 +9,6 @@ type osInformation = {
     OS: string
 }
 
-async function getVersion() {
-    return await app.getVersion().then((version) => {
-        return version
-    })
-}
-
-async function getArch() {
-    return await arch().then((arch) => {
-        return arch
-    })
-}
-
-async function getPlatform() {
-    return await platform().then((platform) => {
-        return platform
-    })
-}
-
-async function getKernelVersion() {
-    return await version().then((version) => {
-        return version
-    })
-}
-
-async function getOSType() {
-    return await type().then((type) => {
-        return type
-    })
-}
-
 export async function gatherInformation() {
     let info: osInformation = {
         version: "Unknown",
@@ -48,11 +18,11 @@ export async function gatherInformation() {
         OS: "Unknown",
     };
 
-    info.version = await getVersion()
-    info.architecture = await getArch()
-    info.platform = await getPlatform()
-    info.kernelVersion = await getKernelVersion()
-    info.OS = await getOSType()
+    info.version = await app.getVersion();
+    info.architecture = await arch();
+    info.platform = await platform();
+    info.kernelVersion = await version();
+    info.OS = await type();
     
     return info;
 }

@@ -60,11 +60,10 @@ async function downloadWine(url: string, archiveName: string) {
     ).then(async () => {
         console.log("Download complete... Unzipping wine!")
         wineDownloadsFrontend.finalizeWineProgressBar();
-        unzip(wineArchive, wineDir);
-        setTimeout(() => {
-            wineDownloadsFrontend.wineDownloadComplete();
-            wineDownloadsFrontend.resetWineProgressbar();
-        }, 500)
+        await unzip(wineArchive, wineDir);
+        wineDownloadsFrontend.wineDownloadComplete();
+        wineDownloadsFrontend.resetWineProgressbar();
+        fs.removeFile(wineArchive);
         let installedWineList = await wineIterator();
         if (installedWineList.includes(archiveName.replace(".tar.gz", ""))) {
             setPrimaryWine(archiveName.replace(".tar.gz", ""), winelist["linux-wine"][archiveName.replace(".tar.gz", "") as keyof typeof winelist["linux-wine"]])
