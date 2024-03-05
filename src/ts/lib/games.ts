@@ -14,18 +14,9 @@ import { invoke } from '@tauri-apps/api/tauri';
 import { platform } from '@tauri-apps/api/os';
 import { returnCode, gameObject } from './types/types';
 import { allGames, isGameIDValid, validGames } from '../gamesInterface';
+import { unzip } from './wineManager';
 
 let info = await infoManager.gatherInformation();
-
-function gameIterator() {
-    for (const [name, value] of Object.entries(games.modern)) {
-        if (localStorage.getItem(name) !== null) {
-            let game = document.getElementById(name)
-            if (game == null) throw new Error("Game element not found, despite being set in localStorage! Try clearing localStorage.")
-            game.style.background = `url(assets/game-images/${value.img})`;
-        }
-    }
-}
 
 
 
@@ -58,13 +49,6 @@ function getGamePath(gameID: string) {
     let gamePathParsed = JSON.parse(gamePath as string)
     if (gamePath == null) throw new Error("Game path not found! Try clearing localStorage.")
     return gamePathParsed.path
-}
-
-function unzip(wineArchive: string, wineDir: string) {
-    let unzip = new Command('tar', ['xvf', wineArchive, '-C', wineDir], { cwd: wineDir });
-    unzip.execute().then(() => {
-        logger.success("Wine unzipped!")
-    })
 }
 
 const downloadWine = async (archiveName: string) => {
@@ -132,29 +116,31 @@ setTimeout(() => {
     checkWineNeeded();
 }, 500)
 
-let pc98 = ["th01", "th02", "th03", "th04", "th05"]
 
 async function launchGame(gameObj: gameObject) {
     try {
         let gameLocation = getGameLocation(gameObj.game_id);
         let fileExtension = await path.extname(gameLocation);
+        console.log(gameLocation, fileExtension)
         let command;
-        if (pc98.includes(gameObj.game_id)) {
-            logger.info(`Running ${gameObj.en_title} with dosbox-x!`)
+        if (games.validIDs["pc-98"].includes(gameObj.game_id)) {
+            logger.info(`Running ${gameObj.en_title} with dosbox-x!`);
+            let dosboxCommand = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gameLocation}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
             switch (info.platform) {
                 case "win32":
                     command = new Command("cmd", ["/C", `${await path.appDataDir() + 'bin\\x64\\Release\\dosbox-x.exe'}`, "-set", "machine=pc98", "-c", `IMGMOUNT A: ${gameLocation}`, "-c", "A:", "-c", "game", "-nopromptfolder"])
                     break;
                 case "linux":
-                    command = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gameLocation}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
+                    command = dosboxCommand;
                     break;
                 default: 
                     logger.warn("Unknown OS detected! Support for PC-98 on this platform is not guaranteed! Attempting to run with dosbox-x!")
-                    command = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gameLocation}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
+                    command = dosboxCommand;
             }
         } else {
             logger.info(`Running ${gameObj.en_title}!`);
             const wineCommand = new Command('wine', gameLocation, { cwd: getGamePath(gameObj.game_id) });
+            console.log(gameLocation);
             switch (info.platform) {
                 case "win32":
                     command = new Command("cmd", ["/c", gameLocation], { cwd: getGamePath(gameObj.game_id) });
@@ -194,15 +180,17 @@ async function launchGame(gameObj: gameObject) {
 
 async function installGamePrompt(name: string, value: gameObject, gameCard: HTMLElement) {
     let currentExtensions = ["exe", "lnk", "hdi"]
-    if (pc98.includes(value.game_id)) {
+    let executableOrHDI = "Executable";
+    if (games.validIDs["pc-98"].includes(value.game_id)) {
         // PC-98 only reasonably supports hdi files, so we don't need to check for anything else.
         currentExtensions = ["hdi"]
+        executableOrHDI = "HDI"
     }
     await dialog.open({
         multiple: false,
         directory: false,
         filters: [{
-            name: `${name} Executable`,
+            name: `${name} ${executableOrHDI}`,
             extensions: currentExtensions
         }]
     }).then(async (file) => {
@@ -375,7 +363,7 @@ async function setSmartGameRichPresence(state: string, game_name: string = "") {
             let JSONDataParsed = JSON.parse(JSONData);
             recursiveUpdateSmartRichPresence(state, game_name, JSONDataParsed);
         } catch {
-            console.error("Failed to parse shm file! Could be corrupt. Falling back to generic rich presence...");
+            logger.error("Failed to enable Smart RPC! Falling back to Generic RPC...")
             setGameRichPresence(state, game_name);
         }
     }
@@ -451,14 +439,8 @@ if (localStorage.getItem("discordRPC") == "enabled") {
 
 
 const funcs = {
-    gameIterator,
-    installedGamesIterator,
-    launchGame,
-    installGamePrompt,
     addGame,
-    unzip,
     downloadWine,
-    checkForCustomImage,
 }
 export var totalBytesDownloaded: any;
 export var total: any;

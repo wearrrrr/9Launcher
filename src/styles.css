@@ -19,6 +19,10 @@
   -webkit-text-size-adjust: 100%;
 }
 
+html {
+  overflow: hidden;
+}
+
 .container {
   margin: 0;
   padding-top: 10vh;
@@ -460,6 +464,7 @@ input:checked + .slider:before {
 }
 #game-title {
   text-align: center;
+  margin: 0;
 }
 
 .delete-game {
@@ -503,9 +508,9 @@ input:checked + .slider:before {
 
 #clear-console {
   position: absolute;
-  top: 82%;
-  width: 19%;
-  left: 80%;
+  top: 75%;
+  width: 225px;
+  left: 75%;
 }
 
 .log-info {
