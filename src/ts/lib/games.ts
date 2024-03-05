@@ -14,7 +14,7 @@ import { invoke } from '@tauri-apps/api/tauri';
 import { platform } from '@tauri-apps/api/os';
 import { returnCode, gameObject } from './types/types';
 import { allGames, isGameIDValid, validGames } from '../gamesInterface';
-import { unzip } from './wineManager';
+import { unzip } from './unzip';
 
 let info = await infoManager.gatherInformation();
 
@@ -125,10 +125,13 @@ async function launchGame(gameObj: gameObject) {
         let command;
         if (games.validIDs["pc-98"].includes(gameObj.game_id)) {
             logger.info(`Running ${gameObj.en_title} with dosbox-x!`);
-            let dosboxCommand = new Command("dosbox-x", ["-c", `IMGMOUNT A: "${gameLocation}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"], { cwd: await path.appDataDir()});
+            let dosboxArgs = ["-c", `IMGMOUNT A: "${gameLocation}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"];
+            let dosboxCommand = new Command("dosbox-x", dosboxArgs, { cwd: await path.appDataDir()});
             switch (info.platform) {
                 case "win32":
-                    command = new Command("cmd", ["/C", `${await path.appDataDir() + 'bin\\x64\\Release\\dosbox-x.exe'}`, "-set", "machine=pc98", "-c", `IMGMOUNT A: ${gameLocation}`, "-c", "A:", "-c", "game", "-nopromptfolder"])
+                    // Push args to launch dosbox-x.
+                    dosboxArgs.unshift("/C", `${await path.appDataDir() + 'bin\\x64\\Release\\dosbox-x.exe'}`);
+                    command = new Command("cmd", dosboxArgs);
                     break;
                 case "linux":
                     command = dosboxCommand;
@@ -179,7 +182,7 @@ async function launchGame(gameObj: gameObject) {
 }
 
 async function installGamePrompt(name: string, value: gameObject, gameCard: HTMLElement) {
-    let currentExtensions = ["exe", "lnk", "hdi"]
+    let currentExtensions = ["exe", "lnk", "hdi", "url"]
     let executableOrHDI = "Executable";
     if (games.validIDs["pc-98"].includes(value.game_id)) {
         // PC-98 only reasonably supports hdi files, so we don't need to check for anything else.

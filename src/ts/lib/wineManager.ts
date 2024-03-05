@@ -5,6 +5,7 @@ import { logger } from './logging';
 import { Command } from '@tauri-apps/api/shell';
 import wineDownloadsFrontend from '../wineDownloadsManager';
 import winelist from "../../assets/winelist.json"
+import { unzip } from './unzip';
 
 
 type wineObject = {
@@ -22,15 +23,6 @@ async function wineIterator() {
         }
     }
     return installedWineVers
-}
-
-export async function unzip(wineArchive: string, wineDir: string) {
-    let unzip = new Command('tar', ['xvf', wineArchive, '-C', wineDir], { cwd: wineDir });
-    unzip.stderr.on('data', data => console.error(`command stderr: "${data}"`));
-    unzip.on('error', error => console.error(`command error: "${error}"`));
-    await unzip.execute().then(() => {
-        logger.success("Wine unzipped!")
-    })
 }
 
 async function downloadWine(url: string, archiveName: string) {

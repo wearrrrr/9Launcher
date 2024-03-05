@@ -41,7 +41,6 @@ async function removeGame() {
             let confirm = await dialog.confirm("This will remove the game from your library, but will not delete the game files.", `Remove ${game.en_title}?`);
             if (confirm) {
                 emit("delete-game", game.game_id)
-                window.close();
             } else {
                 return;
             }
