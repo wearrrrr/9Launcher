@@ -17,17 +17,23 @@ const gamesGridSpinoffs = document.getElementById("games-spinoffs") as HTMLDivEl
 
 const info = await infoManager.gatherInformation();
 
-for (const [name, value] of Object.entries(games["pc-98"])) {
-    await gamesManager.addGame(name, value, gameGrid)
-};
-
-for (const [name, value] of Object.entries(games.modern)) {
-    await gamesManager.addGame(name, value, gameGrid);
+export async function loadGamesList() {
+    for (const [name, value] of Object.entries(games["pc-98"])) {
+        await gamesManager.addGame(name, value, gameGrid)
+    };
+    
+    for (const [name, value] of Object.entries(games.modern)) {
+        await gamesManager.addGame(name, value, gameGrid);
+    }
+    
+    for (const [name, value] of Object.entries(games.spinoffs)) {
+        await gamesManager.addGame(name, value, gamesGridSpinoffs);
+    }
 }
 
-for (const [name, value] of Object.entries(games.spinoffs)) {
-    await gamesManager.addGame(name, value, gamesGridSpinoffs);
-}
+loadGamesList();
+
+
 
 var wineModal = modalManager.createNewModal({
     footer: true,

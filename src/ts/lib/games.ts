@@ -15,6 +15,7 @@ import { platform } from '@tauri-apps/api/os';
 import { returnCode, gameObject } from './types/types';
 import { allGames, isGameIDValid, validGames } from '../gamesInterface';
 import { unzip } from './unzip';
+import { loadGamesList } from "../dashboard";
 
 let info = await infoManager.gatherInformation();
 
@@ -218,8 +219,14 @@ async function installGamePrompt(name: string, value: gameObject, gameCard: HTML
             }
             await messageBox(`${value.en_title} added to library!`, "Success");
             localStorage.setItem(name, JSON.stringify(gameObject));
-            window.location.reload();
-            // This isn't necessary because we are reloading the page, but TS won't shut up about it.
+            const gameGrid = document.getElementById("games") as HTMLDivElement;
+            if (gameGrid === null) return logger.error("Game grid not found!");
+            const gamesGridSpinoffs = document.getElementById("games-spinoffs") as HTMLDivElement;
+            gameGrid.innerHTML = "";
+            gamesGridSpinoffs.innerHTML = "";
+            installedGames = installedGamesIterator();
+            loadGamesList();
+
             return returnCode.SUCCESS;
         } else {
             logger.info("No file selected!");
@@ -281,17 +288,6 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
         </div>
     `;
     const checkInstallStatus = installedGames.includes(name);
-    // if (checkInstallStatus) {
-    //     gameCard.style.background = `url(assets/game-images/${value.img})`;
-    //     gameCard.addEventListener('contextmenu', async (e) => {
-    //         e.preventDefault();
-    //         gameConfigurator(value.game_id);
-    //     });
-    // } else {
-    //     gameCard.addEventListener('contextmenu', async (e) => {
-    //         e.preventDefault();
-    //     })
-    // }
     if (checkInstallStatus) gameCard.style.background = `url(assets/game-images/${value.img})`;
     gameCard.addEventListener('contextmenu', async (e) => {
         if (checkInstallStatus) {
