@@ -1,4 +1,4 @@
-import { path } from "@tauri-apps/api";
+import { APPDATA_PATH } from "../globals";
 import * as fs from "@tauri-apps/api/fs";
 
 export class logger {
@@ -59,12 +59,12 @@ export class logger {
             "message": message,
             "type": type
         }
-        if (!await fs.exists(await path.appDataDir() + "9Launcher.log")) {
+        if (!await fs.exists(APPDATA_PATH + "9Launcher.log")) {
             await fs.writeTextFile("9Launcher.log", "!! 9Launcher Log File !!\n", { dir: fs.BaseDirectory.AppData })
-            let currentContents = await fs.readTextFile(await path.appDataDir() + "9Launcher.log")
+            let currentContents = await fs.readTextFile(APPDATA_PATH + "9Launcher.log")
             await fs.writeTextFile("9Launcher.log", currentContents + `${log.type}: ${log.message} \n`, { dir: fs.BaseDirectory.AppData })
         } else {
-            let currentContents = await fs.readTextFile(await path.appDataDir() + "9Launcher.log")
+            let currentContents = await fs.readTextFile(APPDATA_PATH + "9Launcher.log")
             await fs.writeTextFile("9Launcher.log", currentContents + `${log.type}: ${log.message} \n`, { dir: fs.BaseDirectory.AppData })
         }
     }

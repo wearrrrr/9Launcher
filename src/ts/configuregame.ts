@@ -1,7 +1,7 @@
 import { allGames, isGameIDValid } from "./gamesInterface";
 import * as dialog from "@tauri-apps/api/dialog"
 import * as fs from "@tauri-apps/api/fs"
-import * as path from "@tauri-apps/api/path"
+import { APPDATA_PATH } from "./globals";
 import { emit } from "@tauri-apps/api/event"
 import { platform } from '@tauri-apps/api/os';
 import { returnCode } from "./lib/types/types";
@@ -20,7 +20,7 @@ if (localStorage.getItem(game.game_id) !== null) {
     gameData = JSON.parse(localStorage.getItem(game.game_id) as string);
 }
 
-let customImagesDir: string = await platform() == 'win32' ? await path.appDataDir() + 'custom-img\\' : await path.appDataDir() + 'custom-img/'
+let customImagesDir: string = await platform() == 'win32' ? APPDATA_PATH + 'custom-img\\' : APPDATA_PATH + 'custom-img/'
 let title = document.getElementById('game-title')
 let gameImage = document.getElementById('game-image')
 
@@ -84,7 +84,7 @@ async function setNewImage() {
 
 async function resetImage() {
     if (!await fs.exists(customImagesDir + game.game_id + '.png')) return
-    fs.removeFile(await path.appDataDir() + 'custom-img/' + game.game_id + '.png')
+    fs.removeFile(APPDATA_PATH + 'custom-img/' + game.game_id + '.png')
     gameImage!.setAttribute('src', "/assets/game-images/" + game.img)
     emit("refresh-page")
     window.location.reload()

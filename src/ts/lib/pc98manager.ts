@@ -1,7 +1,7 @@
 import { download } from "tauri-plugin-upload-api"
 import dashboard from "../dashboard";
 import infoManager from './infoManager';
-import * as path from "@tauri-apps/api/path";
+import { APPDATA_PATH } from "../globals";
 import { logger } from "./logging";
 import { Command } from "@tauri-apps/api/shell";
 import { fs } from "@tauri-apps/api";
@@ -12,7 +12,7 @@ async function downloadDosbox() {
     const platform = info.platform;
     const dosboxURLWindows = 'https://github.com/joncampbell123/dosbox-x/releases/download/dosbox-x-v2023.05.01/dosbox-x-vsbuild-win64-20230501103911.zip';
     const dosboxURLUnix = "https://wearr.dev/files/dosbox-x"
-    const appData = await path.appDataDir();
+    const appData = APPDATA_PATH;
     let dosboxPath = appData + 'dosbox-x-vsbuild-win64-20230501103911.zip';
 
     let determinedURL: string; 

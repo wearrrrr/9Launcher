@@ -1,7 +1,8 @@
 import { Command } from '@tauri-apps/api/shell';
 import { dialog } from '@tauri-apps/api';
 import * as fs from "@tauri-apps/api/fs";
-import * as path from "@tauri-apps/api/path";
+import { extname } from "@tauri-apps/api/path";
+import { APPDATA_PATH } from "../globals";
 import messageBox from './bottombar';
 import games from '../../assets/games.json';
 import infoManager from './infoManager';
@@ -56,9 +57,9 @@ const downloadWine = async (archiveName: string) => {
     if (progressBar !== null || progressBar !== undefined) {
         progressBar.wineResetProgressBar();
     }
-    const wineDir = await path.appDataDir() + "/wine/";
-    const wineArchive = await path.appDataDir() + "/wine/" + archiveName;
-    const wineFolder = await path.appDataDir() + "/wine/" + archiveName + "/";
+    const wineDir = APPDATA_PATH + "/wine/";
+    const wineArchive = APPDATA_PATH + "/wine/" + archiveName;
+    const wineFolder = APPDATA_PATH + "/wine/" + archiveName + "/";
     const wineDirExists = await fs.exists(wineDir);
     const wineArchiveExists = await fs.exists(wineArchive);
     const wineFolderExists = await fs.exists(wineFolder);
@@ -70,7 +71,7 @@ const downloadWine = async (archiveName: string) => {
     let totalBytesDownloaded = 0;
     await download(
         `https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${archiveName}/${archiveName}.tar.gz`,
-        await path.appDataDir() + `/wine/${archiveName}.tar.gz`,
+        APPDATA_PATH + `/wine/${archiveName}.tar.gz`,
         (progress, total) => {
             totalBytesDownloaded += progress;
             total = total;
@@ -93,10 +94,10 @@ const downloadWine = async (archiveName: string) => {
 
 async function checkWineExists() {
     if (localStorage.getItem("9L_beenWarned") == "true") return;
-    let proton755 = await fs.exists(await path.appDataDir() + "wine/GE-Proton7-55/files/bin/wine");
-    let proton81 = await fs.exists(await path.appDataDir() + "wine/GE-Proton8-1/files/bin/wine");
-    let proton82 = await fs.exists(await path.appDataDir() + "wine/GE-Proton8-2/files/bin/wine");
-    let proton83 = await fs.exists(await path.appDataDir() + "wine/GE-Proton8-3/files/bin/wine");
+    let proton755 = await fs.exists(APPDATA_PATH + "wine/GE-Proton7-55/files/bin/wine");
+    let proton81 = await fs.exists(APPDATA_PATH + "wine/GE-Proton8-1/files/bin/wine");
+    let proton82 = await fs.exists(APPDATA_PATH + "wine/GE-Proton8-2/files/bin/wine");
+    let proton83 = await fs.exists(APPDATA_PATH + "wine/GE-Proton8-3/files/bin/wine");
 
     if (proton755 == false && proton81 == false && proton82 == false && proton83 == false) {
         if (progressBar !== null || progressBar !== undefined) {
@@ -121,17 +122,17 @@ setTimeout(() => {
 async function launchGame(gameObj: gameObject) {
     try {
         let gameLocation = getGameLocation(gameObj.game_id);
-        let fileExtension = await path.extname(gameLocation);
+        let fileExtension = await extname(gameLocation);
         console.log(gameLocation, fileExtension)
         let command;
         if (games.validIDs["pc-98"].includes(gameObj.game_id)) {
             logger.info(`Running ${gameObj.en_title} with dosbox-x!`);
             let dosboxArgs = ["-c", `IMGMOUNT A: "${gameLocation}"`, "-c", "A:", "-c", "game", "-nopromptfolder", "-set", "machine=pc98"];
-            let dosboxCommand = new Command("dosbox-x", dosboxArgs, { cwd: await path.appDataDir()});
+            let dosboxCommand = new Command("dosbox-x", dosboxArgs, { cwd: APPDATA_PATH});
             switch (info.platform) {
                 case "win32":
                     // Push args to launch dosbox-x.
-                    dosboxArgs.unshift("/C", `${await path.appDataDir() + 'bin\\x64\\Release\\dosbox-x.exe'}`);
+                    dosboxArgs.unshift("/C", `${APPDATA_PATH + 'bin\\x64\\Release\\dosbox-x.exe'}`);
                     command = new Command("cmd", dosboxArgs);
                     break;
                 case "linux":
@@ -183,7 +184,7 @@ async function launchGame(gameObj: gameObject) {
 }
 
 async function installGamePrompt(name: string, value: gameObject, gameCard: HTMLElement) {
-    let currentExtensions = ["exe", "lnk", "hdi", "url"]
+    let currentExtensions = ["exe", "lnk", "url"]
     let executableOrHDI = "Executable";
     if (games.validIDs["pc-98"].includes(value.game_id)) {
         // PC-98 only reasonably supports hdi files, so we don't need to check for anything else.
@@ -261,8 +262,8 @@ await listen("delete-game", async (event) => {
 })
 
 async function checkForCustomImage(id: string) {
-    if (!await fs.exists(await path.appDataDir() + "custom-img/" + id + ".png")) return returnCode.FALSE;
-    const retrievedImage = await fs.readBinaryFile(await path.appDataDir() + "custom-img/" + id + ".png");
+    if (!await fs.exists(APPDATA_PATH + "custom-img/" + id + ".png")) return returnCode.FALSE;
+    const retrievedImage = await fs.readBinaryFile(APPDATA_PATH + "custom-img/" + id + ".png");
     try {
         return retrievedImage;
     } catch {

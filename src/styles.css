@@ -171,34 +171,13 @@ button {
 .copy-info {
   width: 40%;
 }
-.arrow-down-qs {
-  width: 20px;
-  height: 20px;
-  transform: rotate(45deg);
-  position: fixed;
-  margin-top: 25%;
-  left: 13px;
-  background-color: var(--bottom-banner-color);
-  z-index: 1;
-}
-.arrow-down-info {
-  width: 20px;
-  height: 20px;
-  transform: rotate(45deg);
-  position: fixed;
-  margin-top: 245px;
-  right: 15px;
-  background-color: var(--bottom-banner-color);
-  z-index: 1;
-  top: 61%;
-}
 .quick-settings-modal {
   background-color: var(--bottom-banner-color);
   width: 30%;
   position: absolute;
-  top: 60.5%;
+  top: 54vh;
   left: 5px;
-  height: 33%;
+  height: 39%;
   margin: 0;
   padding: 0;
   opacity: 0;
@@ -227,21 +206,13 @@ button {
   opacity: 1;
   pointer-events: all;
 }
-@media (min-height: 900px) {
-  .quick-settings-modal {
-    top: 74%;
-  }
-  .information-page {
-    top: 64%;
-  }
-}
 
 .slider-container {
   display: flex;
   flex-direction: row;
   margin-top: 10px;
   margin-left: 20px;
-  width: 150px;
+  width: 175px;
   justify-content: space-around;
 }
 
