@@ -147,34 +147,15 @@ function openWineManager() {
     })
 }
 
-
-
-window.appWindow.listen("createLog", async () => {
-    if (!await fs.exists("9Launcher.log", { dir: fs.BaseDirectory.AppData })) {
-        try {
-            await fs.writeFile({ path: "9Launcher.log", contents: "" }, { dir: fs.BaseDirectory.AppData })
-        } catch {
-            throw logger.fatal("Couldn't create log file")
-        }
-        
-    }
-    await logger.info("9Launcher started!")
-    await logger.info("9Launcher version: " + info.version)
-    await logger.info("9Launcher OS: " + info.OS)
-    await logger.info("9Launcher Kernel Version: " + info.kernelVersion)
-    await logger.info("9Launcher Architecture: " + info.architecture)
-})
-
 window.getCurrent().listen(TauriEvent.WINDOW_CLOSE_REQUESTED, async () => {
     await logger.info("Closing 9Launcher...")
     // This should never overwrite logs unless they manage to somehow create a race condition where they save two logs at the exact same time
     try {
         await fs.renameFile("9Launcher.log", "9Launcher-" + `${moment().format("MM-DD-mm_ss-YYYY")}` + ".log", { dir: fs.BaseDirectory.AppData })
-        window.getCurrent().close();
     } catch {
         await logger.error("Couldn't save log file")
-        window.getCurrent().close();
     }
+    window.getCurrent().close();
 
 });
 
