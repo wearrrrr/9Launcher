@@ -342,8 +342,8 @@ async function removeGame(name: string, value: gameObject, gameCard: HTMLElement
 let dataJSONRetryCount = 1;
 async function setSmartGameRichPresence(state: string, game_name: string = "") {
     // This only applies for games, so we don't have to worry about the state being "Browsing Library"
-    const shmPath = "/dev/shm/9launcher/data.json";
-    const shmExists = await fs.exists(shmPath);
+    const shmPathUnix = "/dev/shm/9launcher/data.json";
+    const shmExists = await fs.exists(shmPathUnix);
     if (!shmExists) {
         if (dataJSONRetryCount > 3) {
             logger.error("Data JSON not found after 3 retries! Falling back to generic rich presence...");
@@ -358,7 +358,7 @@ async function setSmartGameRichPresence(state: string, game_name: string = "") {
         return;
     } else {
         logger.success("Data JSON found! Reading...");
-        const JSONData = await fs.readTextFile(shmPath);
+        const JSONData = await fs.readTextFile(shmPathUnix);
         try {
             let JSONDataParsed = JSON.parse(JSONData);
             recursiveUpdateSmartRichPresence(state, game_name, JSONDataParsed);
