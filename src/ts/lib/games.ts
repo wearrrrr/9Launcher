@@ -144,8 +144,7 @@ async function launchGame(gameObj: gameObject) {
             }
         } else {
             logger.info(`Running ${gameObj.en_title}!`);
-            const wineCommand = new Command('wine', gameLocation, { cwd: getGamePath(gameObj.game_id) });
-            console.log(gameLocation);
+            const wineCommand = new Command('wine', gameLocation, { cwd: getGamePath(gameObj.game_id), env: { WINEPREFIX: APPDATA_PATH + "wine/prefix/", LANG: "ja_JP.UTF-8" }});
             switch (info.platform) {
                 case "win32":
                     command = new Command("cmd", ["/c", gameLocation], { cwd: getGamePath(gameObj.game_id) });
