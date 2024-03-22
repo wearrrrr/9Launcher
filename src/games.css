@@ -31,7 +31,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* CSS I hate you. */
+  -webkit-user-select: none;
+  user-select: none;
   background-size: cover !important;
 }
 .game-card__info {

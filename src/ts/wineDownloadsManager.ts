@@ -40,12 +40,12 @@ function wineListIterator() {
                 modal.open();
                 if (firstLoadFirstModal == 0) {
                     firstLoadFirstModal = 1;
-                    modal.addFooterBtn('Download', 'tingle-btn tingle-btn--primary', async function() {
+                    modal.addFooterBtn('Download', 'tingle-btn tingle-btn--primary', async () => {
                         await wineManager.downloadWine(value.downloadURL, name);
                         
                     })
                     
-                    modal.addFooterBtn(`Cancel`, 'tingle-btn tingle-btn--danger', function() {
+                    modal.addFooterBtn(`Cancel`, 'tingle-btn tingle-btn--danger', () => {
                         modal.close();
                     })
                 }
@@ -58,14 +58,14 @@ function wineListIterator() {
                 setPrimaryVersion.open();
                 if (firstLoadSecondModal == 0) {
                     firstLoadSecondModal = 1;
-                    setPrimaryVersion.addFooterBtn('Set', 'tingle-btn tingle-btn--primary', async function() {
+                    setPrimaryVersion.addFooterBtn('Set', 'tingle-btn tingle-btn--primary', async () => {
                         await wineManager.setPrimaryWine(name, value, isRelativePath);
                         setTimeout(() => {
                             setPrimaryVersion.close();
                         }, 500);
                     })
                     
-                    setPrimaryVersion.addFooterBtn(`Cancel`, 'tingle-btn tingle-btn--danger', function() {
+                    setPrimaryVersion.addFooterBtn(`Cancel`, 'tingle-btn tingle-btn--danger', () => {
                         setPrimaryVersion.close();
                     })
                 }

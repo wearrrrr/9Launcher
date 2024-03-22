@@ -7,28 +7,26 @@ import modalManager from './lib/modalManager';
 import * as pc98manager from './lib/pc98manager';
 import { logger, attachOnError } from './lib/logging';
 import { fs } from '@tauri-apps/api';
-import infoManager from './lib/infoManager';
 import moment from 'moment';
+import { gameObject } from './lib/types/types';
 
 await attachOnError();
 
 const gameGrid = document.getElementById("games") as HTMLDivElement;
 const gamesGridSpinoffs = document.getElementById("games-spinoffs") as HTMLDivElement;
 
-const info = await infoManager.gatherInformation();
+async function loadList(iterator: Record<string, gameObject>, grid: HTMLDivElement) {
+    for (const [name, value] of Object.entries(iterator)) {
+        await gamesManager.addGame(name, value, grid)
+    }
+
+}
+
 
 export async function loadGamesList() {
-    for (const [name, value] of Object.entries(games["pc-98"])) {
-        await gamesManager.addGame(name, value, gameGrid)
-    };
-    
-    for (const [name, value] of Object.entries(games.modern)) {
-        await gamesManager.addGame(name, value, gameGrid);
-    }
-    
-    for (const [name, value] of Object.entries(games.spinoffs)) {
-        await gamesManager.addGame(name, value, gamesGridSpinoffs);
-    }
+    await loadList(games["pc-98"], gameGrid);
+    await loadList(games.modern, gameGrid);
+    await loadList(games.spinoffs, gamesGridSpinoffs);
 }
 
 loadGamesList();
@@ -47,13 +45,14 @@ wineModal.setContent(`
 <h2 class="modal-title">Warning! No Wine builds installed! Open wine manager?</h2>
 <div class="progress-bar" id="progress-bar">
     <div id="progress-bar-progress"><p id="progress-bar-text">0%</p></div>
-</div>`);
-wineModal.addFooterBtn('Download', 'tingle-btn tingle-btn--primary', function() {
+</div>
+`);
+wineModal.addFooterBtn('Download', 'tingle-btn tingle-btn--primary', () => {
     openWineManager()
     localStorage.setItem("9L_beenWarned", "true");
     modalManager.closeModal(wineModal)
 });
-wineModal.addFooterBtn(`Don't Download (Games won't launch!)`, 'tingle-btn tingle-btn--danger', function() {
+wineModal.addFooterBtn(`Don't Download (Modern Games won't launch!)`, 'tingle-btn tingle-btn--danger', () => {
     localStorage.setItem("9L_beenWarned", "true");
     modalManager.closeModal(wineModal)
 });
@@ -75,10 +74,10 @@ dosboxModal.setContent(`
 <div class="progress-bar" id="dosbox-progress-bar">
     <div id="dosbox-progress-bar-progress"><p id="dosbox-progress-bar-text">0%</p></div>
 </div>`);
-dosboxModal.addFooterBtn('Download', 'tingle-btn tingle-btn--primary', function() {
+dosboxModal.addFooterBtn('Download', 'tingle-btn tingle-btn--primary', () => {
     pc98manager.default.downloadDosbox();
 })
-dosboxModal.addFooterBtn(`Don't Download (PC-98 games won't work!)`, 'tingle-btn tingle-btn--danger', function() {
+dosboxModal.addFooterBtn(`Don't Download (PC-98 games won't work!)`, 'tingle-btn tingle-btn--danger', () => {
     modalManager.closeModal(dosboxModal)
 })
 
@@ -91,8 +90,8 @@ const dosboxProgressBarText = document.getElementById("dosbox-progress-bar-text"
 
 function dosboxUpdateProgressBar(totalDownloaded: number, total: number) {
     const percentage = Math.round((totalDownloaded / total) * 100);
-    dosboxProgressBarProgress.style.width = percentage + "%";
-    dosboxProgressBarText.textContent = percentage + "%";
+    dosboxProgressBarProgress.style.width = `${percentage}%`;
+    dosboxProgressBarText.textContent = `${percentage}%`;
 }
 
 function dosboxUnzipBegin() {

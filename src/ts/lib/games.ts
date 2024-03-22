@@ -75,18 +75,24 @@ const downloadWine = async (archiveName: string) => {
         (progress, total) => {
             totalBytesDownloaded += progress;
             total = total;
-            if (progressBar !== null || progressBar !== undefined) {
+            if (progressBar !== null) {
                 progressBar.wineUpdateProgressBar(totalBytesDownloaded, total);
+            } else {
+                logger.error("Progress bar not found! This is a bug!")
             }
         }
     ).then(async () => {
         logger.info("Download complete... Unzipping wine!")
-        if (progressBar !== null || progressBar !== undefined) {
+        if (progressBar !== null) {
             progressBar.wineUnzipBegin();
+        } else {
+            logger.error("Progress bar not found! This is a bug!")
         }
         unzip(wineArchive, wineDir);
-        if (progressBar !== null || progressBar !== undefined) {
+        if (progressBar !== null) {
             progressBar.wineFinalizeProgressBar();
+        } else {
+            logger.error("Progress bar not found! This is a bug!")
         }
     })
     return returnCode.SUCCESS;
@@ -123,7 +129,6 @@ async function launchGame(gameObj: gameObject) {
     try {
         let gameLocation = getGameLocation(gameObj.game_id);
         let fileExtension = await extname(gameLocation);
-        console.log(gameLocation, fileExtension)
         let command;
         if (games.validIDs["pc-98"].includes(gameObj.game_id)) {
             logger.info(`Running ${gameObj.en_title} with dosbox-x!`);
@@ -170,9 +175,9 @@ async function launchGame(gameObj: gameObject) {
             }
             return returnCode.SUCCESS;
         });
-        command?.on('error', error => console.error(`command error: "${error}"`));
-        command?.stdout.on('data', line => console.log(`command stdout: "${line}"`));
-        command?.stderr.on('data', line => console.log(`command stderr: "${line}"`));
+        command.on('error', error => logger.error(`ERR: "${error}"`));
+        // command.stdout.on('data', line => logger.info(line));
+        // command.stderr.on('data', line => logger.info(line));
         await command?.spawn();
         if (localStorage.getItem("discordRPC") == "enabled") {
             smartSetRichPresence("Playing", gameObj.en_title, fileExtension == "lnk");
