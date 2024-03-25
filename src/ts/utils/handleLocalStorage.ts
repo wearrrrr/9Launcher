@@ -11,7 +11,7 @@ function parseLSObject(item: string) {
 }
 
 function getLocalStorageObject(name: string) {
-    let retrieve = parseLSObject((localStorage.getItem(name) as string));
+    let retrieve = parseLSObject(localStorage.getItem(name) as string);
     if (retrieve === null) {
         return null;
     }
@@ -20,7 +20,9 @@ function getLocalStorageObject(name: string) {
 
 function createLocalStorageObject(key: string) {
     if (!localStorage.getItem(key) === null) {
-        logger.error("Failed to create local storage object! It already exists!");
+        logger.error(
+            "Failed to create local storage object! It already exists!",
+        );
         return null;
     }
     return key;
@@ -30,7 +32,6 @@ const funcs = {
     parseLSObject,
     getLocalStorageObject,
     createLocalStorageObject,
-
-}
+};
 
 export default funcs;

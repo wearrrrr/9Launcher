@@ -1,34 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/src/styles.css">
-    <link rel="stylesheet" href="/src/configure.css">
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link rel="stylesheet" href="/src/styles.css" />
+        <link rel="stylesheet" href="/src/configure.css" />
+    </head>
+    <body>
+        <div class="game-container" id="game-container">
+            <h3 id="game-title">Configure</h3>
+            <div class="image-container">
+                <div class="game-image-container">
+                    <img src="" alt="" id="game-image" class="game-image" />
+                </div>
+                <div class="image-container-spans">
+                    <span class="image-setting-span" id="image-setting-change"
+                        >Change Image</span
+                    ><span id="image-setting-reset" class="image-setting-span"
+                        >Reset Image</span
+                    >
+                </div>
+                <label class="checkmark-container"
+                    >Show Text
+                    <input id="show-text" type="checkbox" checked="checked" />
+                    <span class="checkmark"></span>
+                </label>
 
-    <div class="game-container" id="game-container">
-        <h3 id="game-title">Configure </h3>
-        <div class="image-container">
-            <div class="game-image-container">
-                <img src="" alt="" id="game-image" class="game-image">
+                <button class="delete-game" id="delete-game">
+                    Delete Game
+                </button>
             </div>
-            <div class="image-container-spans">
-                <span class="image-setting-span" id="image-setting-change">Change Image</span><span id="image-setting-reset" class="image-setting-span">Reset Image</span>
-            </div>
-            <label class="checkmark-container">Show Text
-                <input id="show-text" type="checkbox" checked="checked">
-                <span class="checkmark"></span>
-              </label>
-
-              <button class="delete-game" id="delete-game">Delete Game</button>
         </div>
-        
-    </div>
 
-    <script type="module" src="/src/ts/configuregame.ts"></script>
-</body>
+        <script type="module" src="/src/ts/configuregame.ts"></script>
+    </body>
 </html>

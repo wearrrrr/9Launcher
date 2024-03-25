@@ -1,8 +1,8 @@
-import tingle from 'tingle.js';
+import tingle from "tingle.js";
 
 function createNewModal(options: Object) {
     let modal = new tingle.modal(options);
-    return modal
+    return modal;
 }
 function openModal(modal: tingle.modal) {
     modal.open();
@@ -16,7 +16,6 @@ const functions = {
     createNewModal,
     openModal,
     closeModal,
-    
-}
+};
 
 export default functions;

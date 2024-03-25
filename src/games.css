@@ -1,45 +1,46 @@
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
-#modern-era, .installed-games {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 0.5rem;
-  font-size: 15px;
-  width: 100%;
-  margin: 0 auto;
+#modern-era,
+.installed-games {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 0.5rem;
+    font-size: 15px;
+    width: 100%;
+    margin: 0 auto;
 }
 .games-spinoffs {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  margin-top: 20px;
-  font-size: 15px;
-  gap: 0.5rem;
-  width: 30%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    margin-top: 20px;
+    font-size: 15px;
+    gap: 0.5rem;
+    width: 30%;
 }
 .game-card {
-  border: 1px solid #ccc;
-  text-align: center;
-  border-radius: 10px;
-  font-size: 12px;
-  line-height: 12px;
-  width: 135px;
-  height: 50px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  -webkit-user-select: none;
-  user-select: none;
-  background-size: cover !important;
+    border: 1px solid #ccc;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 12px;
+    line-height: 12px;
+    width: 135px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-user-select: none;
+    user-select: none;
+    background-size: cover !important;
 }
 .game-card__info {
-  width: inherit;
+    width: inherit;
 }
 .game-card__title {
-  font-weight: 500;
-  background-color: rgba(0, 0, 0, 0.582);
-  width: 100%;
+    font-weight: 500;
+    background-color: rgba(0, 0, 0, 0.582);
+    width: 100%;
 }

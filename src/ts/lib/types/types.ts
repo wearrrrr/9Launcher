@@ -1,20 +1,20 @@
 export type payloadJSON = {
     payload: {
-        gameID: string,
-        updatedData: string,
-    }
-}
+        gameID: string;
+        updatedData: string;
+    };
+};
 
 export type gameObject = {
-    "long_title": string,
-    "en_title": string,
-    "jp_title": string,
-    "img": string,
-    "img_unset": string,
-    "url_trial": string,
-    "release_year": number,
-    "game_id": string
-}
+    long_title: string;
+    en_title: string;
+    jp_title: string;
+    img: string;
+    img_unset: string;
+    url_trial: string;
+    release_year: number;
+    game_id: string;
+};
 
 export enum returnCode {
     SUCCESS = 0,
@@ -26,4 +26,3 @@ export enum returnCode {
     TRUE = 6,
     FALSE = 7,
 }
-
