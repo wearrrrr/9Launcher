@@ -21,9 +21,7 @@ if (localStorage.getItem(game.game_id) !== null) {
 }
 
 let customImagesDir: string =
-    (await platform()) == "win32"
-        ? APPDATA_PATH + "custom-img\\"
-        : APPDATA_PATH + "custom-img/";
+    (await platform()) == "win32" ? APPDATA_PATH + "custom-img\\" : APPDATA_PATH + "custom-img/";
 let title = document.getElementById("game-title");
 let gameImage = document.getElementById("game-image");
 
@@ -34,8 +32,7 @@ async function setupConfigureMenu() {
     if (game.img === null) throw new Error("Game image is null");
     gameImage.setAttribute("src", "/assets/game-images/" + game.img);
     let deleteGame = document.getElementById("delete-game");
-    if (deleteGame === null)
-        throw new Error("Couldn't find delete game element");
+    if (deleteGame === null) throw new Error("Couldn't find delete game element");
     deleteGame.addEventListener("click", async () => {
         removeGame();
     });
@@ -55,9 +52,7 @@ async function removeGame() {
 
 async function setCurrentImage() {
     if (!(await fs.exists(customImagesDir + game.game_id + ".png"))) return;
-    let image = await fs.readBinaryFile(
-        customImagesDir + game.game_id + ".png",
-    );
+    let image = await fs.readBinaryFile(customImagesDir + game.game_id + ".png");
     let blob = new Blob([image], { type: "image/png" });
     let url = URL.createObjectURL(blob);
     if (gameImage === null) throw new Error("Couldn't find game image element");
@@ -81,9 +76,7 @@ async function setNewImage() {
     });
     if (newImage === undefined) return;
     fs.copyFile(newImage as string, customImagesDir + game.game_id + ".png");
-    let image = await fs.readBinaryFile(
-        customImagesDir + game.game_id + ".png",
-    );
+    let image = await fs.readBinaryFile(customImagesDir + game.game_id + ".png");
     let blob = new Blob([image], { type: "image/png" });
     let url = URL.createObjectURL(blob);
     if (gameImage === null) throw new Error("Couldn't find game image element");
@@ -100,20 +93,15 @@ async function resetImage() {
     window.location.reload();
 }
 
-document
-    .getElementById("image-setting-change")
-    ?.addEventListener("click", setNewImage);
-document
-    .getElementById("image-setting-reset")
-    ?.addEventListener("click", resetImage);
+document.getElementById("image-setting-change")?.addEventListener("click", setNewImage);
+document.getElementById("image-setting-reset")?.addEventListener("click", resetImage);
 let showText = document.getElementById("show-text") as HTMLInputElement;
 
 showText.checked = gameData.showText;
 
 showText?.addEventListener("click", async () => {
     let gameData = localStorage.getItem(game.game_id);
-    if (gameData === null)
-        throw new Error("Couldn't find game data in local storage");
+    if (gameData === null) throw new Error("Couldn't find game data in local storage");
     let gameDataJSON = JSON.parse(gameData);
     gameDataJSON.showText = showText.checked;
     let payload = {

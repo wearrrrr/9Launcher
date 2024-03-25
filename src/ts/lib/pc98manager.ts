@@ -56,30 +56,20 @@ async function downloadDosbox() {
             fs.removeFile(appData + "dosbox-x");
             dashboard.dosboxFinalizeProgressBar();
             setTimeout(() => {
-                new Command("chmod", ["+x", appData + "dosbox/dosbox-x"])
-                    .execute()
-                    .then(() => {
-                        logger.success(
-                            "Dosbox chmodded successfully, should work now!",
-                        );
-                    });
+                new Command("chmod", ["+x", appData + "dosbox/dosbox-x"]).execute().then(() => {
+                    logger.success("Dosbox chmodded successfully, should work now!");
+                });
                 window.location.reload();
             }, 1000);
         }
         if (platform === "darwin") {
-            console.error(
-                "MacOS is not supported yet! Please use Windows or Linux.",
-            );
+            console.error("MacOS is not supported yet! Please use Windows or Linux.");
         }
     });
 }
 
 function unzipWindows(archive: string, unzipDir: string) {
-    let unzip = new Command(
-        "powershell",
-        ["Expand-Archive", "-Force", archive, unzipDir],
-        { cwd: unzipDir },
-    );
+    let unzip = new Command("powershell", ["Expand-Archive", "-Force", archive, unzipDir], { cwd: unzipDir });
     logger.info("Unzipping dosbox...");
     dashboard.dosboxUnzipBegin();
     unzip.execute().then(() => {

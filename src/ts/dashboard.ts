@@ -13,14 +13,9 @@ import { gameObject } from "./lib/types/types";
 await attachOnError();
 
 const gameGrid = document.getElementById("games") as HTMLDivElement;
-const gamesGridSpinoffs = document.getElementById(
-    "games-spinoffs",
-) as HTMLDivElement;
+const gamesGridSpinoffs = document.getElementById("games-spinoffs") as HTMLDivElement;
 
-async function loadList(
-    iterator: Record<string, gameObject>,
-    grid: HTMLDivElement,
-) {
+async function loadList(iterator: Record<string, gameObject>, grid: HTMLDivElement) {
     for (const [name, value] of Object.entries(iterator)) {
         await gamesManager.addGame(name, value, grid);
     }
@@ -53,14 +48,10 @@ wineModal.addFooterBtn("Download", "tingle-btn tingle-btn--primary", () => {
     localStorage.setItem("9L_beenWarned", "true");
     modalManager.closeModal(wineModal);
 });
-wineModal.addFooterBtn(
-    `Don't Download (Modern Games won't launch!)`,
-    "tingle-btn tingle-btn--danger",
-    () => {
-        localStorage.setItem("9L_beenWarned", "true");
-        modalManager.closeModal(wineModal);
-    },
-);
+wineModal.addFooterBtn(`Don't Download (Modern Games won't launch!)`, "tingle-btn tingle-btn--danger", () => {
+    localStorage.setItem("9L_beenWarned", "true");
+    modalManager.closeModal(wineModal);
+});
 
 function wineOpenModal() {
     modalManager.openModal(wineModal);
@@ -82,24 +73,16 @@ dosboxModal.setContent(`
 dosboxModal.addFooterBtn("Download", "tingle-btn tingle-btn--primary", () => {
     pc98manager.default.downloadDosbox();
 });
-dosboxModal.addFooterBtn(
-    `Don't Download (PC-98 games won't work!)`,
-    "tingle-btn tingle-btn--danger",
-    () => {
-        modalManager.closeModal(dosboxModal);
-    },
-);
+dosboxModal.addFooterBtn(`Don't Download (PC-98 games won't work!)`, "tingle-btn tingle-btn--danger", () => {
+    modalManager.closeModal(dosboxModal);
+});
 
 function dosboxOpenModal() {
     modalManager.openModal(dosboxModal);
 }
 
-const dosboxProgressBarProgress = document.getElementById(
-    "dosbox-progress-bar-progress",
-) as HTMLDivElement;
-const dosboxProgressBarText = document.getElementById(
-    "dosbox-progress-bar-text",
-) as HTMLDivElement;
+const dosboxProgressBarProgress = document.getElementById("dosbox-progress-bar-progress") as HTMLDivElement;
+const dosboxProgressBarText = document.getElementById("dosbox-progress-bar-text") as HTMLDivElement;
 
 function dosboxUpdateProgressBar(totalDownloaded: number, total: number) {
     const percentage = Math.round((totalDownloaded / total) * 100);
@@ -123,12 +106,8 @@ function dosboxResetProgressBar() {
     dosboxProgressBarProgress.style.width = "0%";
 }
 
-const progressBarProgress = document.getElementById(
-    "progress-bar-progress",
-) as HTMLDivElement;
-const progressBarText = document.getElementById(
-    "progress-bar-text",
-) as HTMLDivElement;
+const progressBarProgress = document.getElementById("progress-bar-progress") as HTMLDivElement;
+const progressBarText = document.getElementById("progress-bar-text") as HTMLDivElement;
 
 function wineUpdateProgressBar(totalDownloaded: number, total: number) {
     const percentage = Math.round((totalDownloaded / total) * 100);
@@ -165,23 +144,18 @@ window.getCurrent().listen(TauriEvent.WINDOW_CLOSE_REQUESTED, async () => {
     await logger.info("Closing 9Launcher...");
     // This should never overwrite logs unless they manage to somehow create a race condition where they save two logs at the exact same time
     try {
-        await fs.renameFile(
-            "9Launcher.log",
-            "9Launcher-" + `${moment().format("MM-DD-mm_ss-YYYY")}` + ".log",
-            { dir: fs.BaseDirectory.AppData },
-        );
+        await fs.renameFile("9Launcher.log", "9Launcher-" + `${moment().format("MM-DD-mm_ss-YYYY")}` + ".log", {
+            dir: fs.BaseDirectory.AppData,
+        });
     } catch {
         await logger.error("Couldn't save log file");
     }
     window.getCurrent().close();
 });
 
-if (localStorage.getItem("console-logging") !== "enabled")
-    document.getElementById("console")?.remove();
+if (localStorage.getItem("console-logging") !== "enabled") document.getElementById("console")?.remove();
 
-document
-    .getElementById("clear-console")
-    ?.addEventListener("click", logger.clearConsole);
+document.getElementById("clear-console")?.addEventListener("click", logger.clearConsole);
 
 const funcs = {
     wineUpdateProgressBar,

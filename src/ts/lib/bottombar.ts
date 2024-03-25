@@ -8,42 +8,20 @@ import { setGameRichPresence } from "./games";
 const settingsDiv = document.getElementById("settings-icn") as HTMLDivElement;
 const infoPageIcon = document.getElementById("info-page") as HTMLDivElement;
 const appInfo = document.getElementById("app-info") as HTMLDivElement;
-const quickSettings = document.getElementById(
-    "quick-settings",
-) as HTMLDivElement;
-const notificationSlider = document.getElementById(
-    "notifications-slider",
-) as HTMLInputElement;
-const rpcSlider = document.getElementById(
-    "discord-rpc-slider",
-) as HTMLInputElement;
-const rpcSliderRound = document.getElementById(
-    "rpc-slider-round",
-) as HTMLDivElement;
-const fileLoggingSlider = document.getElementById(
-    "file-logging-slider",
-) as HTMLInputElement;
-const consoleInfoSlider = document.getElementById(
-    "console-slider",
-) as HTMLInputElement;
-const clearGames = document.getElementById(
-    "clear-games-btn",
-) as HTMLButtonElement;
-const wineManager = document.getElementById(
-    "wine-manager-btn",
-) as HTMLButtonElement;
-const dosboxManager = document.getElementById(
-    "dosbox-manager-btn",
-) as HTMLButtonElement;
+const quickSettings = document.getElementById("quick-settings") as HTMLDivElement;
+const notificationSlider = document.getElementById("notifications-slider") as HTMLInputElement;
+const rpcSlider = document.getElementById("discord-rpc-slider") as HTMLInputElement;
+const rpcSliderRound = document.getElementById("rpc-slider-round") as HTMLDivElement;
+const fileLoggingSlider = document.getElementById("file-logging-slider") as HTMLInputElement;
+const consoleInfoSlider = document.getElementById("console-slider") as HTMLInputElement;
+const clearGames = document.getElementById("clear-games-btn") as HTMLButtonElement;
+const wineManager = document.getElementById("wine-manager-btn") as HTMLButtonElement;
+const dosboxManager = document.getElementById("dosbox-manager-btn") as HTMLButtonElement;
 
 const osInfo = document.getElementById("os-info") as HTMLParagraphElement;
-const kernelInfo = document.getElementById(
-    "kernel-info",
-) as HTMLParagraphElement;
+const kernelInfo = document.getElementById("kernel-info") as HTMLParagraphElement;
 const archInfo = document.getElementById("arch-info") as HTMLParagraphElement;
-const versionInfo = document.getElementById(
-    "version-info",
-) as HTMLParagraphElement;
+const versionInfo = document.getElementById("version-info") as HTMLParagraphElement;
 
 const copyInfoBtn = document.getElementById("copy-info") as HTMLButtonElement;
 
@@ -58,22 +36,10 @@ if (info.platform == "win32") {
 function setSliderState(element: HTMLInputElement, state: boolean) {
     if (state) element.checked = state;
 }
-setSliderState(
-    notificationSlider,
-    localStorage.getItem("libraryUpdateAlerts") === "enabled" ? true : false,
-);
-setSliderState(
-    rpcSlider,
-    localStorage.getItem("discordRPC") === "enabled" ? true : false,
-);
-setSliderState(
-    fileLoggingSlider,
-    localStorage.getItem("file-logging") === "enabled" ? true : false,
-);
-setSliderState(
-    consoleInfoSlider,
-    localStorage.getItem("console-logging") === "enabled" ? true : false,
-);
+setSliderState(notificationSlider, localStorage.getItem("libraryUpdateAlerts") === "enabled" ? true : false);
+setSliderState(rpcSlider, localStorage.getItem("discordRPC") === "enabled" ? true : false);
+setSliderState(fileLoggingSlider, localStorage.getItem("file-logging") === "enabled" ? true : false);
+setSliderState(consoleInfoSlider, localStorage.getItem("console-logging") === "enabled" ? true : false);
 
 if (localStorage.getItem("discordRPC") === null) {
     localStorage.setItem("discordRPC", "enabled");
@@ -158,14 +124,9 @@ if (settingsDiv !== null) {
             )
             .then(async (response) => {
                 if (response == true) {
-                    let libalertskey = localStorage.getItem(
-                        "libraryUpdateAlerts",
-                    );
+                    let libalertskey = localStorage.getItem("libraryUpdateAlerts");
                     localStorage.clear();
-                    localStorage.setItem(
-                        "libraryUpdateAlerts",
-                        libalertskey as string,
-                    );
+                    localStorage.setItem("libraryUpdateAlerts", libalertskey as string);
                     await messageBox("Library cleared!", "Success");
                     window.location.reload();
                 }

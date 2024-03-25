@@ -36,23 +36,15 @@ async function downloadWine(url: string, archiveName: string) {
     const wineFolderExists = await fs.exists(wineFolder);
     if (!wineDirExists) await fs.createDir(wineDir);
     if (wineArchiveExists) {
-        if (wineFolderExists)
-            return logger.info("Wine already unzipped... nothing to do!");
+        if (wineFolderExists) return logger.info("Wine already unzipped... nothing to do!");
         else return unzip(wineArchive, wineDir);
     }
     let totalBytesDownloaded = 0;
-    await download(
-        url,
-        APPDATA_PATH + `/wine/${archiveName}`,
-        (progress, total) => {
-            totalBytesDownloaded += progress;
-            total = total;
-            wineDownloadsFrontend.updateWineProgressBar(
-                totalBytesDownloaded,
-                total,
-            );
-        },
-    ).then(async () => {
+    await download(url, APPDATA_PATH + `/wine/${archiveName}`, (progress, total) => {
+        totalBytesDownloaded += progress;
+        total = total;
+        wineDownloadsFrontend.updateWineProgressBar(totalBytesDownloaded, total);
+    }).then(async () => {
         logger.info("Download complete... Unzipping wine!");
         wineDownloadsFrontend.finalizeWineProgressBar();
         await unzip(wineArchive, wineDir);
@@ -63,12 +55,7 @@ async function downloadWine(url: string, archiveName: string) {
         if (installedWineList.includes(archiveName.replace(".tar.gz", ""))) {
             setPrimaryWine(
                 archiveName.replace(".tar.gz", ""),
-                winelist["linux-wine"][
-                    archiveName.replace(
-                        ".tar.gz",
-                        "",
-                    ) as keyof (typeof winelist)["linux-wine"]
-                ],
+                winelist["linux-wine"][archiveName.replace(".tar.gz", "") as keyof (typeof winelist)["linux-wine"]],
             );
         }
     });
@@ -97,11 +84,7 @@ async function checkIfVersionExists(wineVersion: string) {
     }
 }
 
-async function setPrimaryWine(
-    name: string,
-    value: wineObject,
-    relativePath: boolean = true,
-) {
+async function setPrimaryWine(name: string, value: wineObject, relativePath: boolean = true) {
     let appData = APPDATA_PATH;
     let linkPath = await join(appData, "wine/wine");
     fs.removeFile(appData + "wine/wine");

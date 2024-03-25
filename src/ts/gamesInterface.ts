@@ -6,10 +6,7 @@ export const allGames: { [key: string]: any } = {
     ...games.modern,
     ...games.spinoffs,
 };
-export const validGames = [
-    ...games.validIDs["pc-98"],
-    ...games.validIDs.windows,
-];
+export const validGames = [...games.validIDs["pc-98"], ...games.validIDs.windows];
 
 export const gameIDs = games.validIDs;
 

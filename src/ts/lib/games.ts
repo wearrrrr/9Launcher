@@ -37,25 +37,19 @@ function installedGamesIterator() {
 
 function getGameLocation(gameID: string) {
     if (isGameIDValid(gameID) == returnCode.FALSE)
-        throw new Error(
-            "Invalid game ID! Valid game IDs are: " + validGames.join(", "),
-        );
+        throw new Error("Invalid game ID! Valid game IDs are: " + validGames.join(", "));
     let gamePath = localStorage.getItem(gameID);
     let gamePathParsed = JSON.parse(gamePath as string);
-    if (gamePath == null)
-        throw new Error("Game path not found! Try clearing localStorage.");
+    if (gamePath == null) throw new Error("Game path not found! Try clearing localStorage.");
     return gamePathParsed.file;
 }
 
 function getGamePath(gameID: string) {
     if (isGameIDValid(gameID) == returnCode.FALSE)
-        throw new Error(
-            "Invalid game ID! Valid game IDs are: " + validGames.join(", "),
-        );
+        throw new Error("Invalid game ID! Valid game IDs are: " + validGames.join(", "));
     let gamePath = localStorage.getItem(gameID);
     let gamePathParsed = JSON.parse(gamePath as string);
-    if (gamePath == null)
-        throw new Error("Game path not found! Try clearing localStorage.");
+    if (gamePath == null) throw new Error("Game path not found! Try clearing localStorage.");
     return gamePathParsed.path;
 }
 
@@ -71,8 +65,7 @@ const downloadWine = async (archiveName: string) => {
     const wineFolderExists = await fs.exists(wineFolder);
     if (!wineDirExists) await fs.createDir(wineDir);
     if (wineArchiveExists) {
-        if (wineFolderExists)
-            return logger.debug("Wine already unzipped... nothing to do!");
+        if (wineFolderExists) return logger.debug("Wine already unzipped... nothing to do!");
         else unzip(wineArchive, wineDir);
     }
     let totalBytesDownloaded = 0;
@@ -107,25 +100,12 @@ const downloadWine = async (archiveName: string) => {
 
 async function checkWineExists() {
     if (localStorage.getItem("9L_beenWarned") == "true") return;
-    let proton755 = await fs.exists(
-        APPDATA_PATH + "wine/GE-Proton7-55/files/bin/wine",
-    );
-    let proton81 = await fs.exists(
-        APPDATA_PATH + "wine/GE-Proton8-1/files/bin/wine",
-    );
-    let proton82 = await fs.exists(
-        APPDATA_PATH + "wine/GE-Proton8-2/files/bin/wine",
-    );
-    let proton83 = await fs.exists(
-        APPDATA_PATH + "wine/GE-Proton8-3/files/bin/wine",
-    );
+    let proton755 = await fs.exists(APPDATA_PATH + "wine/GE-Proton7-55/files/bin/wine");
+    let proton81 = await fs.exists(APPDATA_PATH + "wine/GE-Proton8-1/files/bin/wine");
+    let proton82 = await fs.exists(APPDATA_PATH + "wine/GE-Proton8-2/files/bin/wine");
+    let proton83 = await fs.exists(APPDATA_PATH + "wine/GE-Proton8-3/files/bin/wine");
 
-    if (
-        proton755 == false &&
-        proton81 == false &&
-        proton82 == false &&
-        proton83 == false
-    ) {
+    if (proton755 == false && proton81 == false && proton82 == false && proton83 == false) {
         if (progressBar !== null || progressBar !== undefined) {
             progressBar.wineOpenModal();
             return returnCode.SUCCESS;
@@ -168,10 +148,7 @@ async function launchGame(gameObj: gameObject) {
             switch (info.platform) {
                 case "win32":
                     // Push args to launch dosbox-x.
-                    dosboxArgs.unshift(
-                        "/C",
-                        `${APPDATA_PATH + "bin\\x64\\Release\\dosbox-x.exe"}`,
-                    );
+                    dosboxArgs.unshift("/C", `${APPDATA_PATH + "bin\\x64\\Release\\dosbox-x.exe"}`);
                     command = new Command("cmd", dosboxArgs);
                     break;
                 case "linux":
@@ -224,24 +201,14 @@ async function launchGame(gameObj: gameObject) {
         // command.stderr.on('data', line => logger.info(line));
         await command?.spawn();
         if (localStorage.getItem("discordRPC") == "enabled") {
-            smartSetRichPresence(
-                "Playing",
-                gameObj.en_title,
-                fileExtension == "lnk",
-            );
+            smartSetRichPresence("Playing", gameObj.en_title, fileExtension == "lnk");
         }
     } catch (err) {
-        return logger.error(
-            `Issue launching ${gameObj.en_title}! Error: ${err}`,
-        );
+        return logger.error(`Issue launching ${gameObj.en_title}! Error: ${err}`);
     }
 }
 
-async function installGamePrompt(
-    name: string,
-    value: gameObject,
-    gameCard: HTMLElement,
-) {
+async function installGamePrompt(name: string, value: gameObject, gameCard: HTMLElement) {
     let currentExtensions = ["exe", "lnk", "url"];
     let executableOrHDI = "Executable";
     if (games.validIDs["pc-98"].includes(value.game_id)) {
@@ -264,9 +231,7 @@ async function installGamePrompt(
             if (file !== null) {
                 let filePath: string;
                 if ((await platform()) == "win32") {
-                    const pathComponents: string[] = file
-                        .toString()
-                        .split("\\");
+                    const pathComponents: string[] = file.toString().split("\\");
                     pathComponents.pop();
                     filePath = pathComponents.join("\\");
                 } else {
@@ -282,19 +247,11 @@ async function installGamePrompt(
                     path: filePath,
                     showText: true,
                 };
-                await messageBox(
-                    `${value.en_title} added to library!`,
-                    "Success",
-                );
+                await messageBox(`${value.en_title} added to library!`, "Success");
                 localStorage.setItem(name, JSON.stringify(gameObject));
-                const gameGrid = document.getElementById(
-                    "games",
-                ) as HTMLDivElement;
-                if (gameGrid === null)
-                    return logger.error("Game grid not found!");
-                const gamesGridSpinoffs = document.getElementById(
-                    "games-spinoffs",
-                ) as HTMLDivElement;
+                const gameGrid = document.getElementById("games") as HTMLDivElement;
+                if (gameGrid === null) return logger.error("Game grid not found!");
+                const gamesGridSpinoffs = document.getElementById("games-spinoffs") as HTMLDivElement;
                 gameGrid.innerHTML = "";
                 gamesGridSpinoffs.innerHTML = "";
                 installedGames = installedGamesIterator();
@@ -328,18 +285,14 @@ await listen("refresh-page", () => {
 });
 
 await listen("delete-game", async (event) => {
-    if (!installedGamesIterator().includes(<string>event.payload))
-        return logger.error("Game not found!");
+    if (!installedGamesIterator().includes(<string>event.payload)) return logger.error("Game not found!");
     localStorage.removeItem(<string>event.payload);
     window.location.reload();
 });
 
 async function checkForCustomImage(id: string) {
-    if (!(await fs.exists(APPDATA_PATH + "custom-img/" + id + ".png")))
-        return returnCode.FALSE;
-    const retrievedImage = await fs.readBinaryFile(
-        APPDATA_PATH + "custom-img/" + id + ".png",
-    );
+    if (!(await fs.exists(APPDATA_PATH + "custom-img/" + id + ".png"))) return returnCode.FALSE;
+    const retrievedImage = await fs.readBinaryFile(APPDATA_PATH + "custom-img/" + id + ".png");
     try {
         return retrievedImage;
     } catch {
@@ -347,11 +300,7 @@ async function checkForCustomImage(id: string) {
     }
 }
 
-async function addGame(
-    name: string,
-    value: gameObject,
-    gamesElement: HTMLDivElement,
-) {
+async function addGame(name: string, value: gameObject, gamesElement: HTMLDivElement) {
     const gameCard = document.createElement("div");
     gameCard.classList.add("game-card");
     gameCard.dataset.added = value.img;
@@ -369,8 +318,7 @@ async function addGame(
         </div>
     `;
     const checkInstallStatus = installedGames.includes(name);
-    if (checkInstallStatus)
-        gameCard.style.background = `url(assets/game-images/${value.img})`;
+    if (checkInstallStatus) gameCard.style.background = `url(assets/game-images/${value.img})`;
     gameCard.addEventListener("contextmenu", async (e) => {
         if (checkInstallStatus) {
             gameCard.style.background = `url(assets/game-images/${value.img})`;
@@ -402,11 +350,7 @@ async function addGame(
     }
 }
 
-async function removeGame(
-    name: string,
-    value: gameObject,
-    gameCard: HTMLElement,
-) {
+async function removeGame(name: string, value: gameObject, gameCard: HTMLElement) {
     const checkInstallStatus = installedGames.includes(name);
     if (checkInstallStatus) {
         let confirm = await dialog.confirm(
@@ -434,15 +378,11 @@ async function setSmartGameRichPresence(state: string, game_name: string = "") {
     const shmExists = await fs.exists(shmPathUnix);
     if (!shmExists) {
         if (dataJSONRetryCount > 3) {
-            logger.error(
-                "Data JSON not found after 3 retries! Falling back to generic rich presence...",
-            );
+            logger.error("Data JSON not found after 3 retries! Falling back to generic rich presence...");
             setGameRichPresence(state, game_name);
             return;
         }
-        logger.warn(
-            `Data JSON not found! Retrying in 5 seconds... (${dataJSONRetryCount}/3)`,
-        );
+        logger.warn(`Data JSON not found! Retrying in 5 seconds... (${dataJSONRetryCount}/3)`);
         dataJSONRetryCount++;
         setTimeout(() => {
             setSmartGameRichPresence(state, game_name);
@@ -455,9 +395,7 @@ async function setSmartGameRichPresence(state: string, game_name: string = "") {
             let JSONDataParsed = JSON.parse(JSONData);
             recursiveUpdateSmartRichPresence(state, game_name, JSONDataParsed);
         } catch {
-            logger.error(
-                "Failed to enable Smart RPC! Falling back to Generic RPC...",
-            );
+            logger.error("Failed to enable Smart RPC! Falling back to Generic RPC...");
             setGameRichPresence(state, game_name);
         }
     }
@@ -470,11 +408,7 @@ function getGameNameFromId(gameID: number) {
 }
 
 // TODO: add typing for shmData. It's a JSON object, but I'm lazy.
-async function recursiveUpdateSmartRichPresence(
-    state: string,
-    game_name: string = "",
-    shmData: any,
-) {
+async function recursiveUpdateSmartRichPresence(state: string, game_name: string = "", shmData: any) {
     const shmPath = "/dev/shm/9launcher/data.json";
     const shmExists = await fs.exists(shmPath);
     if (localStorage.getItem("discordRPC") == "enabled") {
@@ -499,19 +433,11 @@ async function recursiveUpdateSmartRichPresence(
     }
     let newShmData = await fs.readTextFile(shmPath);
     setTimeout(() => {
-        recursiveUpdateSmartRichPresence(
-            state,
-            game_name,
-            JSON.parse(newShmData),
-        );
+        recursiveUpdateSmartRichPresence(state, game_name, JSON.parse(newShmData));
     }, 300);
 }
 
-async function smartSetRichPresence(
-    state: string,
-    game_name: string = "",
-    isThcrap: boolean = false,
-) {
+async function smartSetRichPresence(state: string, game_name: string = "", isThcrap: boolean = false) {
     if (!isThcrap) {
         setGameRichPresence(state, game_name);
     } else {
@@ -520,10 +446,7 @@ async function smartSetRichPresence(
     }
 }
 
-async function setGameRichPresence(
-    state: string = "Browsing Library",
-    game_name: string = "",
-) {
+async function setGameRichPresence(state: string = "Browsing Library", game_name: string = "") {
     let appstate;
     if (state == "Playing") {
         appstate = `Playing ${game_name}`;

@@ -20,9 +20,7 @@ function getLocalStorageObject(name: string) {
 
 function createLocalStorageObject(key: string) {
     if (!localStorage.getItem(key) === null) {
-        logger.error(
-            "Failed to create local storage object! It already exists!",
-        );
+        logger.error("Failed to create local storage object! It already exists!");
         return null;
     }
     return key;

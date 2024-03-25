@@ -1,9 +1,7 @@
 import wineListJSON from "../assets/winelist.json";
 import wineManager from "./lib/wineManager";
 import tingle from "tingle.js";
-const wineList = document.getElementById(
-    "wine-downloads-list",
-) as HTMLDivElement;
+const wineList = document.getElementById("wine-downloads-list") as HTMLDivElement;
 
 var modal = new tingle.modal({
     footer: true,
@@ -42,24 +40,13 @@ function wineListIterator() {
                 modal.open();
                 if (firstLoadFirstModal == 0) {
                     firstLoadFirstModal = 1;
-                    modal.addFooterBtn(
-                        "Download",
-                        "tingle-btn tingle-btn--primary",
-                        async () => {
-                            await wineManager.downloadWine(
-                                value.downloadURL,
-                                name,
-                            );
-                        },
-                    );
+                    modal.addFooterBtn("Download", "tingle-btn tingle-btn--primary", async () => {
+                        await wineManager.downloadWine(value.downloadURL, name);
+                    });
 
-                    modal.addFooterBtn(
-                        `Cancel`,
-                        "tingle-btn tingle-btn--danger",
-                        () => {
-                            modal.close();
-                        },
-                    );
+                    modal.addFooterBtn(`Cancel`, "tingle-btn tingle-btn--danger", () => {
+                        modal.close();
+                    });
                 }
             } else {
                 setPrimaryVersion.setContent(`
@@ -70,28 +57,16 @@ function wineListIterator() {
                 setPrimaryVersion.open();
                 if (firstLoadSecondModal == 0) {
                     firstLoadSecondModal = 1;
-                    setPrimaryVersion.addFooterBtn(
-                        "Set",
-                        "tingle-btn tingle-btn--primary",
-                        async () => {
-                            await wineManager.setPrimaryWine(
-                                name,
-                                value,
-                                isRelativePath,
-                            );
-                            setTimeout(() => {
-                                setPrimaryVersion.close();
-                            }, 500);
-                        },
-                    );
-
-                    setPrimaryVersion.addFooterBtn(
-                        `Cancel`,
-                        "tingle-btn tingle-btn--danger",
-                        () => {
+                    setPrimaryVersion.addFooterBtn("Set", "tingle-btn tingle-btn--primary", async () => {
+                        await wineManager.setPrimaryWine(name, value, isRelativePath);
+                        setTimeout(() => {
                             setPrimaryVersion.close();
-                        },
-                    );
+                        }, 500);
+                    });
+
+                    setPrimaryVersion.addFooterBtn(`Cancel`, "tingle-btn tingle-btn--danger", () => {
+                        setPrimaryVersion.close();
+                    });
                 }
             }
         });
@@ -99,12 +74,8 @@ function wineListIterator() {
 }
 
 function updateWineProgressBar(totalDownloaded: number, total: number) {
-    const progressBarProgress = document.getElementById(
-        "progress-bar-progress",
-    ) as HTMLDivElement;
-    const progressBarText = document.getElementById(
-        "progress-bar-text",
-    ) as HTMLDivElement;
+    const progressBarProgress = document.getElementById("progress-bar-progress") as HTMLDivElement;
+    const progressBarText = document.getElementById("progress-bar-text") as HTMLDivElement;
     const percentage = Math.round((totalDownloaded / total) * 100);
 
     progressBarProgress.style.width = percentage + "%";
@@ -112,9 +83,7 @@ function updateWineProgressBar(totalDownloaded: number, total: number) {
 }
 
 function finalizeWineProgressBar() {
-    const progressBarProgress = document.getElementById(
-        "progress-bar-progress",
-    ) as HTMLDivElement;
+    const progressBarProgress = document.getElementById("progress-bar-progress") as HTMLDivElement;
     progressBarProgress.style.width = "100%";
     progressBarProgress.textContent = "Unzipping...";
 }
@@ -124,9 +93,7 @@ function wineDownloadComplete() {
 }
 
 function resetWineProgressbar() {
-    const progressBarProgress = document.getElementById(
-        "progress-bar-progress",
-    ) as HTMLDivElement;
+    const progressBarProgress = document.getElementById("progress-bar-progress") as HTMLDivElement;
     progressBarProgress.style.width = "0%";
 }
 
