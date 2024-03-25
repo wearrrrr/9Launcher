@@ -17,18 +17,19 @@ import { returnCode, gameObject } from "./types/types";
 import { allGames, isGameIDValid, validGames } from "../gamesInterface";
 import { unzip } from "./unzip";
 import { loadGamesList } from "../dashboard";
+import { Storage } from "../utils/handleLocalStorage";
 
 let info = await infoManager.gatherInformation();
 
 function installedGamesIterator() {
     let installedGames = [];
     for (const [name] of Object.entries(games["pc-98"])) {
-        if (localStorage.getItem(name) !== null) {
+        if (Storage.get(name) !== null) {
             installedGames.push(name);
         }
     }
     for (const [name] of Object.entries(games.modern)) {
-        if (localStorage.getItem(name) !== null) {
+        if (Storage.get(name) !== null) {
             installedGames.push(name);
         }
     }
@@ -38,7 +39,7 @@ function installedGamesIterator() {
 function getGameLocation(gameID: string) {
     if (isGameIDValid(gameID) == returnCode.FALSE)
         throw new Error("Invalid game ID! Valid game IDs are: " + validGames.join(", "));
-    let gamePath = localStorage.getItem(gameID);
+    let gamePath = Storage.get(gameID);
     let gamePathParsed = JSON.parse(gamePath as string);
     if (gamePath == null) throw new Error("Game path not found! Try clearing localStorage.");
     return gamePathParsed.file;
@@ -47,7 +48,7 @@ function getGameLocation(gameID: string) {
 function getGamePath(gameID: string) {
     if (isGameIDValid(gameID) == returnCode.FALSE)
         throw new Error("Invalid game ID! Valid game IDs are: " + validGames.join(", "));
-    let gamePath = localStorage.getItem(gameID);
+    let gamePath = Storage.get(gameID);
     let gamePathParsed = JSON.parse(gamePath as string);
     if (gamePath == null) throw new Error("Game path not found! Try clearing localStorage.");
     return gamePathParsed.path;
@@ -99,7 +100,7 @@ const downloadWine = async (archiveName: string) => {
 };
 
 async function checkWineExists() {
-    if (localStorage.getItem("9L_beenWarned") == "true") return;
+    if (Storage.get("9L_beenWarned") == "true") return;
     let proton755 = await fs.exists(APPDATA_PATH + "wine/GE-Proton7-55/files/bin/wine");
     let proton81 = await fs.exists(APPDATA_PATH + "wine/GE-Proton8-1/files/bin/wine");
     let proton82 = await fs.exists(APPDATA_PATH + "wine/GE-Proton8-2/files/bin/wine");
@@ -191,7 +192,7 @@ async function launchGame(gameObj: gameObject) {
         }
         command.on("close", (data) => {
             logger.info(`${gameObj.en_title} closed with code ${data.code}`);
-            if (localStorage.getItem("discordRPC") == "enabled") {
+            if (Storage.get("discordRPC") == "enabled") {
                 smartSetRichPresence("Browsing Library");
             }
             return returnCode.SUCCESS;
@@ -200,7 +201,7 @@ async function launchGame(gameObj: gameObject) {
         // command.stdout.on('data', line => logger.info(line));
         // command.stderr.on('data', line => logger.info(line));
         await command?.spawn();
-        if (localStorage.getItem("discordRPC") == "enabled") {
+        if (Storage.get("discordRPC") == "enabled") {
             smartSetRichPresence("Playing", gameObj.en_title, fileExtension == "lnk");
         }
     } catch (err) {
@@ -247,8 +248,8 @@ async function installGamePrompt(name: string, value: gameObject, gameCard: HTML
                     path: filePath,
                     showText: true,
                 };
-                await messageBox(`${value.en_title} added to library!`, "Success");
-                localStorage.setItem(name, JSON.stringify(gameObject));
+                await messageBox(`${value.en_title} added to library!`, { type: "info", title: "Success!" });
+                Storage.set(name, JSON.stringify(gameObject));
                 const gameGrid = document.getElementById("games") as HTMLDivElement;
                 if (gameGrid === null) return logger.error("Game grid not found!");
                 const gamesGridSpinoffs = document.getElementById("games-spinoffs") as HTMLDivElement;
@@ -286,7 +287,7 @@ await listen("refresh-page", () => {
 
 await listen("delete-game", async (event) => {
     if (!installedGamesIterator().includes(<string>event.payload)) return logger.error("Game not found!");
-    localStorage.removeItem(<string>event.payload);
+    Storage.remove(<string>event.payload);
     window.location.reload();
 });
 
@@ -307,8 +308,8 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
     gameCard.id = value.game_id;
     gameCard.style.background = `url(assets/game-images/${value.img_unset})`;
     let title = value.en_title;
-    if (localStorage.getItem(name) !== null) {
-        if (JSON.parse(localStorage.getItem(name)!).showText == false) {
+    if (Storage.get(name) !== null) {
+        if (JSON.parse(Storage.get(name)!).showText == false) {
             title = "";
         }
     }
@@ -358,7 +359,7 @@ async function removeGame(name: string, value: gameObject, gameCard: HTMLElement
             `Remove ${value.en_title}?`,
         );
         if (confirm) {
-            localStorage.removeItem(name);
+            Storage.remove(name);
             gameCard.style.background = `url(assets/game-images/${value.img_unset})`;
             gameCard.addEventListener("click", async () => {
                 installGamePrompt(name, value, gameCard);
@@ -411,7 +412,7 @@ function getGameNameFromId(gameID: number) {
 async function recursiveUpdateSmartRichPresence(state: string, game_name: string = "", shmData: any) {
     const shmPath = "/dev/shm/9launcher/data.json";
     const shmExists = await fs.exists(shmPath);
-    if (localStorage.getItem("discordRPC") == "enabled") {
+    if (Storage.get("discordRPC") == "enabled") {
         if (shmData.stage == "0" || shmData.gamestate == "1") {
             shmData.stage = "In Menu";
         } else {
@@ -462,7 +463,7 @@ async function setGameRichPresence(state: string = "Browsing Library", game_name
         });
     }
 }
-if (localStorage.getItem("discordRPC") == "enabled") {
+if (Storage.get("discordRPC") == "enabled") {
     setGameRichPresence("Browsing Library");
 }
 

@@ -5,6 +5,7 @@ import { APPDATA_PATH } from "./globals";
 import { emit } from "@tauri-apps/api/event";
 import { platform } from "@tauri-apps/api/os";
 import { returnCode } from "./lib/types/types";
+import { Storage } from "./utils/handleLocalStorage";
 
 const urlParams = new URLSearchParams(window.location.search);
 const gameID = urlParams.get("id") as string;
@@ -16,8 +17,8 @@ if (isGameIDValid(gameID) === returnCode.FALSE) {
 const game = allGames[gameID as keyof typeof allGames];
 
 let gameData: any = null;
-if (localStorage.getItem(game.game_id) !== null) {
-    gameData = JSON.parse(localStorage.getItem(game.game_id) as string);
+if (Storage.get(game.game_id) !== null) {
+    gameData = JSON.parse(Storage.get(game.game_id) as string);
 }
 
 let customImagesDir: string =
@@ -100,14 +101,17 @@ let showText = document.getElementById("show-text") as HTMLInputElement;
 showText.checked = gameData.showText;
 
 showText?.addEventListener("click", async () => {
-    let gameData = localStorage.getItem(game.game_id);
-    if (gameData === null) throw new Error("Couldn't find game data in local storage");
-    let gameDataJSON = JSON.parse(gameData);
-    gameDataJSON.showText = showText.checked;
-    let payload = {
-        gameID: game.game_id,
-        updatedData: JSON.stringify(gameDataJSON),
-    };
-    await emit("update-game", payload);
-    await emit("refresh-page");
+    let gameData = Storage.get(game.game_id);
+    if (Storage.checkByValue(gameData)) {
+        let gameDataJSON = JSON.parse(gameData as string);
+        if (gameDataJSON) {
+            gameDataJSON.showText = showText.checked;
+            let payload = {
+                gameID: game.game_id,
+                updatedData: JSON.stringify(gameDataJSON),
+            };
+            await emit("update-game", payload);
+            await emit("refresh-page");
+        }
+    }
 });

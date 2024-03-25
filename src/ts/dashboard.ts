@@ -9,6 +9,7 @@ import { logger, attachOnError } from "./lib/logging";
 import { fs } from "@tauri-apps/api";
 import moment from "moment";
 import { gameObject } from "./lib/types/types";
+import { Storage } from "./utils/handleLocalStorage";
 
 await attachOnError();
 
@@ -45,11 +46,10 @@ wineModal.setContent(`
 `);
 wineModal.addFooterBtn("Download", "tingle-btn tingle-btn--primary", () => {
     openWineManager();
-    localStorage.setItem("9L_beenWarned", "true");
     modalManager.closeModal(wineModal);
 });
 wineModal.addFooterBtn(`Don't Download (Modern Games won't launch!)`, "tingle-btn tingle-btn--danger", () => {
-    localStorage.setItem("9L_beenWarned", "true");
+    Storage.set("9L_beenWarned", "true");
     modalManager.closeModal(wineModal);
 });
 
@@ -153,7 +153,7 @@ window.getCurrent().listen(TauriEvent.WINDOW_CLOSE_REQUESTED, async () => {
     window.getCurrent().close();
 });
 
-if (localStorage.getItem("console-logging") !== "enabled") document.getElementById("console")?.remove();
+if (Storage.get("console-logging") !== "enabled") document.getElementById("console")?.remove();
 
 document.getElementById("clear-console")?.addEventListener("click", logger.clearConsole);
 

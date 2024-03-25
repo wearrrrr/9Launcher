@@ -1,9 +1,10 @@
-import { message } from "@tauri-apps/api/dialog";
+import { MessageDialogOptions, message } from "@tauri-apps/api/dialog";
 import { dialog } from "@tauri-apps/api";
 import infoManager from "./infoManager";
 import dashboard from "../dashboard";
 import { invoke } from "@tauri-apps/api";
 import { setGameRichPresence } from "./games";
+import { Storage } from "../utils/handleLocalStorage";
 
 const settingsDiv = document.getElementById("settings-icn") as HTMLDivElement;
 const infoPageIcon = document.getElementById("info-page") as HTMLDivElement;
@@ -36,28 +37,19 @@ if (info.platform == "win32") {
 function setSliderState(element: HTMLInputElement, state: boolean) {
     if (state) element.checked = state;
 }
-setSliderState(notificationSlider, localStorage.getItem("libraryUpdateAlerts") === "enabled" ? true : false);
-setSliderState(rpcSlider, localStorage.getItem("discordRPC") === "enabled" ? true : false);
-setSliderState(fileLoggingSlider, localStorage.getItem("file-logging") === "enabled" ? true : false);
-setSliderState(consoleInfoSlider, localStorage.getItem("console-logging") === "enabled" ? true : false);
+setSliderState(notificationSlider, Storage.get("libraryUpdateAlerts") === "enabled" ? true : false);
+setSliderState(rpcSlider, Storage.get("discordRPC") === "enabled" ? true : false);
+setSliderState(fileLoggingSlider, Storage.get("file-logging") === "enabled" ? true : false);
+setSliderState(consoleInfoSlider, Storage.get("console-logging") === "enabled" ? true : false);
 
-if (localStorage.getItem("discordRPC") === null) {
-    localStorage.setItem("discordRPC", "enabled");
+if (Storage.get("discordRPC") === null) {
+    Storage.set("discordRPC", "enabled");
     setGameRichPresence();
     window.location.reload();
 }
-
-if (localStorage.getItem("file-logging") === null) {
-    localStorage.setItem("file-logging", "enabled");
-}
-
-if (localStorage.getItem("libraryUpdateAlerts") === null) {
-    localStorage.setItem("libraryUpdateAlerts", "enabled");
-}
-
-if (localStorage.getItem("console-logging") === null) {
-    localStorage.setItem("console-logging", "enabled");
-}
+if (Storage.get("file-logging") === null) Storage.set("file-logging", "enabled");
+if (Storage.get("libraryUpdateAlerts") === null) Storage.set("libraryUpdateAlerts", "enabled");
+if (Storage.get("console-logging") === null) Storage.set("console-logging", "enabled");
 
 if (settingsDiv !== null) {
     settingsDiv.addEventListener("click", () => {
@@ -78,10 +70,10 @@ if (settingsDiv !== null) {
         }
     });
     notificationSlider.addEventListener("change", (event) => {
-        if ((<HTMLInputElement>event.currentTarget).checked == true) {
-            localStorage.setItem("libraryUpdateAlerts", "enabled");
+        if ((<HTMLInputElement>event.currentTarget).checked) {
+            Storage.set("libraryUpdateAlerts", "enabled");
         } else {
-            localStorage.setItem("libraryUpdateAlerts", "disabled");
+            Storage.set("libraryUpdateAlerts", "disabled");
         }
     });
     rpcSlider.addEventListener("change", (event) => {
@@ -92,26 +84,26 @@ if (settingsDiv !== null) {
             delete rpcSliderRound.dataset.tempDisabled;
             rpcSlider.disabled = false;
         }, 1500);
-        if ((event.currentTarget as HTMLInputElement).checked == true) {
-            localStorage.setItem("discordRPC", "enabled");
+        if ((event.currentTarget as HTMLInputElement).checked) {
+            Storage.set("discordRPC", "enabled");
             setGameRichPresence();
         } else {
-            localStorage.setItem("discordRPC", "disabled");
+            Storage.set("discordRPC", "disabled");
             invoke("clear_activity");
         }
     });
     fileLoggingSlider.addEventListener("change", (event) => {
-        if ((event.currentTarget as HTMLInputElement).checked == true) {
-            localStorage.setItem("file-logging", "enabled");
+        if ((event.currentTarget as HTMLInputElement).checked) {
+            Storage.set("file-logging", "enabled");
         } else {
-            localStorage.setItem("file-logging", "disabled");
+            Storage.set("file-logging", "disabled");
         }
     });
     consoleInfoSlider.addEventListener("change", (event) => {
-        if ((event.currentTarget as HTMLInputElement).checked == true) {
-            localStorage.setItem("console-logging", "enabled");
+        if ((event.currentTarget as HTMLInputElement).checked) {
+            Storage.set("console-logging", "enabled");
         } else {
-            localStorage.setItem("console-logging", "disabled");
+            Storage.set("console-logging", "disabled");
         }
     });
     clearGames.addEventListener("click", async () => {
@@ -124,10 +116,10 @@ if (settingsDiv !== null) {
             )
             .then(async (response) => {
                 if (response == true) {
-                    let libalertskey = localStorage.getItem("libraryUpdateAlerts");
-                    localStorage.clear();
-                    localStorage.setItem("libraryUpdateAlerts", libalertskey as string);
-                    await messageBox("Library cleared!", "Success");
+                    let libalertskey = Storage.get("libraryUpdateAlerts");
+                    Storage.clear();
+                    Storage.set("libraryUpdateAlerts", libalertskey as string);
+                    await messageBox("Library cleared!", { type: "info", title: "Success!" });
                     window.location.reload();
                 }
             });
@@ -162,30 +154,27 @@ function addInfoPageEvents() {
 }
 addInfoPageEvents();
 
-async function addInfoPageDetails() {
-    let os = info.OS;
-    let kernelVersion = info.kernelVersion;
-    let arch = info.architecture;
-    let appVersion = info.version;
-    versionInfo.textContent = "Version: " + appVersion;
-    osInfo.textContent = "OS: " + os;
-    kernelInfo.textContent = "Kernel Version: " + kernelVersion;
-    archInfo.textContent = "Architecture: " + arch;
-    copyInfoBtn.addEventListener("click", () => {
-        navigator.clipboard.writeText(`
+let os = info.OS;
+let kernelVersion = info.kernelVersion;
+let arch = info.architecture;
+let appVersion = info.version;
+versionInfo.textContent = "Version: " + appVersion;
+osInfo.textContent = "OS: " + os;
+kernelInfo.textContent = "Kernel Version: " + kernelVersion;
+archInfo.textContent = "Architecture: " + arch;
+copyInfoBtn.addEventListener("click", () => {
+    navigator.clipboard.writeText(`
         OS: ${os}\n
         Kernel Version: ${kernelVersion}\n
         Architecture: ${arch}\n
         Version: ${appVersion}
-        `);
-        messageBox("Copied device info to clipboard!", "Success!");
-    });
-}
-addInfoPageDetails();
+    `);
+    messageBox("Copied device info to clipboard!", { type: "info", "title": "Success!" });
+});
 
-async function messageBox(messageStr: string, type: string) {
-    if (localStorage.getItem("libraryUpdateAlerts") === "disabled") return;
-    await message(messageStr, type);
+async function messageBox(str: string, type: MessageDialogOptions) {
+    if (Storage.get("libraryUpdateAlerts") === "disabled") return;
+    await message(str, type);
 }
 
 // WHY WONT AUDIO PLAY FROM THE BUNDLED APP?????????
