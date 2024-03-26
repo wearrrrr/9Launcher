@@ -5,7 +5,7 @@ import { APPDATA_PATH } from "./globals";
 import { emit } from "@tauri-apps/api/event";
 import { platform } from "@tauri-apps/api/os";
 import { returnCode } from "./lib/types/types";
-import { Storage } from "./utils/handleLocalStorage";
+import { Storage } from "./utils/storage";
 
 const urlParams = new URLSearchParams(window.location.search);
 const gameID = urlParams.get("id") as string;

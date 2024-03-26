@@ -9,7 +9,7 @@ import { logger, attachOnError } from "./lib/logging";
 import { fs } from "@tauri-apps/api";
 import moment from "moment";
 import { gameObject } from "./lib/types/types";
-import { Storage } from "./utils/handleLocalStorage";
+import { Storage } from "./utils/storage";
 
 await attachOnError();
 

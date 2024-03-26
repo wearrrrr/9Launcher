@@ -4,7 +4,7 @@ import infoManager from "./infoManager";
 import dashboard from "../dashboard";
 import { invoke } from "@tauri-apps/api";
 import { setGameRichPresence } from "./games";
-import { Storage } from "../utils/handleLocalStorage";
+import { Storage } from "../utils/storage";
 
 const settingsDiv = document.getElementById("settings-icn") as HTMLDivElement;
 const infoPageIcon = document.getElementById("info-page") as HTMLDivElement;
@@ -51,6 +51,11 @@ if (Storage.get("file-logging") === null) Storage.set("file-logging", "enabled")
 if (Storage.get("libraryUpdateAlerts") === null) Storage.set("libraryUpdateAlerts", "enabled");
 if (Storage.get("console-logging") === null) Storage.set("console-logging", "enabled");
 
+interface ChangeEvent extends Event {
+    target: HTMLInputElement;
+}
+
+
 if (settingsDiv !== null) {
     settingsDiv.addEventListener("click", () => {
         if (quickSettingsToggle == 0) {
@@ -70,13 +75,16 @@ if (settingsDiv !== null) {
         }
     });
     notificationSlider.addEventListener("change", (event) => {
-        if ((<HTMLInputElement>event.currentTarget).checked) {
+        // Why the fuck do I need to do this..
+        const changeEvent = event as ChangeEvent;
+        if (changeEvent.target.checked) {
             Storage.set("libraryUpdateAlerts", "enabled");
         } else {
             Storage.set("libraryUpdateAlerts", "disabled");
         }
     });
     rpcSlider.addEventListener("change", (event) => {
+        const changeEvent = event as ChangeEvent;
         if (rpcSliderRound == null) return;
         rpcSliderRound.dataset.tempDisabled = "enabled";
         rpcSlider.disabled = true;
@@ -84,7 +92,7 @@ if (settingsDiv !== null) {
             delete rpcSliderRound.dataset.tempDisabled;
             rpcSlider.disabled = false;
         }, 1500);
-        if ((event.currentTarget as HTMLInputElement).checked) {
+        if (changeEvent.target.checked) {
             Storage.set("discordRPC", "enabled");
             setGameRichPresence();
         } else {
@@ -92,15 +100,17 @@ if (settingsDiv !== null) {
             invoke("clear_activity");
         }
     });
-    fileLoggingSlider.addEventListener("change", (event) => {
-        if ((event.currentTarget as HTMLInputElement).checked) {
+    fileLoggingSlider.addEventListener("change", (event: Event) => {
+        const changeEvent = event as ChangeEvent
+        if (changeEvent.target.checked) {
             Storage.set("file-logging", "enabled");
         } else {
             Storage.set("file-logging", "disabled");
         }
     });
     consoleInfoSlider.addEventListener("change", (event) => {
-        if ((event.currentTarget as HTMLInputElement).checked) {
+        const changeEvent = event as ChangeEvent
+        if (changeEvent.target.checked) {
             Storage.set("console-logging", "enabled");
         } else {
             Storage.set("console-logging", "disabled");
@@ -169,7 +179,7 @@ copyInfoBtn.addEventListener("click", () => {
         Architecture: ${arch}\n
         Version: ${appVersion}
     `);
-    messageBox("Copied device info to clipboard!", { type: "info", "title": "Success!" });
+    messageBox("Copied device info to clipboard!", { type: "info", title: "Success!" });
 });
 
 async function messageBox(str: string, type: MessageDialogOptions) {

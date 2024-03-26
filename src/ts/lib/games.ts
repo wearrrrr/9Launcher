@@ -17,7 +17,7 @@ import { returnCode, gameObject } from "./types/types";
 import { allGames, isGameIDValid, validGames } from "../gamesInterface";
 import { unzip } from "./unzip";
 import { loadGamesList } from "../dashboard";
-import { Storage } from "../utils/handleLocalStorage";
+import { Storage } from "../utils/storage";
 
 let info = await infoManager.gatherInformation();
 

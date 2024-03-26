@@ -7,6 +7,7 @@ import { Command } from "@tauri-apps/api/shell";
 import wineDownloadsFrontend from "../wineDownloadsManager";
 import winelist from "../../assets/winelist.json";
 import { unzip } from "./unzip";
+import { Storage } from "../utils/storage";
 
 type wineObject = {
     prefix: string;
@@ -98,7 +99,7 @@ async function setPrimaryWine(name: string, value: wineObject, relativePath: boo
     await createLink.execute();
     logger.success(`Primary wine set to ${name}!`);
     window.location.reload();
-    localStorage.setItem("primary-wine", name);
+    Storage.set("primary-wine", name);
 }
 
 const funcs = {

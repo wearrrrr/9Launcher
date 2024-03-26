@@ -1,6 +1,7 @@
 import { APPDATA_PATH } from "../globals";
 import * as fs from "@tauri-apps/api/fs";
 import infoManager from "./infoManager";
+import { Storage } from "../utils/storage";
 
 const info = await infoManager.gatherInformation();
 
@@ -57,7 +58,7 @@ export class logger {
     }
 
     private static async sendToLogs(message: string, type: string) {
-        if (localStorage.getItem("file-logging") != "enabled") return;
+        if (Storage.get("file-logging") != "enabled") return;
         let log = {
             message: message,
             type: type,
