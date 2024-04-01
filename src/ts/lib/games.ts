@@ -9,7 +9,6 @@ import infoManager from "./infoManager";
 import { download } from "tauri-plugin-upload-api";
 import progressBar from "../dashboard";
 import { logger } from "./logging";
-import { WebviewWindow } from "@tauri-apps/api/window";
 import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/tauri";
 import { platform } from "@tauri-apps/api/os";
@@ -18,6 +17,7 @@ import { allGames, isGameIDValid, validGames } from "../gamesInterface";
 import { unzip } from "./unzip";
 import { loadGamesList } from "../dashboard";
 import { Storage } from "../utils/storage";
+import { spawnWebview } from "./Webview";
 
 let info = await infoManager.gatherInformation();
 
@@ -268,19 +268,6 @@ async function installGamePrompt(name: string, value: gameObject, gameCard: HTML
 
 let installedGames = installedGamesIterator();
 
-async function gameConfigurator(id: string) {
-    new WebviewWindow("configure-game", {
-        url: "configure-game/?id=" + id,
-        title: "Configure Game",
-        width: 450,
-        height: 300,
-        resizable: false,
-        center: true,
-        fileDropEnabled: false,
-        focus: true,
-    });
-}
-
 await listen("refresh-page", () => {
     window.location.reload();
 });
@@ -324,7 +311,16 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
         if (checkInstallStatus) {
             gameCard.style.background = `url(assets/game-images/${value.img})`;
             e.preventDefault();
-            gameConfigurator(value.game_id);
+            spawnWebview("configure-game", {
+                url: "configure-game/?id=" + value.game_id,
+                title: "Configure Game",
+                width: 450,
+                height: 300,
+                resizable: false,
+                center: true,
+                fileDropEnabled: false,
+                focus: true,
+            })
         } else {
             e.preventDefault();
         }

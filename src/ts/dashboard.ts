@@ -1,6 +1,5 @@
 import gamesManager from "./lib/games";
 import games from "../assets/games.json";
-import { WebviewWindow } from "@tauri-apps/api/window";
 import { window } from "@tauri-apps/api";
 import { TauriEvent } from "@tauri-apps/api/event";
 import modalManager from "./lib/modalManager";
@@ -10,6 +9,7 @@ import { fs } from "@tauri-apps/api";
 import moment from "moment";
 import { gameObject } from "./lib/types/types";
 import { Storage } from "./utils/storage";
+import { spawnWebview } from "./lib/Webview";
 
 await attachOnError();
 
@@ -45,7 +45,13 @@ wineModal.setContent(`
 </div>
 `);
 wineModal.addFooterBtn("Download", "tingle-btn tingle-btn--primary", () => {
-    openWineManager();
+    spawnWebview("wine-manager", {
+        url: "wine-manager/",
+        title: "Wine Manager",
+        width: 500,
+        height: 400,
+        resizable: false,
+    })
     modalManager.closeModal(wineModal);
 });
 wineModal.addFooterBtn(`Don't Download (Modern Games won't launch!)`, "tingle-btn tingle-btn--danger", () => {
@@ -130,16 +136,6 @@ function wineResetProgressBar() {
     progressBarProgress.style.width = "0%";
 }
 
-function openWineManager() {
-    new WebviewWindow("wine-manager", {
-        url: "wine-manager/",
-        title: "Wine Manager",
-        width: 500,
-        height: 400,
-        resizable: false,
-    });
-}
-
 window.getCurrent().listen(TauriEvent.WINDOW_CLOSE_REQUESTED, async () => {
     await logger.info("Closing 9Launcher...");
     // This should never overwrite logs unless they manage to somehow create a race condition where they save two logs at the exact same time
@@ -163,7 +159,6 @@ const funcs = {
     wineResetProgressBar,
     wineOpenModal,
     wineUnzipBegin,
-    openWineManager,
     dosboxOpenModal,
     dosboxUpdateProgressBar,
     dosboxUnzipBegin,
