@@ -21,12 +21,12 @@ let firstLoadSecondModal = 0;
 function wineListIterator() {
     for (const [name, value] of Object.entries(wineListJSON["linux-wine"])) {
         let wine = document.createElement("div");
+        let isRelativePath = true;
         wine.classList.add("wine");
         wine.id = name;
         wine.dataset.url = value.downloadURL || "";
         wine.textContent = name;
         wineList.appendChild(wine);
-        let isRelativePath = true;
         wine.addEventListener("click", async () => {
             if (name == "System Wine") {
                 isRelativePath = false;
@@ -49,11 +49,7 @@ function wineListIterator() {
                     });
                 }
             } else {
-                setPrimaryVersion.setContent(`
-                <h2 class="modal-title">Set ${name} as primary Wine build?</h2>
-                <div class="progress-bar" id="progress-bar">
-                    <div id="progress-bar-progress"><p id="progress-bar-text">0%</p></div>
-                </div>`);
+                setPrimaryVersion.setContent(`<h2 class="modal-title">Set ${name} as primary Wine build?</h2>`);
                 setPrimaryVersion.open();
                 if (firstLoadSecondModal == 0) {
                     firstLoadSecondModal = 1;

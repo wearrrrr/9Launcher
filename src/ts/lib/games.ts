@@ -374,12 +374,12 @@ async function setSmartGameRichPresence(state: string, game_name: string = "") {
     const shmPathUnix = "/dev/shm/9launcher/data.json";
     const shmExists = await fs.exists(shmPathUnix);
     if (!shmExists) {
-        if (dataJSONRetryCount > 3) {
+        if (dataJSONRetryCount > 4) {
             logger.error("Data JSON not found after 3 retries! Falling back to generic rich presence...");
             setGameRichPresence(state, game_name);
             return;
         }
-        logger.warn(`Data JSON not found! Retrying in 5 seconds... (${dataJSONRetryCount}/3)`);
+        logger.warn(`Data JSON not found! Retrying in 5 seconds... (${dataJSONRetryCount}/4)`);
         dataJSONRetryCount++;
         setTimeout(() => {
             setSmartGameRichPresence(state, game_name);
@@ -387,6 +387,7 @@ async function setSmartGameRichPresence(state: string, game_name: string = "") {
         return;
     } else {
         logger.success("Data JSON found! Reading...");
+        dataJSONRetryCount = 1;
         const JSONData = await fs.readTextFile(shmPathUnix);
         try {
             let JSONDataParsed = JSON.parse(JSONData);
@@ -439,7 +440,10 @@ async function smartSetRichPresence(state: string, game_name: string = "", isThc
         setGameRichPresence(state, game_name);
     } else {
         // We can safely assume we are running inside thcrap, so we can gather more information about the game state from lib9launcher
-        setSmartGameRichPresence(state, game_name);
+        // Set a timeout to wait for thcrap to init before attmempting to set RPC.
+        setTimeout(() => {
+            setSmartGameRichPresence(state, game_name);
+        }, 2500);
     }
 }
 

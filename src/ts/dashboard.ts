@@ -28,6 +28,16 @@ export async function loadGamesList() {
     await loadList(games.spinoffs, gamesGridSpinoffs);
 }
 
+export async function openWineManager() {
+    spawnWebview("wine-manager", {
+        url: "wine-manager/",
+        title: "Wine Manager",
+        width: 500,
+        height: 400,
+        resizable: false,
+    })
+}
+
 loadGamesList();
 
 var wineModal = modalManager.createNewModal({
@@ -45,13 +55,7 @@ wineModal.setContent(`
 </div>
 `);
 wineModal.addFooterBtn("Download", "tingle-btn tingle-btn--primary", () => {
-    spawnWebview("wine-manager", {
-        url: "wine-manager/",
-        title: "Wine Manager",
-        width: 500,
-        height: 400,
-        resizable: false,
-    })
+    openWineManager();
     modalManager.closeModal(wineModal);
 });
 wineModal.addFooterBtn(`Don't Download (Modern Games won't launch!)`, "tingle-btn tingle-btn--danger", () => {
@@ -164,6 +168,7 @@ const funcs = {
     dosboxUnzipBegin,
     dosboxFinalizeProgressBar,
     dosboxResetProgressBar,
+    openWineManager,
 };
 
 export default funcs;

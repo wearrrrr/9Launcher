@@ -187,48 +187,4 @@ async function messageBox(str: string, type: MessageDialogOptions) {
     await message(str, type);
 }
 
-// WHY WONT AUDIO PLAY FROM THE BUNDLED APP?????????
-// You've forced my hand, this is disabled for now until I get unlazy and implement it in rust or something, works just fine in dev mode.
-// Seriously if someone is looking through this code and can see where I fucked up, please tell me!!
-// And no, its not because I reference /src/assets/warui.mp3, that gets rewritten by Vite properly.
-
-// let waruicount = 0;
-// let iswaruiplaying = false;
-
-// function inconspicuous() {
-//     const soundURL = new URL('/src/assets/warui.mp3', import.meta.url);
-//     if (document.getElementById('inconspicuous') == null || document.getElementById('inconspicuous') == undefined) return;
-//     let inconspicuous = document.getElementById('inconspicuous') as HTMLDivElement;
-//     inconspicuous.addEventListener('click', () => {
-//         if (waruicount < 2 && iswaruiplaying == false) {
-//             waruicount++;
-//             try {
-//                 const warui = new Audio(soundURL.href)
-//                 warui.addEventListener('ended', () => {
-//                     iswaruiplaying = false;
-//                 })
-//                 alert("Should be playing....")
-//                 warui.play();
-//             } catch (err) {
-//                 alert(err)
-//             }
-//             iswaruiplaying = true;
-//         }
-//         if (waruicount == 2) {
-//             return waruicount++
-//         }
-//         if (waruicount == 3) {
-//             localStorage.setItem("achievements", JSON.stringify({"warui": true}));
-//             let waruielem = document.getElementById('inconspicous-character')
-//             if (waruielem == null) return
-//             waruielem.style.opacity = "0";
-//             setTimeout(() => {
-//                 waruielem?.remove();
-//             }, 260);
-//         }
-//         return false;
-//     });
-// }
-// inconspicuous();
-
 export default messageBox;
