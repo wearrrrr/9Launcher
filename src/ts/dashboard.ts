@@ -145,18 +145,20 @@ function wineResetProgressBar() {
     progressBarProgress.style.width = "0%";
 }
 
-WebviewWindow.getCurrent().listen(TauriEvent.WINDOW_CLOSE_REQUESTED, async () => {
+const window = WebviewWindow.getCurrent();
+
+window.listen(TauriEvent.WINDOW_CLOSE_REQUESTED, async () => {
     await logger.info("Closing 9Launcher...");
     // This should never overwrite logs unless they manage to somehow create a race condition where they save two logs at the exact same time
     try {
         await fs.rename("9Launcher.log", "9Launcher-" + `${moment().format("MM-DD-mm_ss-YYYY")}` + ".log", {
-            oldPathBaseDir: fs.BaseDirectory.AppLog,
-            newPathBaseDir: fs.BaseDirectory.AppLog,
+            oldPathBaseDir: fs.BaseDirectory.AppData,
+            newPathBaseDir: fs.BaseDirectory.AppData,
         });
     } catch {
         console.error("Couldn't rename log file!");
     }
-    WebviewWindow.getCurrent().close();
+    window.destroy();
 });
 
 if (Storage.get("console-logging") !== "enabled") document.getElementById("console")?.remove();
