@@ -1,15 +1,15 @@
 import gamesManager from "./lib/games";
 import games from "../assets/games.json";
-import { window } from "@tauri-apps/api";
+import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { TauriEvent } from "@tauri-apps/api/event";
 import modalManager from "./lib/modalManager";
 import * as pc98manager from "./lib/pc98manager";
 import { logger, attachOnError } from "./lib/logging";
-import { fs } from "@tauri-apps/api";
+import {} from "@tauri-apps/api";
 import moment from "moment";
 import { gameObject } from "./lib/types/types";
 import { Storage } from "./utils/storage";
-import { spawnWebview } from "./lib/Webview";
+import * as fs from "@tauri-apps/plugin-fs";
 
 await attachOnError();
 
@@ -29,13 +29,17 @@ export async function loadGamesList() {
 }
 
 export async function openWineManager() {
-    spawnWebview("wine-manager", {
+    console.log("Creating webview...")
+    // await logger.info("Opening Wine Manager...");
+    const ww = new WebviewWindow("wine-manager", {
         url: "wine-manager/",
         title: "Wine Manager",
         width: 500,
         height: 400,
         resizable: false,
     })
+
+    console.log(ww);
 }
 
 loadGamesList();
@@ -55,6 +59,7 @@ wineModal.setContent(`
 </div>
 `);
 wineModal.addFooterBtn("Download", "tingle-btn tingle-btn--primary", () => {
+    console.log("Attempting to open Wine Manager...");
     openWineManager();
     modalManager.closeModal(wineModal);
 });
@@ -140,17 +145,18 @@ function wineResetProgressBar() {
     progressBarProgress.style.width = "0%";
 }
 
-window.getCurrent().listen(TauriEvent.WINDOW_CLOSE_REQUESTED, async () => {
+WebviewWindow.getCurrent().listen(TauriEvent.WINDOW_CLOSE_REQUESTED, async () => {
     await logger.info("Closing 9Launcher...");
     // This should never overwrite logs unless they manage to somehow create a race condition where they save two logs at the exact same time
     try {
-        await fs.renameFile("9Launcher.log", "9Launcher-" + `${moment().format("MM-DD-mm_ss-YYYY")}` + ".log", {
-            dir: fs.BaseDirectory.AppData,
+        await fs.rename("9Launcher.log", "9Launcher-" + `${moment().format("MM-DD-mm_ss-YYYY")}` + ".log", {
+            oldPathBaseDir: fs.BaseDirectory.AppLog,
+            newPathBaseDir: fs.BaseDirectory.AppLog,
         });
     } catch {
-        await logger.error("Couldn't save log file");
+        console.error("Couldn't rename log file!");
     }
-    window.getCurrent().close();
+    WebviewWindow.getCurrent().close();
 });
 
 if (Storage.get("console-logging") !== "enabled") document.getElementById("console")?.remove();

@@ -1,5 +1,5 @@
 import { APPDATA_PATH } from "../globals";
-import * as fs from "@tauri-apps/api/fs";
+import * as fs from "@tauri-apps/plugin-fs";
 import infoManager from "./infoManager";
 import { Storage } from "../utils/storage";
 
@@ -16,24 +16,24 @@ export class logger {
         if (fileLog) await this.sendToLogs(message, "warn");
         this.sendToConsole(message, "warn");
     }
-    public static async info(message: string, fileLog: boolean = true, sendToConsole: boolean = true) {
+    public static async info(message: string, sendToConsole: boolean = true, fileLog: boolean = true) {
         console.info("%c[9L] " + message, "color: #63d3ff; font-weight: bold");
         if (fileLog) await this.sendToLogs(message, "info");
         if (sendToConsole) this.sendToConsole(message, "info");
     }
-    public static async debug(message: string, fileLog: boolean = true, sendToConsole: boolean = true) {
+    public static async debug(message: string, sendToConsole: boolean = true, fileLog: boolean = true) {
         console.debug("[9L] " + message);
         if (fileLog) await this.sendToLogs(message, "debug");
         if (sendToConsole) this.sendToConsole(message, "debug");
     }
-    public static async success(message: string, fileLog: boolean = true, sendToConsole: boolean = true) {
+    public static async success(message: string, sendToConsole: boolean = true, fileLog: boolean = true) {
         console.log("%c[9L] " + message, "color: #00ff00; font-weight: bold");
         if (fileLog) await this.sendToLogs(message, "success");
         if (sendToConsole) this.sendToConsole(message, "success");
     }
-    public static async fatal(message: string | unknown, fileLog: boolean = true, sendToConsole: boolean = true) {
-        if (fileLog) await this.sendToLogs(message as string, "fatal");
-        if (sendToConsole) this.sendToConsole(message as string, "fatal");
+    public static async fatal(message: string, fileLog: boolean = true, sendToConsole: boolean = true) {
+        if (fileLog) await this.sendToLogs(message, "fatal");
+        if (sendToConsole) this.sendToConsole(message, "fatal");
         throw new Error("[9L] " + message);
     }
     private static async sendToConsole(message: string, type: string) {
@@ -49,7 +49,7 @@ export class logger {
     public static async clearConsole() {
         let internalConsole = document.getElementById("console-output");
         if (internalConsole) {
-            [...internalConsole.getElementsByTagName("span")].forEach((element: HTMLSpanElement) => {
+            Array.from(internalConsole.getElementsByTagName("span")).forEach((element: HTMLSpanElement) => {
                 element.remove();
             });
         } else {
@@ -59,30 +59,25 @@ export class logger {
 
     private static async sendToLogs(message: string, type: string) {
         if (Storage.get("file-logging") != "enabled") return;
-        let log = {
-            message: message,
-            type: type,
-        };
-        if (!(await fs.exists(APPDATA_PATH + "9Launcher.log"))) {
+
+        if (!(await fs.exists("9Launcher.log", { baseDir: fs.BaseDirectory.AppData }))) {
             await this.initLogFile();
         }
-        let currentContents = await fs.readTextFile(APPDATA_PATH + "9Launcher.log");
-        await fs.writeTextFile(
-            "9Launcher.log",
-            currentContents + `${Date.now()} -> [9L] ${log.type}: ${log.message} \n`,
-            { dir: fs.BaseDirectory.AppData },
-        );
+        let currentContents = await fs.readTextFile("9Launcher.log", { baseDir: fs.BaseDirectory.AppData });
+        await fs.writeTextFile("9Launcher.log", currentContents + `${Date.now()} -> [9L] ${type}: ${message} \n`, {
+            baseDir: fs.BaseDirectory.AppData,
+        });
     }
 
     public static async initLogFile() {
         await fs.writeTextFile("9Launcher.log", "!! 9Launcher Log File !!\n", {
-            dir: fs.BaseDirectory.AppData,
+            baseDir: fs.BaseDirectory.AppData,
         });
-        await logger.info("9Launcher started!", true, false);
-        await logger.info("9Launcher version: " + info.version, true, false);
-        await logger.info("9Launcher OS: " + info.OS, true, false);
-        await logger.info("9Launcher Kernel Version: " + info.kernelVersion, true, false);
-        await logger.info("9Launcher Architecture: " + info.architecture, true, false);
+        await logger.info("9Launcher started!", true);
+        await logger.info("9Launcher version: " + info.version, true);
+        await logger.info("9Launcher OS: " + info.OS, true);
+        await logger.info("9Launcher Kernel Version: " + info.kernelVersion, true);
+        await logger.info("9Launcher Architecture: " + info.architecture, true);
     }
 }
 

@@ -1,25 +1,27 @@
-import { Command } from "@tauri-apps/api/shell";
-import { dialog } from "@tauri-apps/api";
-import * as fs from "@tauri-apps/api/fs";
+import { Command } from "@tauri-apps/plugin-shell";
+import {} from "@tauri-apps/api";
+import * as fs from "@tauri-apps/plugin-fs";
 import { extname } from "@tauri-apps/api/path";
 import { APPDATA_PATH } from "../globals";
 import messageBox from "./bottombar";
 import games from "../../assets/games.json";
 import infoManager from "./infoManager";
-import { download } from "tauri-plugin-upload-api";
+import { download } from "@tauri-apps/plugin-upload";
 import progressBar from "../dashboard";
 import { logger } from "./logging";
 import { listen } from "@tauri-apps/api/event";
-import { invoke } from "@tauri-apps/api/tauri";
-import { platform } from "@tauri-apps/api/os";
+import { invoke } from "@tauri-apps/api/core";
+import { platform } from "@tauri-apps/plugin-os";
 import { returnCode, gameObject } from "./types/types";
 import { allGames, isGameIDValid, validGames } from "../gamesInterface";
 import { unzip } from "./unzip";
 import { loadGamesList } from "../dashboard";
 import { Storage } from "../utils/storage";
-import { spawnWebview } from "./Webview";
+import * as dialog from "@tauri-apps/plugin-dialog";
+import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 
 let info = await infoManager.gatherInformation();
+const customImagesDir = platform() == "windows" ? APPDATA_PATH + "\\custom-img\\" : APPDATA_PATH + "/custom-img/";
 
 function installedGamesIterator() {
     let installedGames = [];
@@ -60,11 +62,11 @@ const downloadWine = async (archiveName: string) => {
     }
     const wineDir = APPDATA_PATH + "/wine/";
     const wineArchive = APPDATA_PATH + "/wine/" + archiveName;
-    const wineFolder = APPDATA_PATH + "/wine/" + archiveName + "/";
+    // const wineFolder = APPDATA_PATH + "/wine/" + archiveName + "/";
     const wineDirExists = await fs.exists(wineDir);
     const wineArchiveExists = await fs.exists(wineArchive);
-    const wineFolderExists = await fs.exists(wineFolder);
-    if (!wineDirExists) await fs.createDir(wineDir);
+    const wineFolderExists = await fs.exists(`${wineDir}${archiveName}/`);
+    if (!wineDirExists) await fs.mkdir(wineDir);
     if (wineArchiveExists) {
         if (wineFolderExists) return logger.debug("Wine already unzipped... nothing to do!");
         else unzip(wineArchive, wineDir);
@@ -73,11 +75,10 @@ const downloadWine = async (archiveName: string) => {
     await download(
         `https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${archiveName}/${archiveName}.tar.gz`,
         APPDATA_PATH + `/wine/${archiveName}.tar.gz`,
-        (progress, total) => {
-            totalBytesDownloaded += progress;
-            total = total;
+        (payload) => {
+            totalBytesDownloaded += payload.progress;
             if (progressBar !== null) {
-                progressBar.wineUpdateProgressBar(totalBytesDownloaded, total);
+                progressBar.wineUpdateProgressBar(totalBytesDownloaded, payload.total);
             } else {
                 logger.error("Progress bar not found! This is a bug!");
             }
@@ -101,10 +102,10 @@ const downloadWine = async (archiveName: string) => {
 
 async function checkWineExists() {
     if (Storage.get("9L_beenWarned") == "true") return;
-    let proton755 = await fs.exists(APPDATA_PATH + "wine/GE-Proton7-55/files/bin/wine");
-    let proton81 = await fs.exists(APPDATA_PATH + "wine/GE-Proton8-1/files/bin/wine");
-    let proton82 = await fs.exists(APPDATA_PATH + "wine/GE-Proton8-2/files/bin/wine");
-    let proton83 = await fs.exists(APPDATA_PATH + "wine/GE-Proton8-3/files/bin/wine");
+    let proton755 = await fs.exists(APPDATA_PATH + "/wine/GE-Proton7-55/files/bin/wine");
+    let proton81 = await fs.exists(APPDATA_PATH + "/wine/GE-Proton8-1/files/bin/wine");
+    let proton82 = await fs.exists(APPDATA_PATH + "/wine/GE-Proton8-2/files/bin/wine");
+    let proton83 = await fs.exists(APPDATA_PATH + "/wine/GE-Proton8-3/files/bin/wine");
 
     if (proton755 == false && proton81 == false && proton82 == false && proton83 == false) {
         if (progressBar !== null || progressBar !== undefined) {
@@ -143,14 +144,14 @@ async function launchGame(gameObj: gameObject) {
                 "-set",
                 "machine=pc98",
             ];
-            let dosboxCommand = new Command("dosbox-x", dosboxArgs, {
+            let dosboxCommand = await Command.create("dosbox-x", dosboxArgs, {
                 cwd: APPDATA_PATH,
             });
             switch (info.platform) {
                 case "win32":
                     // Push args to launch dosbox-x.
                     dosboxArgs.unshift("/C", `${APPDATA_PATH + "bin\\x64\\Release\\dosbox-x.exe"}`);
-                    command = new Command("cmd", dosboxArgs);
+                    command = Command.create("cmd", dosboxArgs);
                     break;
                 case "linux":
                     command = dosboxCommand;
@@ -163,16 +164,16 @@ async function launchGame(gameObj: gameObject) {
             }
         } else {
             logger.info(`Running ${gameObj.en_title}!`);
-            const wineCommand = new Command("wine", gameLocation, {
+            const wineCommand = Command.create("wine", gameLocation, {
                 cwd: getGamePath(gameObj.game_id),
                 env: {
-                    WINEPREFIX: APPDATA_PATH + "wine/prefix/",
+                    WINEPREFIX: APPDATA_PATH + "/wine/prefix/",
                     LANG: "ja_JP.UTF-8",
                 },
             });
             switch (info.platform) {
                 case "win32":
-                    command = new Command("cmd", ["/c", gameLocation], {
+                    command = Command.create("cmd", ["/c", gameLocation], {
                         cwd: getGamePath(gameObj.game_id),
                     });
                     break;
@@ -231,7 +232,7 @@ async function installGamePrompt(name: string, value: gameObject, gameCard: HTML
         .then(async (file) => {
             if (file !== null) {
                 let filePath: string;
-                if ((await platform()) == "win32") {
+                if (platform() == "windows") {
                     const pathComponents: string[] = file.toString().split("\\");
                     pathComponents.pop();
                     filePath = pathComponents.join("\\");
@@ -248,7 +249,7 @@ async function installGamePrompt(name: string, value: gameObject, gameCard: HTML
                     path: filePath,
                     showText: true,
                 };
-                await messageBox(`${value.en_title} added to library!`, { type: "info", title: "Success!" });
+                await messageBox(`${value.en_title} added to library!`, { kind: "info", title: "Success!" });
                 Storage.set(name, JSON.stringify(gameObject));
                 const gameGrid = document.getElementById("games") as HTMLDivElement;
                 if (gameGrid === null) return logger.error("Game grid not found!");
@@ -279,8 +280,8 @@ await listen("delete-game", async (event) => {
 });
 
 async function checkForCustomImage(id: string) {
-    if (!(await fs.exists(APPDATA_PATH + "custom-img/" + id + ".png"))) return returnCode.FALSE;
-    const retrievedImage = await fs.readBinaryFile(APPDATA_PATH + "custom-img/" + id + ".png");
+    if (!(await fs.exists(customImagesDir + id + ".png"))) return returnCode.FALSE;
+    const retrievedImage = await fs.readFile(customImagesDir + id + ".png");
     try {
         return retrievedImage;
     } catch {
@@ -311,14 +312,13 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
         if (checkInstallStatus) {
             gameCard.style.background = `url(assets/game-images/${value.img})`;
             e.preventDefault();
-            spawnWebview("configure-game", {
+            new WebviewWindow("configure-game", {
                 url: "configure-game/?id=" + value.game_id,
                 title: "Configure Game",
                 width: 450,
                 height: 300,
                 resizable: false,
                 center: true,
-                fileDropEnabled: false,
                 focus: true,
             })
         } else {

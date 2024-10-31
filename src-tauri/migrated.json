@@ -1,0 +1,172 @@
+{
+  "identifier": "migrated",
+  "description": "permissions that were migrated from v1",
+  "local": true,
+  "windows": [
+    "main",
+    "wine-manager"
+  ],
+  "permissions": [
+    "core:default",
+    "fs:allow-read-file",
+    "fs:allow-write-file",
+    "fs:allow-copy-file",
+    "fs:allow-mkdir",
+    "fs:allow-remove",
+    "fs:allow-rename",
+    "fs:allow-exists",
+    "fs:allow-write",
+    "fs:write-all",
+    "fs:allow-appdata-read-recursive",
+    "fs:allow-appdata-write-recursive",
+    "fs:allow-appdata-read",
+    "fs:allow-appdata-write",
+    "fs:allow-appdata-meta-recursive",
+    "fs:allow-appdata-meta",
+    "fs:scope-appdata-recursive",
+    "fs:scope-appdata",
+    "fs:scope-appdata-index",
+    {
+      "identifier": "fs:scope",
+      "allow": [
+        "$APPDATA",
+        "$APPDATA/*",
+        "$APPDATA/**",
+        "$APPDATA/wine/",
+        "$APPDATA/wine/**",
+        "$APPDATA/*",
+        "$APPDATA/dosbox/*",
+        "$APPDATA/dosbox/**",
+        "$APPDATA/custom-img/*",
+        "$APPDATA/custom-img/**",
+        "/usr/bin/wine",
+        "/dev/shm/9launcher/**"
+      ]
+    },
+    "core:window:allow-create",
+    "core:window:allow-center",
+    "core:window:allow-request-user-attention",
+    "core:window:allow-set-resizable",
+    "core:window:allow-set-maximizable",
+    "core:window:allow-set-minimizable",
+    "core:window:allow-set-closable",
+    "core:window:allow-set-title",
+    "core:window:allow-maximize",
+    "core:window:allow-unmaximize",
+    "core:window:allow-minimize",
+    "core:window:allow-unminimize",
+    "core:window:allow-show",
+    "core:window:allow-hide",
+    "core:window:allow-close",
+    "core:window:allow-set-decorations",
+    "core:window:allow-set-always-on-top",
+    "core:window:allow-set-content-protected",
+    "core:window:allow-set-size",
+    "core:window:allow-set-min-size",
+    "core:window:allow-set-max-size",
+    "core:window:allow-set-position",
+    "core:window:allow-set-fullscreen",
+    "core:window:allow-set-focus",
+    "core:window:allow-set-icon",
+    "core:window:allow-set-skip-taskbar",
+    "core:window:allow-set-cursor-grab",
+    "core:window:allow-set-cursor-visible",
+    "core:window:allow-set-cursor-icon",
+    "core:window:allow-set-cursor-position",
+    "core:window:allow-set-ignore-cursor-events",
+    "core:window:allow-start-dragging",
+    "core:webview:allow-print",
+    "core:webview:allow-create-webview-window",
+    "shell:default",
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [
+        {
+          "args": true,
+          "cmd": "$APPDATA/wine/wine",
+          "name": "wine",
+          "sidecar": false
+        },
+        {
+          "args": true,
+          "cmd": "tar",
+          "name": "tar",
+          "sidecar": false
+        },
+        {
+          "args": true,
+          "cmd": "unzip",
+          "name": "unzip",
+          "sidecar": false
+        },
+        {
+          "args": true,
+          "cmd": "ln",
+          "name": "ln",
+          "sidecar": false
+        },
+        {
+          "args": true,
+          "cmd": "$APPDATA/dosbox/dosbox-x",
+          "name": "dosbox-x",
+          "sidecar": false
+        },
+        {
+          "args": true,
+          "cmd": "powershell",
+          "name": "powershell",
+          "sidecar": false
+        },
+        {
+          "args": true,
+          "cmd": "chmod",
+          "name": "chmod",
+          "sidecar": false
+        },
+        {
+          "args": true,
+          "cmd": "cmd",
+          "name": "cmd",
+          "sidecar": false
+        },
+        {
+          "args": true,
+          "cmd": "killall",
+          "name": "killall",
+          "sidecar": false
+        }
+      ]
+    },
+    "shell:allow-open",
+    "shell:allow-spawn",
+    "shell:allow-stdin-write",
+    "dialog:allow-open",
+    "dialog:allow-save",
+    "dialog:allow-message",
+    "dialog:allow-ask",
+    "dialog:allow-confirm",
+    {
+      "identifier": "http:default",
+      "allow": [
+        {
+          "url": "https://**/*"
+        },
+        {
+          "url": "http://**/*"
+        }
+      ]
+    },
+    "os:allow-platform",
+    "os:allow-version",
+    "os:allow-os-type",
+    "os:allow-family",
+    "os:allow-arch",
+    "os:allow-exe-extension",
+    "os:allow-locale",
+    "os:allow-hostname",
+    "dialog:default",
+    "os:default",
+    "http:default",
+    "upload:default"
+  ]
+}

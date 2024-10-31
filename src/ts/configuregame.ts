@@ -1,9 +1,9 @@
 import { allGames, isGameIDValid } from "./gamesInterface";
-import * as dialog from "@tauri-apps/api/dialog";
-import * as fs from "@tauri-apps/api/fs";
+import * as dialog from "@tauri-apps/plugin-dialog";
+import * as fs from "@tauri-apps/plugin-fs";
 import { APPDATA_PATH } from "./globals";
 import { emit } from "@tauri-apps/api/event";
-import { platform } from "@tauri-apps/api/os";
+import { platform } from "@tauri-apps/plugin-os";
 import { returnCode } from "./lib/types/types";
 import { Storage } from "./utils/storage";
 
@@ -21,8 +21,7 @@ if (Storage.get(game.game_id) !== null) {
     gameData = JSON.parse(Storage.get(game.game_id) as string);
 }
 
-let customImagesDir: string =
-    (await platform()) == "win32" ? APPDATA_PATH + "custom-img\\" : APPDATA_PATH + "custom-img/";
+const customImagesDir = platform() == "windows" ? APPDATA_PATH + "\\custom-img\\" : APPDATA_PATH + "/custom-img/";
 let title = document.getElementById("game-title");
 let gameImage = document.getElementById("game-image");
 
@@ -53,7 +52,7 @@ async function removeGame() {
 
 async function setCurrentImage() {
     if (!(await fs.exists(customImagesDir + game.game_id + ".png"))) return;
-    let image = await fs.readBinaryFile(customImagesDir + game.game_id + ".png");
+    let image = await fs.readFile(customImagesDir + game.game_id + ".png");
     let blob = new Blob([image], { type: "image/png" });
     let url = URL.createObjectURL(blob);
     if (gameImage === null) throw new Error("Couldn't find game image element");
@@ -63,7 +62,7 @@ setCurrentImage();
 
 async function setNewImage() {
     if (!(await fs.exists(customImagesDir))) {
-        await fs.createDir(customImagesDir, { recursive: true });
+        await fs.mkdir(customImagesDir, { recursive: true });
     }
     let newImage = await dialog.open({
         multiple: false,
@@ -77,7 +76,7 @@ async function setNewImage() {
     });
     if (newImage === undefined) return;
     fs.copyFile(newImage as string, customImagesDir + game.game_id + ".png");
-    let image = await fs.readBinaryFile(customImagesDir + game.game_id + ".png");
+    let image = await fs.readFile(customImagesDir + game.game_id + ".png");
     let blob = new Blob([image], { type: "image/png" });
     let url = URL.createObjectURL(blob);
     if (gameImage === null) throw new Error("Couldn't find game image element");
@@ -88,7 +87,7 @@ async function setNewImage() {
 
 async function resetImage() {
     if (!(await fs.exists(customImagesDir + game.game_id + ".png"))) return;
-    fs.removeFile(APPDATA_PATH + "custom-img/" + game.game_id + ".png");
+    fs.remove(customImagesDir + game.game_id + ".png");
     gameImage!.setAttribute("src", "/assets/game-images/" + game.img);
     emit("refresh-page");
     window.location.reload();

@@ -2,121 +2,28 @@
   "build": {
     "beforeDevCommand": "yarn dev",
     "beforeBuildCommand": "yarn build",
-    "devPath": "http://localhost:1420",
-    "distDir": "../dist",
-    "withGlobalTauri": true
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420"
   },
-  "package": {
-    "productName": "9launcher",
-    "version": "1.3.2"
+  "bundle": {
+    "active": true,
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "copyright": "MIT",
+    "targets": "all"
   },
-  "tauri": {
-    "allowlist": {
-      "all": false,
-      "shell": {
-        "all": true,
-        "open": true,
-        "scope": [
-          {
-            "name": "wine",
-            "cmd": "$APPDATA/wine/wine",
-            "args": true
-          },
-          {
-            "name": "tar",
-            "cmd": "tar",
-            "args": true
-          },
-          {
-            "name": "unzip",
-            "cmd": "unzip",
-            "args": true
-          },
-          {
-            "name": "ln",
-            "cmd": "ln",
-            "args": true
-          },
-          {
-            "name": "dosbox-x",
-            "cmd": "$APPDATA/dosbox/dosbox-x",
-            "args": true
-          },
-          {
-            "name": "powershell",
-            "cmd": "powershell",
-            "args": true
-          },
-          {
-            "name": "chmod",
-            "cmd": "chmod",
-            "args": true
-          },
-          {
-            "name": "cmd",
-            "cmd": "cmd",
-            "args": true
-          },
-          {
-            "name": "killall",
-            "cmd": "killall",
-            "args": true
-          }
-        ]
-      },
-      "http": {
-        "all": true,
-        "request": true,
-        "scope": ["https://**/*", "http://**/*"] 
-      },
-      "fs": {
-        "all": false,
-        "createDir": true,
-        "exists": true,
-        "removeFile": true,
-        "copyFile": true,
-        "writeFile": true,
-        "readFile": true,
-        "renameFile": true,
-        "scope": ["$APPDATA/*", "$APPDATA/**", "$APPDATA/wine/", "$APPDATA/wine/**", "$APPDATA/*", "$APPDATA/dosbox/*", "$APPDATA/dosbox/**", "$APPDATA/custom-img/*", "$APPDATA/custom-img/**", "/usr/bin/wine", "/dev/shm/9launcher/**"]
-      },
-      "path": {
-        "all": true
-      },
-      "os": {
-        "all": true
-      },
-      "dialog": {
-        "all": true,
-        "ask": true,
-        "confirm": true,
-        "message": true,
-        "open": true,
-        "save": true
-      },
-      "window": {
-        "all": true
-      }
-    },
-    "bundle": {
-      "active": true,
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
-      "identifier": "dev.wearr.9launcher",
-      "targets": "all",
-      "copyright": "MIT"
-    },
-    "security": {
-      "csp": null
-    },
-    "updater": {
-      "active": false
-    },
+  "productName": "9launcher",
+  "mainBinaryName": "9launcher",
+  "version": "1.3.2",
+  "identifier": "dev.wearr.9launcher",
+  "plugins": {},
+  "app": {
+    "withGlobalTauri": true,
     "windows": [
       {
         "fullscreen": false,
@@ -129,6 +36,9 @@
         "center": true,
         "theme": "Dark"
       }
-    ]
+    ],
+    "security": {
+      "csp": null
+    }
   }
 }

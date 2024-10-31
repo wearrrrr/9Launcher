@@ -1,5 +1,5 @@
 import { app } from "@tauri-apps/api";
-import { arch, platform, type, version } from "@tauri-apps/api/os";
+import { arch, platform, type, version } from "@tauri-apps/plugin-os";
 
 type osInformation = {
     version: string;

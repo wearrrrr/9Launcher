@@ -1,9 +1,9 @@
 import { APPDATA_PATH } from "../globals";
 import { join } from "@tauri-apps/api/path";
-import * as fs from "@tauri-apps/api/fs";
-import { download } from "tauri-plugin-upload-api";
+import * as fs from "@tauri-apps/plugin-fs";
+import { download } from "@tauri-apps/plugin-upload";
 import { logger } from "./logging";
-import { Command } from "@tauri-apps/api/shell";
+import { Command } from "@tauri-apps/plugin-shell";
 import wineDownloadsFrontend from "../wineDownloadsManager";
 import winelist from "../../assets/winelist.json";
 import { unzip } from "./unzip";
@@ -27,31 +27,31 @@ async function wineIterator() {
 }
 
 async function downloadWine(url: string, archiveName: string) {
-    const wineDir = APPDATA_PATH + "wine/";
+    const wineDir = APPDATA_PATH + "/wine/";
     archiveName = archiveName.replace(".", "-");
     archiveName = archiveName + ".tar.gz";
-    const wineArchive = APPDATA_PATH + "wine/" + archiveName;
-    const wineFolder = APPDATA_PATH + "wine/" + archiveName + "/";
+    const wineArchive = APPDATA_PATH + "/wine/" + archiveName;
+    const wineFolder = APPDATA_PATH + "/wine/" + archiveName + "/";
     const wineDirExists = await fs.exists(wineDir);
     const wineArchiveExists = await fs.exists(wineArchive);
     const wineFolderExists = await fs.exists(wineFolder);
-    if (!wineDirExists) await fs.createDir(wineDir);
+    if (!wineDirExists) await fs.mkdir(wineDir);
     if (wineArchiveExists) {
         if (wineFolderExists) return logger.info("Wine already unzipped... nothing to do!");
         else return unzip(wineArchive, wineDir);
     }
     let totalBytesDownloaded = 0;
-    await download(url, APPDATA_PATH + `/wine/${archiveName}`, (progress, total) => {
-        totalBytesDownloaded += progress;
-        total = total;
-        wineDownloadsFrontend.updateWineProgressBar(totalBytesDownloaded, total);
+    await download(url, APPDATA_PATH + `/wine/${archiveName}`, (payload) => {
+        totalBytesDownloaded += payload.progress;
+        // total = total;
+        wineDownloadsFrontend.updateWineProgressBar(totalBytesDownloaded, payload.total);
     }).then(async () => {
         logger.info("Download complete... Unzipping wine!");
         wineDownloadsFrontend.finalizeWineProgressBar();
         await unzip(wineArchive, wineDir);
         wineDownloadsFrontend.wineDownloadComplete();
         wineDownloadsFrontend.resetWineProgressbar();
-        fs.removeFile(wineArchive);
+        fs.remove(wineArchive);
         let installedWineList = await wineIterator();
         if (installedWineList.includes(archiveName.replace(".tar.gz", ""))) {
             setPrimaryWine(
@@ -74,10 +74,10 @@ async function checkIfVersionExists(wineVersion: string) {
         }
     }
     const wineDir = APPDATA_PATH + "/wine/";
-    const wineFolder = APPDATA_PATH + "wine/" + wineVersion + "/";
+    const wineFolder = `${wineDir}${wineVersion}/`;
     const wineDirExists = await fs.exists(wineDir);
     const wineFolderExists = await fs.exists(wineFolder);
-    if (!wineDirExists) await fs.createDir(wineDir);
+    if (!wineDirExists) await fs.mkdir(wineDir);
     if (wineFolderExists) {
         return true;
     } else {
@@ -88,14 +88,14 @@ async function checkIfVersionExists(wineVersion: string) {
 async function setPrimaryWine(name: string, value: wineObject, relativePath: boolean = true) {
     let appData = APPDATA_PATH;
     let linkPath = await join(appData, "wine/wine");
-    fs.removeFile(appData + "wine/wine");
+    fs.remove(appData + "wine/wine");
     let winePath;
     if (relativePath == false) {
         winePath = value.path;
     } else {
-        winePath = appData + value.path;
+        winePath = appData + "/" + value.path;
     }
-    let createLink = new Command("ln", ["-sf", winePath, linkPath]);
+    let createLink = Command.create("ln", ["-sf", winePath, linkPath]);
     await createLink.execute();
     logger.success(`Primary wine set to ${name}!`);
     window.location.reload();

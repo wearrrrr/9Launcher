@@ -1,10 +1,11 @@
-import { MessageDialogOptions, message } from "@tauri-apps/api/dialog";
-import { dialog } from "@tauri-apps/api";
+import { MessageDialogOptions, message } from "@tauri-apps/plugin-dialog";
+import {} from "@tauri-apps/api";
 import infoManager from "./infoManager";
 import dashboard from "../dashboard";
-import { invoke } from "@tauri-apps/api";
+import { invoke } from "@tauri-apps/api/core";
 import { setGameRichPresence } from "./games";
 import { Storage } from "../utils/storage";
+import * as dialog from "@tauri-apps/plugin-dialog";
 
 const settingsDiv = document.getElementById("settings-icn") as HTMLDivElement;
 const infoPageIcon = document.getElementById("info-page") as HTMLDivElement;
@@ -55,7 +56,6 @@ interface ChangeEvent extends Event {
     target: HTMLInputElement;
 }
 
-
 if (settingsDiv !== null) {
     settingsDiv.addEventListener("click", () => {
         if (quickSettingsToggle == 0) {
@@ -101,7 +101,7 @@ if (settingsDiv !== null) {
         }
     });
     fileLoggingSlider.addEventListener("change", (event: Event) => {
-        const changeEvent = event as ChangeEvent
+        const changeEvent = event as ChangeEvent;
         if (changeEvent.target.checked) {
             Storage.set("file-logging", "enabled");
         } else {
@@ -109,7 +109,7 @@ if (settingsDiv !== null) {
         }
     });
     consoleInfoSlider.addEventListener("change", (event) => {
-        const changeEvent = event as ChangeEvent
+        const changeEvent = event as ChangeEvent;
         if (changeEvent.target.checked) {
             Storage.set("console-logging", "enabled");
         } else {
@@ -129,7 +129,7 @@ if (settingsDiv !== null) {
                     let libalertskey = Storage.get("libraryUpdateAlerts");
                     Storage.clear();
                     Storage.set("libraryUpdateAlerts", libalertskey as string);
-                    await messageBox("Library cleared!", { type: "info", title: "Success!" });
+                    await messageBox("Library cleared!", { kind: "info", title: "Success!" });
                     window.location.reload();
                 }
             });
@@ -179,7 +179,7 @@ copyInfoBtn.addEventListener("click", () => {
         Architecture: ${arch}\n
         Version: ${appVersion}
     `);
-    messageBox("Copied device info to clipboard!", { type: "info", title: "Success!" });
+    messageBox("Copied device info to clipboard!", { kind: "info", title: "Success!" });
 });
 
 async function messageBox(str: string, type: MessageDialogOptions) {
