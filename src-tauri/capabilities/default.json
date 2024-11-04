@@ -29,6 +29,7 @@
         "core:window:allow-close",
         "core:window:allow-destroy",
         "core:webview:allow-create-webview-window",
+        "core:webview:allow-internal-toggle-devtools",
 
         "fs:allow-read-file",
         "fs:allow-write-file",

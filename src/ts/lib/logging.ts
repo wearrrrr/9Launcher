@@ -1,4 +1,3 @@
-import { APPDATA_PATH } from "../globals";
 import * as fs from "@tauri-apps/plugin-fs";
 import infoManager from "./infoManager";
 import { Storage } from "../utils/storage";

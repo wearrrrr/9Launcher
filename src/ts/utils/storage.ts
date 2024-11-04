@@ -1,5 +1,6 @@
 export class Storage {
-    static set(key: string, value: string) {
+    static set(key: string, value: any) {
+        if (typeof value != "string") value = value.toString();
         localStorage.setItem(key, value);
     }
     static checkByValue(value: string | null): boolean {

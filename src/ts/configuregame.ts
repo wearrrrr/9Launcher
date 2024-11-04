@@ -4,7 +4,7 @@ import * as fs from "@tauri-apps/plugin-fs";
 import { APPDATA_PATH } from "./globals";
 import { emit } from "@tauri-apps/api/event";
 import { platform } from "@tauri-apps/plugin-os";
-import { returnCode } from "./lib/types/types";
+import { returnCode } from "./types";
 import { Storage } from "./utils/storage";
 
 const urlParams = new URLSearchParams(window.location.search);

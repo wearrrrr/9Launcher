@@ -1,5 +1,5 @@
 import games from "../assets/games.json";
-import { returnCode } from "./lib/types/types";
+import { returnCode } from "./types";
 
 export const allGames: { [key: string]: any } = {
     ...games["pc-98"],

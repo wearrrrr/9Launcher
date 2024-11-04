@@ -1,7 +1,7 @@
 import wineListJSON from "../assets/winelist.json";
 import wineManager from "./lib/wineManager";
 import tingle from "tingle.js";
-const wineList = document.getElementById("wine-downloads-list") as HTMLDivElement;
+const wineList = document.getElementById("wine-downloads-list")!;
 
 var modal = new tingle.modal({
     footer: true,
@@ -70,8 +70,8 @@ function wineListIterator() {
 }
 
 function updateWineProgressBar(totalDownloaded: number, total: number) {
-    const progressBarProgress = document.getElementById("progress-bar-progress") as HTMLDivElement;
-    const progressBarText = document.getElementById("progress-bar-text") as HTMLDivElement;
+    const progressBarProgress = document.getElementById("progress-bar-progress")!;
+    const progressBarText = document.getElementById("progress-bar-text")!;
     const percentage = Math.round((totalDownloaded / total) * 100);
 
     progressBarProgress.style.width = percentage + "%";
@@ -79,7 +79,7 @@ function updateWineProgressBar(totalDownloaded: number, total: number) {
 }
 
 function finalizeWineProgressBar() {
-    const progressBarProgress = document.getElementById("progress-bar-progress") as HTMLDivElement;
+    const progressBarProgress = document.getElementById("progress-bar-progress")!;
     progressBarProgress.style.width = "100%";
     progressBarProgress.textContent = "Unzipping...";
 }
@@ -89,7 +89,7 @@ function wineDownloadComplete() {
 }
 
 function resetWineProgressbar() {
-    const progressBarProgress = document.getElementById("progress-bar-progress") as HTMLDivElement;
+    const progressBarProgress = document.getElementById("progress-bar-progress")!;
     progressBarProgress.style.width = "0%";
 }
 

@@ -19,7 +19,7 @@ async function downloadDosbox() {
 
     let determinedURL: string;
     switch (platform) {
-        case "win32":
+        case "windows":
             determinedURL = dosboxURLWindows;
             dosboxPath = appData + "/dosbox-x-vsbuild-win64-20230501103911.zip";
             break;
@@ -27,7 +27,7 @@ async function downloadDosbox() {
             determinedURL = dosboxURLUnix;
             dosboxPath = appData + "/dosbox-x";
             break;
-        case "darwin":
+        case "macos":
             // TODO: Add macOS support
             determinedURL = dosboxURLUnix;
             dosboxPath = appData + "/dosbox-x";
@@ -45,7 +45,7 @@ async function downloadDosbox() {
         dashboard.dosboxUpdateProgressBar(totalBytesDownloaded, payload.total);
     }).then(async () => {
         logger.info("Downloaded dosbox!");
-        if (platform === "win32") {
+        if (platform === "windows") {
             // This is the only reason I have to have powershell made invokable. this better not trip up windows defender or something
             unzipWindows(dosboxPath, appData);
         }
@@ -64,7 +64,7 @@ async function downloadDosbox() {
                     });
             }, 1000);
         }
-        if (platform === "darwin") {
+        if (platform === "macos") {
             console.error("MacOS is not supported yet! Please use Windows or Linux.");
         }
     });

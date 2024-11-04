@@ -11,8 +11,7 @@ import progressBar from "../dashboard";
 import { logger } from "./logging";
 import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
-import { platform } from "@tauri-apps/plugin-os";
-import { returnCode, gameObject } from "./types/types";
+import { returnCode } from "../globals";
 import { allGames, isGameIDValid, validGames } from "../gamesInterface";
 import { unzip } from "./unzip";
 import { loadGamesList } from "../dashboard";
@@ -21,7 +20,7 @@ import * as dialog from "@tauri-apps/plugin-dialog";
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 
 let info = await infoManager.gatherInformation();
-const customImagesDir = platform() == "windows" ? APPDATA_PATH + "\\custom-img\\" : APPDATA_PATH + "/custom-img/";
+const customImagesDir = info.platform == "windows" ? APPDATA_PATH + "\\custom-img\\" : APPDATA_PATH + "/custom-img/";
 
 function installedGamesIterator() {
     let installedGames = [];
@@ -53,7 +52,7 @@ function getGamePath(gameID: string) {
     let gamePath = Storage.get(gameID);
     let gamePathParsed = JSON.parse(gamePath as string);
     if (gamePath == null) throw new Error("Game path not found! Try clearing localStorage.");
-    return gamePathParsed.path;
+    return gamePathParsed.filePath;
 }
 
 const downloadWine = async (archiveName: string) => {
@@ -119,7 +118,7 @@ async function checkWineExists() {
 }
 
 const checkWineNeeded = async () => {
-    if (info.platform == "win32") return;
+    if (info.platform == "windows") return;
     checkWineExists();
 };
 setTimeout(() => {
@@ -144,11 +143,11 @@ async function launchGame(gameObj: gameObject) {
                 "-set",
                 "machine=pc98",
             ];
-            let dosboxCommand = await Command.create("dosbox-x", dosboxArgs, {
+            let dosboxCommand = Command.create("dosbox-x", dosboxArgs, {
                 cwd: APPDATA_PATH,
             });
             switch (info.platform) {
-                case "win32":
+                case "windows":
                     // Push args to launch dosbox-x.
                     dosboxArgs.unshift("/C", `${APPDATA_PATH + "bin\\x64\\Release\\dosbox-x.exe"}`);
                     command = Command.create("cmd", dosboxArgs);
@@ -164,6 +163,7 @@ async function launchGame(gameObj: gameObject) {
             }
         } else {
             logger.info(`Running ${gameObj.en_title}!`);
+            logger.info(getGamePath(gameObj.game_id));
             const wineCommand = Command.create("wine", gameLocation, {
                 cwd: getGamePath(gameObj.game_id),
                 env: {
@@ -172,7 +172,7 @@ async function launchGame(gameObj: gameObject) {
                 },
             });
             switch (info.platform) {
-                case "win32":
+                case "windows":
                     command = Command.create("cmd", ["/c", gameLocation], {
                         cwd: getGamePath(gameObj.game_id),
                     });
@@ -180,7 +180,7 @@ async function launchGame(gameObj: gameObject) {
                 case "linux":
                     command = wineCommand;
                     break;
-                case "darwin":
+                case "macos":
                     command = wineCommand;
                     break;
                 default:
@@ -199,8 +199,6 @@ async function launchGame(gameObj: gameObject) {
             return returnCode.SUCCESS;
         });
         command.on("error", (error) => logger.error(`ERR: "${error}"`));
-        // command.stdout.on('data', line => logger.info(line));
-        // command.stderr.on('data', line => logger.info(line));
         await command?.spawn();
         if (Storage.get("discordRPC") == "enabled") {
             smartSetRichPresence("Playing", gameObj.en_title, fileExtension == "lnk");
@@ -208,6 +206,45 @@ async function launchGame(gameObj: gameObject) {
     } catch (err) {
         return logger.error(`Issue launching ${gameObj.en_title}! Error: ${err}`);
     }
+}
+
+function getPathFromPlatform(file: string) {
+    if (info.platform == "windows") {
+        const pathComponents: string[] = file.toString().split("\\");
+        pathComponents.pop();
+        return pathComponents.join("\\");
+    } else {
+        const pathComponents: string[] = file.toString().split("/");
+        pathComponents.pop();
+        return pathComponents.join("/");
+    }
+}
+
+function reloadGames() {
+    const gameGrid = document.getElementById("games") as HTMLDivElement;
+    if (gameGrid === null) return logger.error("Game grid not found!");
+    const gamesGridSpinoffs = document.getElementById("games-spinoffs") as HTMLDivElement;
+    gameGrid.innerHTML = "";
+    gamesGridSpinoffs.innerHTML = "";
+    installedGames = installedGamesIterator();
+    loadGamesList();
+    return returnCode.SUCCESS;
+}
+
+async function setupGameObject(file: string, value: gameObject, gameCard: HTMLElement) {
+    if (file === null) return returnCode.WARNING;
+    const filePath = getPathFromPlatform(file);
+    gameCard.style.background = `url(assets/game-images/${value.img})`;
+    const gameObject = {
+        name: value.en_title,
+        img: value.img,
+        file: file,
+        filePath: filePath,
+        showText: true,
+    };
+    await messageBox(`${value.en_title} added to library!`, { kind: "info", title: "Success!" });
+    Storage.set(value.game_id, JSON.stringify(gameObject));
+    return returnCode.SUCCESS;
 }
 
 async function installGamePrompt(name: string, value: gameObject, gameCard: HTMLElement) {
@@ -218,53 +255,22 @@ async function installGamePrompt(name: string, value: gameObject, gameCard: HTML
         currentExtensions = ["hdi"];
         executableOrHDI = "HDI";
     }
-    await dialog
-        .open({
-            multiple: false,
-            directory: false,
-            filters: [
-                {
-                    name: `${name} ${executableOrHDI}`,
-                    extensions: currentExtensions,
-                },
-            ],
-        })
-        .then(async (file) => {
-            if (file !== null) {
-                let filePath: string;
-                if (platform() == "windows") {
-                    const pathComponents: string[] = file.toString().split("\\");
-                    pathComponents.pop();
-                    filePath = pathComponents.join("\\");
-                } else {
-                    const pathComponents: string[] = file.toString().split("/");
-                    pathComponents.pop();
-                    filePath = pathComponents.join("/");
-                }
-                gameCard.style.background = `url(assets/game-images/${value.img})`;
-                let gameObject = {
-                    name: name,
-                    img: value.img,
-                    file: file,
-                    path: filePath,
-                    showText: true,
-                };
-                await messageBox(`${value.en_title} added to library!`, { kind: "info", title: "Success!" });
-                Storage.set(name, JSON.stringify(gameObject));
-                const gameGrid = document.getElementById("games") as HTMLDivElement;
-                if (gameGrid === null) return logger.error("Game grid not found!");
-                const gamesGridSpinoffs = document.getElementById("games-spinoffs") as HTMLDivElement;
-                gameGrid.innerHTML = "";
-                gamesGridSpinoffs.innerHTML = "";
-                installedGames = installedGamesIterator();
-                loadGamesList();
-
-                return returnCode.SUCCESS;
-            } else {
-                logger.info("No file selected!");
-                return returnCode.INFO;
-            }
-        });
+    const file = await dialog.open({
+        multiple: false,
+        directory: false,
+        filters: [
+            {
+                name: `${name} ${executableOrHDI}`,
+                extensions: currentExtensions,
+            },
+        ],
+    });
+    if (file === null) return returnCode.WARNING;
+    const addToLibrary = await setupGameObject(file, value, gameCard);
+    if (addToLibrary == returnCode.SUCCESS) {
+        reloadGames();
+    }
+    return returnCode.SUCCESS;
 }
 
 let installedGames = installedGamesIterator();
@@ -274,7 +280,7 @@ await listen("refresh-page", () => {
 });
 
 await listen("delete-game", async (event) => {
-    if (!installedGamesIterator().includes(<string>event.payload)) return logger.error("Game not found!");
+    if (!installedGamesIterator().includes(event.payload as string)) return logger.error("Game not found!");
     Storage.remove(<string>event.payload);
     window.location.reload();
 });
@@ -289,7 +295,7 @@ async function checkForCustomImage(id: string) {
     }
 }
 
-async function addGame(name: string, value: gameObject, gamesElement: HTMLDivElement) {
+async function addGame(name: string, value: gameObject, gamesElement: HTMLElement) {
     const gameCard = document.createElement("div");
     gameCard.classList.add("game-card");
     gameCard.dataset.added = value.img;
@@ -320,7 +326,7 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
                 resizable: false,
                 center: true,
                 focus: true,
-            })
+            });
         } else {
             e.preventDefault();
         }
@@ -339,9 +345,14 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLDivEle
         if ((await checkForCustomImage(value.game_id)) != returnCode.FALSE) {
             const customImage = await checkForCustomImage(value.game_id);
             if (customImage != returnCode.FALSE) {
-                let blob = new Blob([customImage], { type: "image/png" });
-                let url = URL.createObjectURL(blob);
-                gameCard.style.background = `url(${url})`;
+                if (customImage instanceof Uint8Array) {
+                    let blob = new Blob([customImage], { type: "image/png" });
+                    let url = URL.createObjectURL(blob);
+                    gameCard.style.background = `url(${url})`;
+                } else {
+                    logger.error("Failed to load custom image!");
+                }
+
             }
         }
     }
@@ -470,8 +481,10 @@ if (Storage.get("discordRPC") == "enabled") {
 const funcs = {
     addGame,
     downloadWine,
+    reloadGames,
+    removeGame, 
+    setGameRichPresence 
 };
 export var totalBytesDownloaded: any;
 export var total: any;
-export { removeGame, setGameRichPresence };
 export default funcs;

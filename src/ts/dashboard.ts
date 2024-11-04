@@ -7,7 +7,6 @@ import * as pc98manager from "./lib/pc98manager";
 import { logger, attachOnError } from "./lib/logging";
 import {} from "@tauri-apps/api";
 import moment from "moment";
-import { gameObject } from "./lib/types/types";
 import { Storage } from "./utils/storage";
 import * as fs from "@tauri-apps/plugin-fs";
 
@@ -16,7 +15,7 @@ await attachOnError();
 const gameGrid = document.getElementById("games") as HTMLDivElement;
 const gamesGridSpinoffs = document.getElementById("games-spinoffs") as HTMLDivElement;
 
-async function loadList(iterator: Record<string, gameObject>, grid: HTMLDivElement) {
+async function loadList(iterator: Record<string, gameObject>, grid: HTMLElement) {
     for (const [name, value] of Object.entries(iterator)) {
         await gamesManager.addGame(name, value, grid);
     }
@@ -29,17 +28,13 @@ export async function loadGamesList() {
 }
 
 export async function openWineManager() {
-    console.log("Creating webview...")
-    // await logger.info("Opening Wine Manager...");
-    const ww = new WebviewWindow("wine-manager", {
+    new WebviewWindow("wine-manager", {
         url: "wine-manager/",
         title: "Wine Manager",
         width: 500,
         height: 400,
         resizable: false,
     })
-
-    console.log(ww);
 }
 
 loadGamesList();
@@ -53,18 +48,17 @@ var wineModal = modalManager.createNewModal({
     },
 });
 wineModal.setContent(`
-<h2 class="modal-title">Warning! No Wine builds installed! Open wine manager?</h2>
-<div class="progress-bar" id="progress-bar">
-    <div id="progress-bar-progress"><p id="progress-bar-text">0%</p></div>
-</div>
+    <h2 class="modal-title">Warning! No Wine builds installed! Open wine manager?</h2>
+    <div class="progress-bar" id="progress-bar">
+        <div id="progress-bar-progress"><p id="progress-bar-text">0%</p></div>
+    </div>
 `);
 wineModal.addFooterBtn("Download", "tingle-btn tingle-btn--primary", () => {
-    console.log("Attempting to open Wine Manager...");
     openWineManager();
     modalManager.closeModal(wineModal);
 });
 wineModal.addFooterBtn(`Don't Download (Modern Games won't launch!)`, "tingle-btn tingle-btn--danger", () => {
-    Storage.set("9L_beenWarned", "true");
+    Storage.set("9L_beenWarned", true);
     modalManager.closeModal(wineModal);
 });
 

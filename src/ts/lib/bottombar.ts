@@ -3,27 +3,27 @@ import {} from "@tauri-apps/api";
 import infoManager from "./infoManager";
 import dashboard from "../dashboard";
 import { invoke } from "@tauri-apps/api/core";
-import { setGameRichPresence } from "./games";
+import games from "./games";
 import { Storage } from "../utils/storage";
 import * as dialog from "@tauri-apps/plugin-dialog";
 
-const settingsDiv = document.getElementById("settings-icn") as HTMLDivElement;
-const infoPageIcon = document.getElementById("info-page") as HTMLDivElement;
-const appInfo = document.getElementById("app-info") as HTMLDivElement;
-const quickSettings = document.getElementById("quick-settings") as HTMLDivElement;
+const settingsDiv = document.getElementById("settings-icn")!;
+const infoPageIcon = document.getElementById("info-page")!;
+const appInfo = document.getElementById("app-info")!;
+const quickSettings = document.getElementById("quick-settings")!;
 const notificationSlider = document.getElementById("notifications-slider") as HTMLInputElement;
 const rpcSlider = document.getElementById("discord-rpc-slider") as HTMLInputElement;
-const rpcSliderRound = document.getElementById("rpc-slider-round") as HTMLDivElement;
+const rpcSliderRound = document.getElementById("rpc-slider-round")!;
 const fileLoggingSlider = document.getElementById("file-logging-slider") as HTMLInputElement;
 const consoleInfoSlider = document.getElementById("console-slider") as HTMLInputElement;
 const clearGames = document.getElementById("clear-games-btn") as HTMLButtonElement;
 const wineManager = document.getElementById("wine-manager-btn") as HTMLButtonElement;
 const dosboxManager = document.getElementById("dosbox-manager-btn") as HTMLButtonElement;
 
-const osInfo = document.getElementById("os-info") as HTMLParagraphElement;
-const kernelInfo = document.getElementById("kernel-info") as HTMLParagraphElement;
-const archInfo = document.getElementById("arch-info") as HTMLParagraphElement;
-const versionInfo = document.getElementById("version-info") as HTMLParagraphElement;
+const osInfo = document.getElementById("os-info")!;
+const kernelInfo = document.getElementById("kernel-info")!;
+const archInfo = document.getElementById("arch-info")!;
+const versionInfo = document.getElementById("version-info")!;
 
 const copyInfoBtn = document.getElementById("copy-info") as HTMLButtonElement;
 
@@ -31,7 +31,7 @@ let info = await infoManager.gatherInformation();
 let quickSettingsToggle = 0;
 let infoPageToggle = 0;
 
-if (info.platform == "win32") {
+if (info.platform == "windows") {
     document.getElementById("wine-manager")?.remove();
 }
 
@@ -45,7 +45,7 @@ setSliderState(consoleInfoSlider, Storage.get("console-logging") === "enabled" ?
 
 if (Storage.get("discordRPC") === null) {
     Storage.set("discordRPC", "enabled");
-    setGameRichPresence();
+    games.setGameRichPresence();
     window.location.reload();
 }
 if (Storage.get("file-logging") === null) Storage.set("file-logging", "enabled");
@@ -94,7 +94,7 @@ if (settingsDiv !== null) {
         }, 1500);
         if (changeEvent.target.checked) {
             Storage.set("discordRPC", "enabled");
-            setGameRichPresence();
+            games.setGameRichPresence();
         } else {
             Storage.set("discordRPC", "disabled");
             invoke("clear_activity");
@@ -117,22 +117,19 @@ if (settingsDiv !== null) {
         }
     });
     clearGames.addEventListener("click", async () => {
-        return await dialog
-            .confirm(
-                "Are you sure you want to clear your library? This will remove all games from your library, and you will have to re-add them.",
-                {
-                    title: "9Launcher",
-                },
-            )
-            .then(async (response) => {
-                if (response == true) {
-                    let libalertskey = Storage.get("libraryUpdateAlerts");
-                    Storage.clear();
-                    Storage.set("libraryUpdateAlerts", libalertskey as string);
-                    await messageBox("Library cleared!", { kind: "info", title: "Success!" });
-                    window.location.reload();
-                }
-            });
+        const confirm = await dialog.confirm(
+            "Are you sure you want to clear your library? This will remove all games from your library, and you will have to re-add them.",
+            {
+                title: "9Launcher",
+            },
+        );
+        if (confirm) {
+            let libalertskey = Storage.get("libraryUpdateAlerts");
+            Storage.clear();
+            Storage.set("libraryUpdateAlerts", libalertskey);
+            await messageBox("Library cleared!", { kind: "info", title: "Success!" });
+            window.location.reload();
+        }
     });
     dosboxManager.addEventListener("click", () => {
         dashboard.dosboxOpenModal();
