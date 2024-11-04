@@ -11,7 +11,6 @@ export type gameObject = {
     jp_title: string;
     img: string;
     img_unset: string;
-    url_trial: string;
     release_year: number;
     game_id: string;
 };

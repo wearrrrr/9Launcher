@@ -149,7 +149,6 @@ const window = WebviewWindow.getCurrent();
 
 window.listen(TauriEvent.WINDOW_CLOSE_REQUESTED, async () => {
     await logger.info("Closing 9Launcher...");
-    // This should never overwrite logs unless they manage to somehow create a race condition where they save two logs at the exact same time
     try {
         await fs.rename("9Launcher.log", "9Launcher-" + `${moment().format("MM-DD-mm_ss-YYYY")}` + ".log", {
             oldPathBaseDir: fs.BaseDirectory.AppData,
