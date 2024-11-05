@@ -7,8 +7,8 @@ const info = await infoManager.gatherInformation();
 export class logger {
     public static async error(message: string, fileLog: boolean = true) {
         console.error("[9L] " + message);
-        if (fileLog) await this.sendToLogs(message, "error");
         this.sendToConsole(message, "error");
+        if (fileLog) await this.sendToLogs(message, "error");
     }
     public static async warn(message: string, fileLog: boolean = true) {
         console.warn("[9L] " + message);
@@ -49,8 +49,10 @@ export class logger {
         let internalConsole = document.getElementById("console-output");
         if (internalConsole) {
             Array.from(internalConsole.getElementsByTagName("span")).forEach((element: HTMLSpanElement) => {
-                element.remove();
+                // Hack to work around what I assume is a webkit2gtk bug.
+                element.innerText = "";
             });
+            internalConsole.innerHTML = "";
         } else {
             console.error("Internal Console not found!");
         }

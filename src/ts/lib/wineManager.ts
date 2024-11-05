@@ -4,7 +4,7 @@ import * as fs from "@tauri-apps/plugin-fs";
 import { download } from "@tauri-apps/plugin-upload";
 import { logger } from "./logging";
 import { Command } from "@tauri-apps/plugin-shell";
-import wineDownloadsFrontend from "../wineDownloadsManager";
+import wineDownloadsFrontend from "../wineDownloadManager";
 import winelist from "../../assets/winelist.json";
 import { unzip } from "./unzip";
 import { Storage } from "../utils/storage";
@@ -43,7 +43,6 @@ async function downloadWine(url: string, archiveName: string) {
     let totalBytesDownloaded = 0;
     await download(url, APPDATA_PATH + `/wine/${archiveName}`, (payload) => {
         totalBytesDownloaded += payload.progress;
-        // total = total;
         wineDownloadsFrontend.updateWineProgressBar(totalBytesDownloaded, payload.total);
     }).then(async () => {
         logger.info("Download complete... Unzipping wine!");
@@ -65,7 +64,6 @@ async function downloadWine(url: string, archiveName: string) {
 
 async function checkIfVersionExists(wineVersion: string) {
     if (wineVersion == "System Wine") {
-        // Check if /usr/bin/wine exists
         const wineExists = await fs.exists("/usr/bin/wine");
         if (wineExists) {
             return true;
@@ -76,9 +74,8 @@ async function checkIfVersionExists(wineVersion: string) {
     const wineDir = APPDATA_PATH + "/wine/";
     const wineFolder = `${wineDir}${wineVersion}/`;
     const wineDirExists = await fs.exists(wineDir);
-    const wineFolderExists = await fs.exists(wineFolder);
     if (!wineDirExists) await fs.mkdir(wineDir);
-    if (wineFolderExists) {
+    if (await fs.exists(wineFolder)) {
         return true;
     } else {
         return false;
@@ -87,8 +84,8 @@ async function checkIfVersionExists(wineVersion: string) {
 
 async function setPrimaryWine(name: string, value: wineObject, relativePath: boolean = true) {
     let appData = APPDATA_PATH;
-    let linkPath = await join(appData, "wine/wine");
-    fs.remove(appData + "wine/wine");
+    let linkPath = await join(appData, "/wine/wine");
+    await fs.remove(appData + "/wine/wine");
     let winePath;
     if (relativePath == false) {
         winePath = value.path;
@@ -98,8 +95,9 @@ async function setPrimaryWine(name: string, value: wineObject, relativePath: boo
     let createLink = Command.create("ln", ["-sf", winePath, linkPath]);
     await createLink.execute();
     logger.success(`Primary wine set to ${name}!`);
-    window.location.reload();
+    await Command.create("killall", ["wineserver"]).execute();
     Storage.set("primary-wine", name);
+    window.location.reload();
 }
 
 const funcs = {

@@ -10,7 +10,7 @@ export async function unzip(wineArchive: string, wineDir: string) {
     });
     unzip.stderr.on("data", (data) => console.error(`command stderr: "${data}"`));
     unzip.on("error", (error) => console.error(`command error: "${error}"`));
-    const exec = await unzip.execute()
+    const exec = await unzip.execute();
     if (exec.code == 0) {
         logger.info("Unzipped Wine successfully!");
         return returnCode.SUCCESS;

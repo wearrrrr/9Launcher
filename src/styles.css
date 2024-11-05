@@ -87,7 +87,6 @@ button {
 }
 #settings-gear:hover {
     cursor: pointer;
-    rotate: 180deg;
 }
 .info-icn {
     margin-right: 20px;
@@ -116,12 +115,11 @@ button {
     background-color: var(--bottom-banner-color);
     width: 30%;
     position: absolute;
-    top: 54vh;
+    top: 50vh;
     left: 5px;
-    height: 39%;
+    height: 43%;
     margin: 0;
     padding: 0;
-    opacity: 0;
     transition: 250ms ease-in-out;
     z-index: 2;
     border-radius: 5px;
@@ -144,7 +142,7 @@ button {
     box-shadow: 3px 3px 12px 0px #101010;
 }
 .modal-active {
-    opacity: 1;
+    opacity: 1 !important;
     pointer-events: all;
 }
 
@@ -218,17 +216,9 @@ input:checked + .slider:before {
     border-radius: 50%;
 }
 
-.next-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 50px;
-}
-
-.next-arrow {
-    position: relative;
-}
 .clear-games,
 .wine-manager,
+.thcrap-manager,
 .dosbox-manager {
     position: relative;
     width: 90%;
@@ -392,7 +382,7 @@ input:checked + .slider:before {
     width: 100%;
     height: 100%;
     padding: 10px;
-    margin-top: 5px;
+    margin-top: 15px;
     position: relative;
 }
 
@@ -400,7 +390,7 @@ input:checked + .slider:before {
     height: 275px;
     width: 100%;
     background-color: #292929;
-    padding: 5px 10px 10px 15px;
+    padding: 15px 10px 10px 15px;
     font-family: monospace;
     overflow-y: scroll;
 }

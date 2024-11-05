@@ -46,6 +46,13 @@
         "fs:allow-appdata-write",
         "fs:allow-appdata-meta-recursive",
         "fs:allow-appdata-meta",
+        {
+            "identifier": "fs:scope",
+            "allow": [
+                "/usr/bin/wine",
+                "/dev/shm/9launcher/**"
+            ]
+        },
         "fs:scope-appdata-recursive",
         "fs:scope-appdata",
         "fs:scope-appdata-index",
@@ -73,11 +80,6 @@
                     "args": true,
                     "cmd": "cmd",
                     "name": "cmd"
-                  },
-                  {
-                    "args": true,
-                    "cmd": "killall",
-                    "name": "killall"
                   }
             ]
         },
@@ -104,6 +106,11 @@
                     "args": true,
                     "cmd": "tar",
                     "name": "tar"
+                },
+                {
+                    "args": true,
+                    "cmd": "killall",
+                    "name": "killall"
                 }
             ]
         },

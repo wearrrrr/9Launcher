@@ -6,6 +6,7 @@ import { invoke } from "@tauri-apps/api/core";
 import games from "./games";
 import { Storage } from "../utils/storage";
 import * as dialog from "@tauri-apps/plugin-dialog";
+import { thcrapDownloader } from "../thcrap";
 
 const settingsDiv = document.getElementById("settings-icn")!;
 const infoPageIcon = document.getElementById("info-page")!;
@@ -18,6 +19,7 @@ const fileLoggingSlider = document.getElementById("file-logging-slider") as HTML
 const consoleInfoSlider = document.getElementById("console-slider") as HTMLInputElement;
 const clearGames = document.getElementById("clear-games-btn") as HTMLButtonElement;
 const wineManager = document.getElementById("wine-manager-btn") as HTMLButtonElement;
+const thcrapManager = document.getElementById("thcrap-manager-btn") as HTMLButtonElement;
 const dosboxManager = document.getElementById("dosbox-manager-btn") as HTMLButtonElement;
 
 const osInfo = document.getElementById("os-info")!;
@@ -130,6 +132,9 @@ if (settingsDiv !== null) {
             await messageBox("Library cleared!", { kind: "info", title: "Success!" });
             window.location.reload();
         }
+    });
+    thcrapManager.addEventListener("click", () => {
+        dashboard.openThcrapManager();
     });
     dosboxManager.addEventListener("click", () => {
         dashboard.dosboxOpenModal();

@@ -41,45 +41,38 @@ async function downloadDosbox() {
     logger.info("Downloading dosbox...");
     await download(determinedURL, dosboxPath, (payload) => {
         totalBytesDownloaded += payload.progress;
-        // total = total;
         dashboard.dosboxUpdateProgressBar(totalBytesDownloaded, payload.total);
-    }).then(async () => {
-        logger.info("Downloaded dosbox!");
-        if (platform === "windows") {
-            // This is the only reason I have to have powershell made invokable. this better not trip up windows defender or something
-            unzipWindows(dosboxPath, appData);
-        }
-        if (platform === "linux") {
-            if (!(await fs.exists(appData + "/dosbox"))) {
-                fs.mkdir(appData + "/dosbox");
-            }
-            await fs.copyFile(appData + "/dosbox-x", appData + "/dosbox/dosbox-x");
-            await fs.remove(appData + "/dosbox-x");
-            dashboard.dosboxFinalizeProgressBar();
-            setTimeout(() => {
-                Command.create("chmod", ["+x", appData + "/dosbox/dosbox-x"])
-                    .execute()
-                    .then(() => {
-                        logger.success("Dosbox chmodded successfully, should work now!");
-                    });
-            }, 1000);
-        }
-        if (platform === "macos") {
-            console.error("MacOS is not supported yet! Please use Windows or Linux.");
-        }
     });
+    logger.info("Downloaded dosbox!");
+    if (platform === "windows") {
+        await unzipWindows(dosboxPath, appData);
+    }
+    if (platform === "linux") {
+        if (!(await fs.exists(appData + "/dosbox"))) {
+            fs.mkdir(appData + "/dosbox");
+        }
+        await fs.copyFile(appData + "/dosbox-x", appData + "/dosbox/dosbox-x");
+        await fs.remove(appData + "/dosbox-x");
+        dashboard.dosboxFinalizeProgressBar();
+        setTimeout(async () => {
+            await Command.create("chmod", ["+x", appData + "/dosbox/dosbox-x"]).execute()
+            logger.success("Dosbox chmodded successfully, should work now!");
+        }, 1000);
+    }
+    if (platform === "macos") {
+        console.error("MacOS is not supported yet! Please use Windows or Linux.");
+    }
 }
 
-function unzipWindows(archive: string, unzipDir: string) {
+async function unzipWindows(archive: string, unzipDir: string) {
     let unzip = Command.create("powershell", ["Expand-Archive", "-Force", archive, unzipDir], { cwd: unzipDir });
     logger.info("Unzipping dosbox...");
     dashboard.dosboxUnzipBegin();
-    unzip.execute().then(() => {
-        logger.success("Dosbox unzipped!");
-        dashboard.dosboxFinalizeProgressBar();
-        logger.info("Removing archive...");
-        fs.remove(archive);
-    });
+    await unzip.execute()
+    logger.success("Dosbox unzipped!");
+    dashboard.dosboxFinalizeProgressBar();
+    logger.info("Removing archive...");
+    fs.remove(archive);
 }
 
 const funcs = {

@@ -27,6 +27,16 @@ export async function loadGamesList() {
     await loadList(games.spinoffs, gamesGridSpinoffs);
 }
 
+async function openThcrapManager() {
+    new WebviewWindow("thcrap-manager", {
+        url: "thcrap-manager/",
+        title: "Thcrap Manager",
+        width: 500,
+        height: 400,
+        resizable: false,
+    });
+}
+
 export async function openWineManager() {
     new WebviewWindow("wine-manager", {
         url: "wine-manager/",
@@ -34,7 +44,7 @@ export async function openWineManager() {
         width: 500,
         height: 400,
         resizable: false,
-    })
+    });
 }
 
 loadGamesList();
@@ -120,7 +130,9 @@ const progressBarText = document.getElementById("progress-bar-text") as HTMLDivE
 
 function wineUpdateProgressBar(totalDownloaded: number, total: number) {
     const percentage = Math.round((totalDownloaded / total) * 100);
+    if (!progressBarProgress) return;
     progressBarProgress.style.width = percentage + "%";
+    if (!progressBarText) return;
     progressBarText.textContent = percentage + "%";
 }
 
@@ -170,6 +182,7 @@ const funcs = {
     dosboxFinalizeProgressBar,
     dosboxResetProgressBar,
     openWineManager,
+    openThcrapManager,
 };
 
 export default funcs;

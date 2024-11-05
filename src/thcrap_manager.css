@@ -1,0 +1,39 @@
+:root {
+    --element-padding: 0.5rem;
+}
+
+.download-container {
+    display: flex;
+    gap: 0.5rem;
+}
+
+#thcrap__branch-list-selected {
+    background-color: #121212;
+    border-radius: 5px;
+    padding: var(--element-padding);
+    text-align: center;
+    cursor: pointer;
+}
+
+#thcrap__branch-list {
+    width: 15%;
+    font-size: 16px;
+    text-align: center;
+}
+
+#thcrap__branch-list-items {
+    background-color: #121212;
+    margin-top: 3px;
+    border-radius: 5px;
+    transition: height 350ms;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+#thcrap__download-btn {
+    width: 100px;
+    padding: var(--element-padding);
+    height: 2.5rem;
+    font-size: 16px;
+    text-align: center;
+}

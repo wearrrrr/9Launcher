@@ -82,20 +82,15 @@ const downloadWine = async (archiveName: string) => {
                 logger.error("Progress bar not found! This is a bug!");
             }
         },
-    ).then(async () => {
-        logger.info("Download complete... Unzipping wine!");
-        if (progressBar !== null) {
-            progressBar.wineUnzipBegin();
-        } else {
-            logger.error("Progress bar not found! This is a bug!");
-        }
-        unzip(wineArchive, wineDir);
-        if (progressBar !== null) {
-            progressBar.wineFinalizeProgressBar();
-        } else {
-            logger.error("Progress bar not found! This is a bug!");
-        }
-    });
+    )
+    logger.info("Download complete... Unzipping wine!");
+    if (progressBar !== null) {
+        progressBar.wineUnzipBegin();
+    } else {
+        logger.error("Progress bar not found! This is a bug!");
+    }
+    await unzip(wineArchive, wineDir);
+    progressBar.wineFinalizeProgressBar();
     return returnCode.SUCCESS;
 };
 
@@ -198,6 +193,7 @@ async function launchGame(gameObj: gameObject) {
             }
             return returnCode.SUCCESS;
         });
+
         command.on("error", (error) => logger.error(`ERR: "${error}"`));
         await command?.spawn();
         if (Storage.get("discordRPC") == "enabled") {
@@ -352,7 +348,6 @@ async function addGame(name: string, value: gameObject, gamesElement: HTMLElemen
                 } else {
                     logger.error("Failed to load custom image!");
                 }
-
             }
         }
     }
@@ -482,8 +477,8 @@ const funcs = {
     addGame,
     downloadWine,
     reloadGames,
-    removeGame, 
-    setGameRichPresence 
+    removeGame,
+    setGameRichPresence,
 };
 export var totalBytesDownloaded: any;
 export var total: any;
