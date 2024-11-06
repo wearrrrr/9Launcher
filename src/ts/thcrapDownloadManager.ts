@@ -13,7 +13,6 @@ const patchlist = document.getElementById("thcrap__patchlist") as HTMLDivElement
 const thcrapContinueBtn = document.getElementById("thcrap__continue") as HTMLButtonElement;
 const thcrap = new thcrapDownloader();
 const json = await thcrap.getBranchInfo();
-const url = thcrap.getPath();
 delete json["version-resolve-fix"];
 
 const branchMap = new Map<string, string>();
@@ -25,7 +24,7 @@ Object.keys(json).forEach((branch) => {
     const branchName = branch.charAt(0).toUpperCase() + branch.slice(1);
     const option = document.createElement("div");
     option.textContent = branchName;
-    branchMap.set(branch, url + json[branch].latest);
+    branchMap.set(branch, thcrap.url + json[branch].latest);
     branchList.appendChild(option);
     option.addEventListener("click", () => {
         selectedItem.textContent = branchName;
@@ -133,5 +132,16 @@ searchbar.addEventListener("input", () => {
 })
 
 thcrapContinueBtn.addEventListener("click", async () => {
+    console.log("Downloading patches...");
     console.log(patchMap);
+    const patchesToResolve = Array.from(patchMap.keys());
+
+    patchesToResolve.forEach(async (patch) => {
+        const patchInfo = await thcrap.getPatchInfo(patch);
+        console.log(patchInfo);
+        patchInfo.dependencies.forEach(async (dependency: string) => {
+            const dependencyInfo = await thcrap.fetchDependency(dependency);
+            console.log(dependencyInfo);
+        });
+    });
 })
