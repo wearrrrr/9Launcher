@@ -93,18 +93,12 @@ async function loadReposFile() {
 
 function createPatchItem(patch: string, patchTitle: string) {
     const patchItem = document.createElement("div");
-    patchItem.textContent = patchTitle;
+    const patchTitleElement = document.createElement("span");
+    patchTitleElement.textContent = patchTitle;
     const patchCheckbox = document.createElement("input");
     patchCheckbox.type = "checkbox";
     patchCheckbox.id = patch;
-    patchCheckbox.addEventListener("change", () => {
-        if (patchCheckbox.checked) {
-            patchMap.set(patch, patchTitle);
-        } else {
-            patchMap.delete(patch);
-        }
-    })
-    patchItem.addEventListener("click", () => {
+    patchTitleElement.addEventListener("click", () => {
         patchCheckbox.checked = !patchCheckbox.checked;
         if (patchCheckbox.checked) {
             patchMap.set(patch, patchTitle);
@@ -112,6 +106,14 @@ function createPatchItem(patch: string, patchTitle: string) {
             patchMap.delete(patch);
         }
     });
+    patchCheckbox.addEventListener("click", () => {
+        if (patchCheckbox.checked) {
+            patchMap.set(patch, patchTitle);
+        } else {
+            patchMap.delete(patch);
+        }
+    });
+    patchItem.appendChild(patchTitleElement);
     patchItem.prepend(patchCheckbox);
     patchlist.appendChild(patchItem);
 }
