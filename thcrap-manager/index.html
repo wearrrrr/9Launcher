@@ -23,14 +23,35 @@
             }
         </style>
         <h2>Thcrap Manager</h2>
-        <p>Click here to download thcrap! This will apply per wine prefix</p>
+        <p>Select a branch and configure thcrap below.</p>
         <div class="download-container">
             <div id="thcrap__branch-list">
                 <div id="thcrap__branch-list-selected"></div>
                 <div style="height: 0px;" id="thcrap__branch-list-items"></div>
             </div>
-            <button id="thcrap__download-btn">Download!</button>
+            <button id="thcrap__download-btn">Download</button>
         </div>
+        <div class="thcrap__download-progress">
+            <div id="thcrap__download-progressbar-outer">
+                <div id="thcrap__download-progressbar"></div>
+            </div>
+            <span id="thcrap__download-progress-text">0%</span>
+        </div>
+        <div id="thcrap__current-step">
+            <div id="thcrap__patchlist-container">
+                <label>Search: </label> <input type="text" id="thcrap__searchbar">
+                <div id="thcrap__patchlist">
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="thcrap__bottombar-container">
+            <button id="thcrap__continue">Continue →</button>
+        </div>
+
+
+
         <script type="module" src="/src/ts/thcrapDownloadManager.ts"></script>
     </body>
 </html>

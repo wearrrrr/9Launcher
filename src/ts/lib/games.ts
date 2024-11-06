@@ -13,7 +13,7 @@ import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
 import { returnCode } from "../globals";
 import { allGames, isGameIDValid, validGames } from "../gamesInterface";
-import { unzip } from "./unzip";
+import { unzip } from "../utils/unzip";
 import { loadGamesList } from "../dashboard";
 import { Storage } from "../utils/storage";
 import * as dialog from "@tauri-apps/plugin-dialog";

@@ -13,14 +13,20 @@
     padding: var(--element-padding);
     text-align: center;
     cursor: pointer;
+    transition: 250ms ease-in-out;
+}
+#thcrap__branch-list-selected:hover {
+    background-color: #1e1e1e;
 }
 
 #thcrap__branch-list {
-    width: 15%;
+    width: 20%;
     font-size: 16px;
     text-align: center;
+    position: relative;
 }
 
+ 
 #thcrap__branch-list-items {
     background-color: #121212;
     margin-top: 3px;
@@ -28,12 +34,78 @@
     transition: height 350ms;
     overflow: hidden;
     cursor: pointer;
+    position: absolute;
+    width: 100%;
+    & > div {
+        padding: 0.25rem;
+        transition: 250ms ease-in-out;
+    }
+    & > div:hover {
+        background-color: #1e1e1e;
+    }
 }
 
 #thcrap__download-btn {
-    width: 100px;
+    width: 150px;
     padding: var(--element-padding);
     height: 2.5rem;
     font-size: 16px;
     text-align: center;
+    transition: 250ms ease-in-out;
+}
+
+#thcrap__download-btn:hover {
+    background-color: #1e1e1e;
+}
+
+.thcrap__download-progress {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#thcrap__download-progressbar-outer {
+    width: 60%;
+    height: 0.5rem;
+    background-color: #121212;
+    border-radius: 5px;
+    overflow: hidden;
+    transition: 1ms ease-in;
+}
+
+#thcrap__download-progressbar {
+    height: 100%;
+    width: 0%;
+    transition: width 10ms ease-in-out;
+    background-color: rgb(255, 96, 96);
+}
+
+#thcrap__patchlist-container {
+    border: 2px solid #fff;
+    border-radius: 15px;
+    padding: 0.5rem;
+    opacity: 0;
+    transition: 250ms ease-in-out;
+}
+
+#thcrap__patchlist {
+    overflow: scroll;
+    height: 70vh;
+    width: 100%;
+    & > div {
+        padding: 0.25rem;
+        transition: 250ms ease-in-out;
+        cursor: pointer;
+    };
+    & > div > input {
+        width: 32px;
+    }
+}
+.thcrap__bottombar-container {
+    display: flex;
+    justify-content: flex-end;
+}
+#thcrap__continue {
+    margin-top: 0.5rem;
+    padding: var(--element-padding);
 }

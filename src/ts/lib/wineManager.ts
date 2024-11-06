@@ -6,7 +6,7 @@ import { logger } from "./logging";
 import { Command } from "@tauri-apps/plugin-shell";
 import wineDownloadsFrontend from "../wineDownloadManager";
 import winelist from "../../assets/winelist.json";
-import { unzip } from "./unzip";
+import { unzip } from "../utils/unzip";
 import { Storage } from "../utils/storage";
 
 type wineObject = {

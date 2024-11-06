@@ -6,6 +6,7 @@ import { logger } from "./logging";
 import { Command } from "@tauri-apps/plugin-shell";
 import {} from "@tauri-apps/api";
 import * as fs from "@tauri-apps/plugin-fs";
+import { unzip } from "../utils/unzip";
 
 let info = await infoManager.gatherInformation();
 
@@ -45,7 +46,13 @@ async function downloadDosbox() {
     });
     logger.info("Downloaded dosbox!");
     if (platform === "windows") {
-        await unzipWindows(dosboxPath, appData);
+        logger.info("Unzipping dosbox...");
+        dashboard.dosboxUnzipBegin();
+        await unzip(dosboxPath, appData);
+        logger.success("Dosbox unzipped!");
+        dashboard.dosboxFinalizeProgressBar();
+        logger.info("Removing archive...");
+        fs.remove(dosboxPath);
     }
     if (platform === "linux") {
         if (!(await fs.exists(appData + "/dosbox"))) {
@@ -62,17 +69,6 @@ async function downloadDosbox() {
     if (platform === "macos") {
         console.error("MacOS is not supported yet! Please use Windows or Linux.");
     }
-}
-
-async function unzipWindows(archive: string, unzipDir: string) {
-    let unzip = Command.create("powershell", ["Expand-Archive", "-Force", archive, unzipDir], { cwd: unzipDir });
-    logger.info("Unzipping dosbox...");
-    dashboard.dosboxUnzipBegin();
-    await unzip.execute()
-    logger.success("Dosbox unzipped!");
-    dashboard.dosboxFinalizeProgressBar();
-    logger.info("Removing archive...");
-    fs.remove(archive);
 }
 
 const funcs = {

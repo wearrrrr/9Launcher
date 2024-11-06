@@ -31,8 +31,8 @@ async function openThcrapManager() {
     new WebviewWindow("thcrap-manager", {
         url: "thcrap-manager/",
         title: "Thcrap Manager",
-        width: 500,
-        height: 400,
+        width: 600,
+        height: 850,
         resizable: false,
     });
 }
@@ -53,9 +53,9 @@ var wineModal = modalManager.createNewModal({
     footer: true,
     stickyFooter: false,
     closeMethods: [],
-    beforeClose: function () {
+    beforeClose: () => {
         return true;
-    },
+    }
 });
 wineModal.setContent(`
     <h2 class="modal-title">Warning! No Wine builds installed! Open wine manager?</h2>

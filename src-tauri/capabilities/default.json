@@ -4,7 +4,8 @@
     "windows": [
         "main",
         "wine-manager",
-        "configure-game"
+        "configure-game",
+        "thcrap-manager"
     ],
     "permissions": [
         "core:path:default",
@@ -68,11 +69,6 @@
                   },
                   {
                     "args": true,
-                    "cmd": "unzip",
-                    "name": "unzip"
-                  },
-                  {
-                    "args": true,
                     "cmd": "$APPDATA/dosbox/dosbox-x",
                     "name": "dosbox-x"
                   },
@@ -96,6 +92,11 @@
                     "args": true,
                     "cmd": "powershell",
                     "name": "powershell"
+                },
+                {
+                    "args": true,
+                    "cmd": "unzip",
+                    "name": "unzip"
                 },
                 {
                     "args": true,
