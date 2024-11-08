@@ -101,9 +101,22 @@
         width: 32px;
     }
 }
+.thcrap__patch-item {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    & > abbr {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    };
+
+}
 .thcrap__bottombar-container {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
+    height: 45px;
 }
 #thcrap__continue {
     margin-top: 0.5rem;

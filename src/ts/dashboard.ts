@@ -5,7 +5,6 @@ import { TauriEvent } from "@tauri-apps/api/event";
 import modalManager from "./lib/modalManager";
 import * as pc98manager from "./lib/pc98manager";
 import { logger, attachOnError } from "./lib/logging";
-import {} from "@tauri-apps/api";
 import moment from "moment";
 import { Storage } from "./utils/storage";
 import * as fs from "@tauri-apps/plugin-fs";
@@ -15,7 +14,7 @@ await attachOnError();
 const gameGrid = document.getElementById("games") as HTMLDivElement;
 const gamesGridSpinoffs = document.getElementById("games-spinoffs") as HTMLDivElement;
 
-async function loadList(iterator: Record<string, gameObject>, grid: HTMLElement) {
+async function loadList(iterator: Record<string, gameObject>, grid: HTMLDivElement) {
     for (const [name, value] of Object.entries(iterator)) {
         await gamesManager.addGame(name, value, grid);
     }
@@ -31,9 +30,9 @@ async function openThcrapManager() {
     new WebviewWindow("thcrap-manager", {
         url: "thcrap-manager/",
         title: "Thcrap Manager",
-        width: 600,
-        height: 850,
-        resizable: false,
+        width: 800,
+        height: 900,
+        resizable: true,
     });
 }
 

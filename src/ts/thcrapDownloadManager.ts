@@ -3,6 +3,7 @@ import { APPDATA_PATH } from "./globals";
 import * as fs from "@tauri-apps/plugin-fs";
 import { download } from "@tauri-apps/plugin-upload";
 import { unzip } from "./utils/unzip";
+import { logger } from "./lib/logging";
 const branchList = document.getElementById("thcrap__branch-list-items")!
 const selectedItem = document.getElementById("thcrap__branch-list-selected")!
 const downloadButton = document.getElementById("thcrap__download-btn") as HTMLButtonElement;
@@ -11,6 +12,7 @@ const progresstext = document.getElementById("thcrap__download-progress-text") a
 const searchbar = document.getElementById("thcrap__searchbar") as HTMLInputElement;
 const patchlist = document.getElementById("thcrap__patchlist") as HTMLDivElement;
 const thcrapContinueBtn = document.getElementById("thcrap__continue") as HTMLButtonElement;
+const currentFile = document.getElementById("thcrap__currentfile") as HTMLSpanElement;
 const thcrap = new thcrapDownloader();
 const json = await thcrap.getBranchInfo();
 delete json["version-resolve-fix"];
@@ -19,12 +21,13 @@ const branchMap = new Map<string, string>();
 const patchMap = new Map<string, string>();
 
 const priorityPatches = ["lang_en", "lang_en-4kids", "lang_en-ca", "lang_en-literal", "lang_es", "lang_es-419", "lang_fr", "lang_it", "lang_ko", "lang_ru", "lang_zh-hans", "lang_zh-hant", "lang_en-tyke", "lang_en-yoda"];
+const patchItems: string[] = [];
 
 Object.keys(json).forEach((branch) => {
     const branchName = branch.charAt(0).toUpperCase() + branch.slice(1);
     const option = document.createElement("div");
     option.textContent = branchName;
-    branchMap.set(branch, thcrap.url + json[branch].latest);
+    branchMap.set(branch, thcrap.url + "/" + json[branch].latest);
     branchList.appendChild(option);
     option.addEventListener("click", () => {
         selectedItem.textContent = branchName;
@@ -45,7 +48,9 @@ function collapseInput(element: HTMLElement, branchItem?: Element) {
 }
 
 if (await fs.exists(APPDATA_PATH + "/thcrap")) {
-    loadReposFile();
+    const repo = await loadReposFile();
+    await initPatchlist(repo);
+
 }
 
 downloadButton.addEventListener("click", async () => {
@@ -72,31 +77,63 @@ downloadButton.addEventListener("click", async () => {
     await unzip(APPDATA_PATH + "/thcrap.zip", APPDATA_PATH + "/thcrap");
     progresstext.innerText = "Done!";
     await fs.remove(APPDATA_PATH + "/thcrap.zip");
-    loadReposFile();
+    const repo = await loadReposFile();
+    const patches = thcrap.crawlNeighbors(repo.neighbors);
+    console.log(patches)
+    await initPatchlist(repo);
 })
 
 async function loadReposFile() {
     const reposFile = await fs.readTextFile(APPDATA_PATH + "/thcrap/repos/thpatch/repo.js");
-    const repos = JSON.parse(reposFile);
+    const repo = JSON.parse(reposFile);
+    return repo;
+}
+
+// TODO: Add type for repo.
+async function initPatchlist(repo: any) {
     const thcrapPatchlistContainer = document.getElementById("thcrap__patchlist-container") as HTMLElement;
     thcrapPatchlistContainer.style.opacity = "1";
     priorityPatches.forEach((patch) => {
-        createPatchItem(patch, repos.patches[patch]);
+        createPatchItem(patch, repo.patches[patch]);
     });
-    Object.keys(repos.patches).forEach((patch) => {
+    Object.keys(repo.patches).forEach((patch) => {
         if (!priorityPatches.includes(patch)) {
-            createPatchItem(patch, repos.patches[patch]);
+            createPatchItem(patch, repo.patches[patch]);
         }
     })
+
+    const start = Date.now();
+    const patches = await thcrap.crawlNeighbors(repo.neighbors);
+    const end = Date.now();
+    console.log(`Crawled ${patches.length} patches in ${end - start}ms`);
+    await loadPatchesFromPatchList(patches);
 }
 
-function createPatchItem(patch: string, patchTitle: string) {
+async function loadPatchesFromPatchList(patchList: thcrapRepoPatch[]) {
+    patchList.forEach((patch) => {
+        const patchItem = patch.patches;
+        const server = patch.server;
+        Object.keys(patchItem).forEach((patch) => {
+            createPatchItem(patch, patchItem[patch], server);
+        })
+    });
+}
+
+function createPatchItem(patch: string, patchTitle: string, resolveURL?: string) {
+    if (patchItems.includes(patch)) return;
+    patchItems.push(patch);
+
     const patchItem = document.createElement("div");
-    const patchTitleElement = document.createElement("span");
+    patchItem.classList.add("thcrap__patch-item");
+    const patchTitleElement = document.createElement("abbr");
+    patchTitleElement.title = patchTitle;
     patchTitleElement.textContent = patchTitle;
     const patchCheckbox = document.createElement("input");
     patchCheckbox.type = "checkbox";
     patchCheckbox.id = patch;
+    if (resolveURL) {
+        patchItem.dataset.resolve = resolveURL;
+    }
     patchTitleElement.addEventListener("click", () => {
         patchCheckbox.checked = !patchCheckbox.checked;
         if (patchCheckbox.checked) {
@@ -112,6 +149,7 @@ function createPatchItem(patch: string, patchTitle: string) {
             patchMap.delete(patch);
         }
     });
+
     patchItem.appendChild(patchTitleElement);
     patchItem.prepend(patchCheckbox);
     patchlist.appendChild(patchItem);
@@ -135,13 +173,106 @@ thcrapContinueBtn.addEventListener("click", async () => {
     console.log("Downloading patches...");
     console.log(patchMap);
     const patchesToResolve = Array.from(patchMap.keys());
+    const fullPatchList: string[] = [];
 
     patchesToResolve.forEach(async (patch) => {
+        fullPatchList.push(patch);
         const patchInfo = await thcrap.getPatchInfo(patch);
-        console.log(patchInfo);
         patchInfo.dependencies.forEach(async (dependency: string) => {
-            const dependencyInfo = await thcrap.fetchDependency(dependency);
-            console.log(dependencyInfo);
+            if (!fullPatchList.includes(dependency)) {
+                fullPatchList.push(dependency)
+            };
+            const fileList = await thcrap.downloadFilesList(dependency);
+            logger.info("Got file list for " + dependency);
+            // Iterate over the files and download them.
+            if (!await fs.exists(`${APPDATA_PATH}/thcrap/repos/`)) {
+                await fs.mkdir(`${APPDATA_PATH}/thcrap/repos/`);
+            }
+            const list = Object.keys(fileList);
+
+            for (let i = 0; i < list.length; i++) {
+                const file = list[i];
+
+                if (fileList[file] === null) continue;
+                const fileURL = `${thcrap.mirror}/${dependency}/${file}`;
+                const filePath = `${APPDATA_PATH}/thcrap/repos/${dependency}/${file}`;
+                const folderPath = filePath.substring(0, filePath.lastIndexOf("/"));
+            
+                if (await fs.exists(`thcrap/repos/${dependency}/${file}`, { baseDir: fs.BaseDirectory.AppData })) {
+                    continue;
+                }
+                if (!await fs.exists(`thcrap/repos/${dependency}/`, { baseDir: fs.BaseDirectory.AppData })) {
+                    await fs.mkdir(`thcrap/repos/${dependency}/`, { recursive: true, baseDir: fs.BaseDirectory.AppData });
+                }
+                if (!await fs.exists(folderPath)) {
+                    await fs.mkdir(folderPath, { recursive: true });
+                }
+                currentFile.textContent = file;
+                await downloadFile(fileURL, folderPath);
+            }
+            
+            logger.info(`Downloaded all files for ${dependency}!`);
+            currentFile.textContent = "Done!";
         });
+
+        /* 
+            Now, we have to save the patch file.
+            - if it's a language patch, we have to save it into thcrap/repos/thpatch/<patch name>/patch.js
+            - if it's a game patch, we have to save it into thcrap/repos/<REPO + PATCH NAME>/patch.js
+            - We can ignore dependencies for now, since we are relying on thcrap's auto updater to resolve any that we somehow missed.
+        */
+       let path;
+        if (thcrap.getURLForPatch(patch) == thcrap.srv) {
+            path = `thcrap/repos/thpatch/${patch}`;
+        } else {
+            path = `thcrap/repos/${patch}`;
+        }
+        if (!await fs.exists(`${path}/`, { baseDir: fs.BaseDirectory.AppData })) {
+            await fs.mkdir(`${path}/`, { recursive: true, baseDir: fs.BaseDirectory.AppData });
+        }
+        await fs.writeTextFile(`${path}/patch.js`, JSON.stringify(patchInfo), { baseDir: fs.BaseDirectory.AppData });
+
+        logger.info(`Downloaded patch ${patch}!`);
+
+        // Now, we have to create a config file for the patch.
+        await createConfigFile(fullPatchList, patch);
     });
-})
+});
+
+
+async function createConfigFile(patchlist: string[], patchName: string) {
+    const config: thcrapConfigFile = {
+        console: false,
+        dat_dump: false,
+        patched_files_dump: false,
+        patches: []
+    }
+    patchlist.forEach((patch) => {
+        if (patch.includes("/")) {
+            config.patches.push({
+                archive: `repos/${patch}`
+            });
+        } else {
+            config.patches.push({
+                archive: `repos/thpatch/${patch}`
+            });
+        }
+
+    });
+    if (!await fs.exists("thcrap/config/", { baseDir: fs.BaseDirectory.AppData })) {
+        await fs.mkdir("thcrap/config/", { baseDir: fs.BaseDirectory.AppData });
+    }
+    await fs.writeTextFile(`thcrap/config/${patchName}.js`, JSON.stringify(config), { baseDir: fs.BaseDirectory.AppData });
+}
+
+async function downloadFile(fileURL: string, folderPath: string) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await download(fileURL, folderPath + "/" + fileURL.substring(fileURL.lastIndexOf("/") + 1));
+            resolve(null);
+        } catch (e) {
+            reject(e);
+        }
+
+    });
+}
