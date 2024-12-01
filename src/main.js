@@ -47,20 +47,13 @@ function loadGamesJSON(path) {
 function handleGameLaunch(item, installedJSON) {
     const gameItem = installedJSON.installed.filter(game => game.game_id === item.game_id)[0];
 
-    if (item == null) {
+    if (gameItem == null) {
         console.log("Game is not installed: " + item.game_id + "!");
         return;
     }
 
     const path = gameItem.path;
-
     const cwd = path.substring(0, path.lastIndexOf("/"));
 
-    if (item.isPC98) {
-        console.log("Launching PC-98 game: " + item.game_id);
-        gameLauncher.launchGame(path, cwd);
-        return;
-    }
-    console.log("Launching modern game: " + item.game_id);
-    gameLauncher.launchGame(path, cwd);
+    gameLauncher.launchGame(path, cwd, item.isPC98);
 }
