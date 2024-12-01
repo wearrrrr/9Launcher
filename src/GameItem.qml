@@ -6,6 +6,8 @@ import Qt5Compat.GraphicalEffects
 import QtQuick.Controls
 import QtQuick.Dialogs
 import FileIO 1.0
+import GameLauncher 1.0
+import "main.js" as Core
 
 
 Button {
@@ -14,10 +16,17 @@ Button {
     property bool isInstalled: false
     id: button
 
-    onClicked: isInstalled ? console.log("already installed!") : gameDialog.open()
+    onClicked: isInstalled ? (function () {
+        const installedJSON = JSON.parse(fileIO.read(StandardPaths.writableLocation(StandardPaths.AppDataLocation) + "/installed.json"));
+        Core.handleGameLaunch(item, installedJSON);
+    }()) : gameDialog.open()
 
     FileIO {
         id: fileIO
+    }
+
+    GameLauncher {
+        id: gameLauncher
     }
 
     Image {
@@ -88,6 +97,8 @@ Button {
             }
 
             const currentInstalled = JSON.parse(fileIO.read(path));
+
+            targetItem.path = file;
 
             currentInstalled.installed.push(targetItem);
 

@@ -17,10 +17,3 @@ function openFile(path) {
         return null;
     }
 }
-
-function saveFile(path, data) {
-    var request = new XMLHttpRequest();
-    request.open("PUT", path, false);
-    request.send(data);
-    return request.status;
-}

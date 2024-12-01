@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QtCore/QLoggingCategory>
 #include "FileIO.h"
+#include "GameLauncher.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,6 +15,8 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     qmlRegisterType<FileIO>("FileIO", 1, 0, "FileIO");
+    qmlRegisterType<GameLauncher>("GameLauncher", 1, 0, "GameLauncher");
+
 
     QObject::connect(
         &engine,
@@ -23,5 +26,10 @@ int main(int argc, char *argv[])
         Qt::QueuedConnection);
     engine.loadFromModule("nineLauncher-v2", "Main");
 
-    return app.exec();
+    int ret = app.exec();
+
+    delete app;
+    delete engine;
+
+    return ret;
 }

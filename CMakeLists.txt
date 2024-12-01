@@ -26,6 +26,8 @@ qt_add_qml_module(appNineLauncher-v2
         QML_FILES src/main.js
         SOURCES src/FileIO.h
         SOURCES src/FileIO.cpp
+        SOURCES src/GameLauncher.h
+        SOURCES src/GameLauncher.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
