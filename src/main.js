@@ -35,7 +35,7 @@ function createGameItem(name, value, layout) {
 }
 
 function loadGamesJSON(path) {
-    let response = File.openFile(path);
+    let response = File.read(path);
     if (response && response.status === 200) {
         let games = JSON.parse(response.content);
         return games;
@@ -56,4 +56,6 @@ function handleGameLaunch(item, installedJSON) {
     const cwd = path.substring(0, path.lastIndexOf("/"));
 
     gameLauncher.launchGame(path, cwd, item.isPC98);
+
+    return true;
 }

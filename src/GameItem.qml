@@ -2,7 +2,6 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtCore
-import Qt5Compat.GraphicalEffects
 import QtQuick.Controls
 import QtQuick.Dialogs
 import FileIO 1.0
@@ -19,7 +18,7 @@ Button {
     onClicked: isInstalled ? (function () {
         const installedJSON = JSON.parse(fileIO.read(StandardPaths.writableLocation(StandardPaths.AppDataLocation) + "/installed.json"));
         Core.handleGameLaunch(item, installedJSON);
-    }()) : gameDialog.open()
+    }()) : gameDialog.open();
 
     FileIO {
         id: fileIO
@@ -34,10 +33,6 @@ Button {
         width: parent.width
         height: parent.height
         source: "game-images/" + parent.item.img_unset
-        layer.enabled: true
-        layer.effect: OpacityMask {
-            maskSource: button
-        }
 
         Component.onCompleted: {
             const path = StandardPaths.writableLocation(StandardPaths.AppDataLocation) + "/installed.json";

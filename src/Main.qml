@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.LocalStorage
+import FileIO 1.0
 import "main.js" as Core
 
 
@@ -16,6 +17,10 @@ Window {
     color: "#2f2f2f"
 
     FontLoader { id: fontello; source: "font/fontello.ttf" }
+
+    FileIO {
+        id: fileIO
+    }
 
     ColumnLayout {
         width: parent.width

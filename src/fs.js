@@ -1,6 +1,6 @@
 .pragma library
 
-function openFile(path) {
+function read(path) {
     let request = new XMLHttpRequest();
     request.open("GET", path, false);
 

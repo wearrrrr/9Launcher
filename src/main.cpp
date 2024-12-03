@@ -28,8 +28,5 @@ int main(int argc, char *argv[])
 
     int ret = app.exec();
 
-    delete app;
-    delete engine;
-
     return ret;
 }
