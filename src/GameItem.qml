@@ -53,12 +53,14 @@ Button {
     }
 
     Rectangle {
+        id: rect
         width: parent.width
         height: parent.height
         border.color: "white"
         border.width: 1
         radius: 4
         color: "#60000000"
+
         anchors.centerIn: parent
         Text {
             anchors.fill: parent
@@ -72,7 +74,28 @@ Button {
             font.bold: true
         }
 
+        states: [
+            State {
+                name: "hovered"
+                when: mouse.hovered
+                PropertyChanges {
+                    target: rect
+                    color: "#80000000"
+                }
+            }
+        ]
+
+        transitions: Transition {
+            reversible: true
+            ColorAnimation {
+                property: "color"
+                duration: 250
+                easing.type: Easing.InOutQuad
+            }
+        }
+
         HoverHandler {
+            id: mouse
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
             cursorShape: Qt.PointingHandCursor
         }
