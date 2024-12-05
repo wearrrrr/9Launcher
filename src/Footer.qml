@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls
 
 Rectangle {
     width: parent.width
@@ -12,9 +13,12 @@ Rectangle {
         height: parent.height
         Layout.alignment: Qt.AlignHCenter
         spacing: 10
-        Item {
+        Button {
             Layout.preferredHeight: 32
             Layout.preferredWidth: 32
+            background: Rectangle {
+                color: "transparent"
+            }
             Text {
                 id: settingsIcon
                 text: "\ue804" // icon-cog
@@ -43,6 +47,10 @@ Rectangle {
                 }
             }
 
+            onClicked: {
+                console.log("Settings clicked")
+            }
+
             HoverHandler {
                 id: settingsItem
                 acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
@@ -52,11 +60,14 @@ Rectangle {
 
         Item { Layout.fillWidth: true }
 
-        Item {
+        Button {
             Layout.preferredHeight: 32
             Layout.preferredWidth: 32
+            background: Rectangle {
+                color: "transparent"
+            }
             Text {
-                id: helpIcon
+                id: infoIcon
                 text: "\ue801" // icon-help
                 font.family: "fontello"
                 font.pixelSize: 24
@@ -66,9 +77,9 @@ Rectangle {
                 states: [
                     State {
                         name: "hovered"
-                        when: helpItem.hovered
+                        when: infoItem.hovered
                         PropertyChanges {
-                            target: helpIcon
+                            target: infoIcon
                             color: "#bfbfbf"
                         }
                     }
@@ -82,10 +93,13 @@ Rectangle {
                     }
                 }
             }
+            onClicked: {
+                console.log("Info clicked")
+            }
             HoverHandler {
                 acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
                 cursorShape: Qt.PointingHandCursor
-                id: helpItem
+                id: infoItem
             }
         }
     }
