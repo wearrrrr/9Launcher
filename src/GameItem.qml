@@ -10,7 +10,7 @@ import "main.js" as Core
 
 
 Button {
-    property var item: ({})
+    property var item: {}
     property bool isPC98: false
     property bool isInstalled: false
     id: button

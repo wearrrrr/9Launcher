@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QtCore/QLoggingCategory>
+#include <QQuickStyle>
 #include "FileIO.h"
 #include "GameLauncher.h"
 
@@ -13,6 +14,8 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
+
+    QQuickStyle::setStyle("Material");
 
     qmlRegisterType<FileIO>("FileIO", 1, 0, "FileIO");
     qmlRegisterType<GameLauncher>("GameLauncher", 1, 0, "GameLauncher");
