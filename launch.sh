@@ -1,1 +1,1 @@
-sh build.sh && ./build/appNineLauncher-v2
+sh build.sh && ./build/NineLauncher

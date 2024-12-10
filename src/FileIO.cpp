@@ -2,13 +2,20 @@
 #include <QFile>
 #include <QUrl>
 #include <QTextStream>
-#include <QDebug>
+#include <QDir>
 
 FileIO::FileIO(QObject *parent) : QObject(parent) {}
 
 bool FileIO::write(const QString &filePath, const QString &data) {
     QString localPath = QUrl(filePath).toLocalFile();
     QFile file(localPath);
+
+    // Check if directory exists, create it if it doesn't
+    QFileInfo fileInfo(file);
+    QDir dir = fileInfo.dir();
+    if (!dir.exists()) {
+        dir.mkpath(".");
+    }
 
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         qWarning() << "Could not open file for writing:" << filePath;

@@ -1,3 +1,4 @@
+import QtCore
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls.Material
@@ -11,7 +12,16 @@ Rectangle {
     anchors.bottom: parent.bottom
     color: "#212121"
 
-   Rectangle {
+    Settings {
+        id: settings
+        category: "Footer"
+        property alias warnings: warningsSetting.switchValue
+        property alias rpc: rpcSetting.switchValue
+        property alias fileLogging: fileLoggingSetting.switchValue
+        property alias launchInfo: launchInfoSetting.switchValue
+    }
+
+    Rectangle {
         id: settingsMenu
         width: 300
         height: 250
@@ -63,6 +73,14 @@ Rectangle {
                 Setting {
                     text: "Warnings"
                     id: warningsSetting
+
+                    onSwitchValueChanged: {
+                        if (settings.warnings) {
+                            Footer.showWarning()
+                        } else {
+                            Footer.hideWarning()
+                        }
+                    }
                 }
 
                 Setting {
@@ -72,7 +90,7 @@ Rectangle {
 
                 Setting {
                     text: "File Logging"
-                    id: fpsSetting
+                    id: fileLoggingSetting
                 }
 
                 Setting {

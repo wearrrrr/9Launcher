@@ -8,6 +8,14 @@ Item {
     id: setting
     property string text: ""
     property alias switchComponent: settingsSwitch
+    property alias switchValue: settingsSwitch.checked
+
+    Connections {
+        target: setting
+        function onSwitchValueChanged() {
+            setting.switchValue = settingsSwitch.checked
+        }
+    }
 
     Layout.fillWidth: true
     Layout.fillHeight: true

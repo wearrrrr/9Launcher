@@ -41,7 +41,12 @@ Button {
                 fileIO.write(path, '{ "installed": [] }');
             }
 
-            const items = JSON.parse(fileIO.read(path));
+            const contents = fileIO.read(path)
+            if (!contents) {
+                throw new Error("Could not read contents!");
+            }
+
+            const items = JSON.parse(contents);
 
             items.installed.forEach((item) => {
                 if (item.game_id == button.item.game_id) {
