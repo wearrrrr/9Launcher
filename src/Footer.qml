@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls
+import QtQuick.Controls.Material
 import "footer.js" as Footer
 
 Rectangle {
@@ -12,10 +12,11 @@ Rectangle {
    Rectangle {
         id: settingsMenu
         width: 300
-        height: 200
+        height: 250
         color: "#212121"
         opacity: 0
         visible: false
+        radius: 8
 
         anchors.bottom: parent.top
         anchors.bottomMargin: 10

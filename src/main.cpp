@@ -15,6 +15,8 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
+    engine.addImportPath(":/MMaterial");
+    engine.addImportPath("qrc:/");
     QQuickStyle::setStyle("Material");
 
     qmlRegisterType<FileIO>("FileIO", 1, 0, "FileIO");

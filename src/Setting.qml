@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls
+import QtQuick.Controls.Material
+
+import MMaterial
 
 Item {
     id: setting
@@ -30,13 +32,9 @@ Item {
             Layout.fillWidth: true
         }
 
-        Switch {
+        MSwitch {
             id: settingsSwitch
-            Layout.preferredHeight: 18
-            checked: false
-            onCheckedChanged: {
-                console.log("Settings switch toggled to " + checked)
-            }
+            accent: Theme.primary; checked: false;
         }
     }
 
