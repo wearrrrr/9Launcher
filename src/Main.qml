@@ -16,8 +16,6 @@ Window {
     title: qsTr("9Launcher")
     color: "#2f2f2f"
 
-    FontLoader { id: fontello; source: "font/fontello.ttf" }
-
     FileIO {
         id: fileIO
     }

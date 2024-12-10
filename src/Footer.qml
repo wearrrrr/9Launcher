@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls.Material
+
+import MMaterial
 import "footer.js" as Footer
 
 Rectangle {
@@ -97,6 +99,10 @@ Rectangle {
         height: parent.height
         Layout.alignment: Qt.AlignHCenter
         spacing: 10
+        anchors.left: parent.left
+        anchors.leftMargin: 10
+        anchors.right: parent.right
+        anchors.rightMargin: 10
 
         Button {
             Layout.preferredHeight: 32
@@ -104,41 +110,37 @@ Rectangle {
             background: Rectangle {
                 color: "transparent"
             }
-            Text {
+            Icon {
                 id: settingsIcon
-                text: "\ue804" // icon-cog
-                font.family: "fontello"
-                font.pixelSize: 24
-                anchors.centerIn: parent
-                color: "#fff"
-                leftPadding: 8
+                color: Theme.text.primary
+                iconData: Icons.light["settings"]
                 states: [
                     State {
-                        name: "hovered"
-                        when: settingsItem.hovered
-                        PropertyChanges {
-                            target: settingsIcon
-                            color: "#bfbfbf"
+                            name: "hovered"
+                            when: settingsItem.hovered
+                            PropertyChanges {
+                                target: settingsIcon
+                                color: "#bfbfbf"
+                            }
+                        }
+                    ]
+                    transitions: Transition {
+                        reversible: true
+                        ColorAnimation {
+                            property: "color"
+                            duration: 250
+                            easing.type: Easing.InOutQuad
                         }
                     }
-                ]
-                transitions: Transition {
-                    reversible: true
-                    ColorAnimation {
-                        property: "color"
-                        duration: 250
-                        easing.type: Easing.InOutQuad
-                    }
                 }
-            }
 
-            onClicked: settingsMenu.toggleVisibility()
+                onClicked: settingsMenu.toggleVisibility()
 
-            HoverHandler {
-                id: settingsItem
-                acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-                cursorShape: Qt.PointingHandCursor
-            }
+                HoverHandler {
+                    id: settingsItem
+                    acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                    cursorShape: Qt.PointingHandCursor
+                }
         }
 
         Item { Layout.fillWidth: true }
@@ -149,41 +151,37 @@ Rectangle {
             background: Rectangle {
                 color: "transparent"
             }
-            Text {
+            Icon {
                 id: infoIcon
-                text: "\ue801" // icon-help
-                font.family: "fontello"
-                font.pixelSize: 24
-                anchors.centerIn: parent
-                color: "#fff"
-                rightPadding: 8
+                color: Theme.text.primary
+                iconData: Icons.light["info"]
                 states: [
                     State {
-                        name: "hovered"
-                        when: infoItem.hovered
-                        PropertyChanges {
-                            target: infoIcon
-                            color: "#bfbfbf"
+                            name: "hovered"
+                            when: infoItem.hovered
+                            PropertyChanges {
+                                target: infoIcon
+                                color: "#bfbfbf"
+                            }
+                        }
+                    ]
+                    transitions: Transition {
+                        reversible: true
+                        ColorAnimation {
+                            property: "color"
+                            duration: 250
+                            easing.type: Easing.InOutQuad
                         }
                     }
-                ]
-                transitions: Transition {
-                    reversible: true
-                    ColorAnimation {
-                        property: "color"
-                        duration: 250
-                        easing.type: Easing.InOutQuad
-                    }
                 }
-            }
-            onClicked: {
-                console.log("Info clicked")
-            }
-            HoverHandler {
-                acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-                cursorShape: Qt.PointingHandCursor
-                id: infoItem
-            }
+                onClicked: {
+                    console.log("Info clicked")
+                }
+                HoverHandler {
+                    acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                    cursorShape: Qt.PointingHandCursor
+                    id: infoItem
+                }
         }
     }
 }
