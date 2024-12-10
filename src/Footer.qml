@@ -41,17 +41,6 @@ Rectangle {
             }
         }
 
-        function toggleVisibility() {
-            if (settingsMenu.opacity === 0) {
-                settingsMenu.visible = true;
-                settingsMenu.opacity = 1;
-            } else {
-                settingsMenu.opacity = 0;
-                SequentialAnimation.running = true;
-            }
-        }
-
-        // Container for the actual setting and it's associated toggle switch
         Item {
             width: parent.width
             height: parent.height
@@ -134,7 +123,7 @@ Rectangle {
                     }
                 }
 
-                onClicked: settingsMenu.toggleVisibility()
+                onClicked: Footer.toggleVisibility(settingsMenu, SequentialAnimation)
 
                 HoverHandler {
                     id: settingsItem
