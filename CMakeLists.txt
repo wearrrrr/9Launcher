@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(nineLauncher VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_AUTOMOC ON)
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Quick)
 find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
@@ -31,6 +32,7 @@ qt_add_qml_module(NineLauncher
         SOURCES src/FileIO.cpp
         SOURCES src/GameLauncher.h
         SOURCES src/GameLauncher.cpp
+        SOURCES src/AppSettings.h
 )
 
 add_subdirectory(src/MMaterial)

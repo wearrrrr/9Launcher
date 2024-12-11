@@ -7,19 +7,16 @@ import MMaterial
 import "footer.js" as Footer
 
 Rectangle {
+    property bool warnings: AppSettings.value("warnings", false)
+    property bool rpc: AppSettings.value("rpc", false)
+    property bool fileLogging: AppSettings.value("fileLogging", false)
+    property bool launchInfo: AppSettings.value("launchInfo", false)
+
+
     width: parent.width
     height: 40
     anchors.bottom: parent.bottom
     color: "#212121"
-
-    Settings {
-        id: settings
-        category: "Footer"
-        property alias warnings: warningsSetting.switchValue
-        property alias rpc: rpcSetting.switchValue
-        property alias fileLogging: fileLoggingSetting.switchValue
-        property alias launchInfo: launchInfoSetting.switchValue
-    }
 
     Rectangle {
         id: settingsMenu
@@ -73,29 +70,25 @@ Rectangle {
                 Setting {
                     text: "Warnings"
                     id: warningsSetting
-
-                    onSwitchValueChanged: {
-                        if (settings.warnings) {
-                            Footer.showWarning()
-                        } else {
-                            Footer.hideWarning()
-                        }
-                    }
+                    update: "warnings"
                 }
 
                 Setting {
                     text: "Discord RPC"
                     id: rpcSetting
+                    update: "rpc"
                 }
 
                 Setting {
                     text: "File Logging"
                     id: fileLoggingSetting
+                    update: "fileLogging"
                 }
 
                 Setting {
                     text: "Launch Info"
                     id: launchInfoSetting
+                    update: "launchInfo"
                 }
             }
         }

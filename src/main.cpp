@@ -1,7 +1,9 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QtCore/QLoggingCategory>
+#include <QQmlContext>
 #include <QQuickStyle>
+
+#include "AppSettings.h"
 #include "FileIO.h"
 #include "GameLauncher.h"
 
@@ -16,6 +18,9 @@ int main(int argc, char *argv[])
     app.setApplicationName("NineLauncher");
 
     QQmlApplicationEngine engine;
+    AppSettings settings("wearr", "NineLauncher");
+    engine.rootContext()->setContextProperty("AppSettings", &settings);
+
 
     engine.addImportPath(":/MMaterial");
     engine.addImportPath("qrc:/");
@@ -24,13 +29,14 @@ int main(int argc, char *argv[])
     qmlRegisterType<FileIO>("FileIO", 1, 0, "FileIO");
     qmlRegisterType<GameLauncher>("GameLauncher", 1, 0, "GameLauncher");
 
-
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,
         &app,
         []() { QCoreApplication::exit(-1); },
-        Qt::QueuedConnection);
+        Qt::QueuedConnection
+    );
+    
     engine.loadFromModule("nineLauncher", "Main");
 
     int ret = app.exec();

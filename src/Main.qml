@@ -68,5 +68,4 @@ Window {
     }
 
     Footer { id: footer }
-
 }

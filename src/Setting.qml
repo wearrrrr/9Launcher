@@ -7,6 +7,7 @@ import MMaterial
 Item {
     id: setting
     property string text: ""
+    property string update: ""
     property alias switchComponent: settingsSwitch
     property alias switchValue: settingsSwitch.checked
 
@@ -14,6 +15,7 @@ Item {
         target: setting
         function onSwitchValueChanged() {
             setting.switchValue = settingsSwitch.checked
+            AppSettings.setValue(setting.update, settingsSwitch.checked)
         }
     }
 
@@ -43,6 +45,10 @@ Item {
         MSwitch {
             id: settingsSwitch
             accent: Theme.primary; checked: false;
+
+            Component.onCompleted: {
+                settingsSwitch.checked = AppSettings.value(setting.update, false);
+            }
         }
     }
 
