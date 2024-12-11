@@ -7,12 +7,6 @@ import MMaterial
 import "footer.js" as Footer
 
 Rectangle {
-    property bool warnings: AppSettings.value("warnings", false)
-    property bool rpc: AppSettings.value("rpc", false)
-    property bool fileLogging: AppSettings.value("fileLogging", false)
-    property bool launchInfo: AppSettings.value("launchInfo", false)
-
-
     width: parent.width
     height: 40
     anchors.bottom: parent.bottom

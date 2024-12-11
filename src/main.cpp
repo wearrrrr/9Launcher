@@ -1,5 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QtLogging>
 #include <QQmlContext>
 #include <QQuickStyle>
 
@@ -18,8 +19,9 @@ int main(int argc, char *argv[])
     app.setApplicationName("NineLauncher");
 
     QQmlApplicationEngine engine;
-    AppSettings settings("wearr", "NineLauncher");
+    static AppSettings settings("wearr", "NineLauncher");
     engine.rootContext()->setContextProperty("AppSettings", &settings);
+    qDebug() << "Settings path: " << settings.fileName();
 
 
     engine.addImportPath(":/MMaterial");
@@ -40,6 +42,8 @@ int main(int argc, char *argv[])
     engine.loadFromModule("nineLauncher", "Main");
 
     int ret = app.exec();
+
+    settings.sync();
 
     return ret;
 }

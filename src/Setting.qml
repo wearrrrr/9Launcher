@@ -11,14 +11,6 @@ Item {
     property alias switchComponent: settingsSwitch
     property alias switchValue: settingsSwitch.checked
 
-    Connections {
-        target: setting
-        function onSwitchValueChanged() {
-            setting.switchValue = settingsSwitch.checked
-            AppSettings.setValue(setting.update, settingsSwitch.checked)
-        }
-    }
-
     Layout.fillWidth: true
     Layout.fillHeight: true
 
@@ -44,10 +36,15 @@ Item {
 
         MSwitch {
             id: settingsSwitch
-            accent: Theme.primary; checked: false;
+            accent: Theme.primary;
+            checked: AppSettings.value(setting.update, false)
 
-            Component.onCompleted: {
-                settingsSwitch.checked = AppSettings.value(setting.update, false);
+            function saveSetting(key, value) {
+                AppSettings.setValue(key, value);
+            }
+
+            onCheckedChanged: {
+                saveSetting(setting.update, settingsSwitch.checked);
             }
         }
     }

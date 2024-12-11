@@ -9,11 +9,20 @@ public:
     AppSettings(const QString &organization, const QString &application)
         : QSettings(organization, application) {}
 
-    Q_INVOKABLE QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const {
-        return QSettings::value(key, defaultValue);
+    Q_INVOKABLE QVariant value(const QString &key, const QVariant &defaultValue) const {
+        QVariant result = QSettings::value(key, defaultValue);
+
+        // Boolean conversion BS.
+        if (result.typeId() == QVariant::String) {
+            QString strValue = result.toString().toLower();
+            if (strValue == "true") return true;
+            if (strValue == "false") return false;
+        }
+
+        return result;
     }
 
     Q_INVOKABLE void setValue(const QString &key, const QVariant &value) {
-        QSettings::setValue(key, value);
+        return QSettings::setValue(key, value);
     }
 };
