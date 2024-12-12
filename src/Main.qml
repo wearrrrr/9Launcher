@@ -1,8 +1,12 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.LocalStorage
+import QtQuick.Controls.Material
 import FileIO 1.0
 import "main.js" as Core
+
+import MMaterial as MMaterial
+import "footer.js" as Footer
 
 
 Window {
@@ -66,6 +70,42 @@ Window {
             padding: 10
         }
     }
+
+    MMaterial.Dialog {
+        id: dialog
+        // TODO: Figure out why this causes the background to be white, it should be a dark color!!
+        modal: true
+        title: qsTr("Reset Settings")
+        width: parent.width / 2
+        anchors.centerIn: parent
+
+        closePolicy: MMaterial.Dialog.NoAutoClose
+        iconData: MMaterial.Icons.light.warning
+
+        contentItem: ColumnLayout {
+            Label {
+                text: qsTr("Are you sure you want to reset all settings?")
+                color: "white"
+            }
+        }
+
+        MMaterial.Dialog.DialogCloseButton {
+            Layout.preferredWidth: parent.width / 2 - 10
+            text: qsTr("Close")
+            onClicked: dialog.close()
+
+        }
+
+        MMaterial.Dialog.DialogButton {
+            Layout.preferredWidth: parent.width / 2 - 10
+            text: qsTr("Reset")
+            onClicked: {
+                dialog.close()
+                footer.resetSettings()
+            }
+        }
+    }
+
 
     Footer { id: footer }
 }

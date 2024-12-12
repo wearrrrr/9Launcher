@@ -19,14 +19,12 @@ Item {
 
     RowLayout {
         width: parent.width
-        height: parent.height
+        height: 32
         spacing: 10
-        Text {
-            Layout.preferredHeight: 18
-
+        H5 {
+            Layout.preferredHeight: 24
             text: setting.text
             color: "#fff"
-            font.pixelSize: 18
             font.bold: true
         }
 
@@ -35,6 +33,8 @@ Item {
         }
 
         MSwitch {
+            Layout.preferredHeight: 24
+            Layout.alignment: Qt.AlignHCenter
             id: settingsSwitch
             accent: Theme.primary;
             checked: AppSettings.value(setting.update, false)

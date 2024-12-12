@@ -22,7 +22,15 @@ public:
         return result;
     }
 
+    Q_INVOKABLE QVariant value(const QString &key) const {
+        return QSettings::value(key);
+    }
+
     Q_INVOKABLE void setValue(const QString &key, const QVariant &value) {
         return QSettings::setValue(key, value);
+    }
+
+    Q_INVOKABLE void clear() {
+        return QSettings::clear();
     }
 };

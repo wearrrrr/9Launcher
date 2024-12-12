@@ -156,10 +156,10 @@ T.Dialog {
     }
 
     T.Overlay.modal: Rectangle {
-        color: Color.transparent(MMaterial.Theme.background.paper, 0.5)
+        color: Qt.alpha(MMaterial.Theme.background.paper, 0.5)
     }
 
     T.Overlay.modeless: Rectangle {
-        color: Color.transparent(MMaterial.Theme.background.paper, 0.12)
+        color: Qt.alpha(MMaterial.Theme.background.paper, 0.12)
     }
 }

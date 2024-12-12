@@ -12,54 +12,25 @@ Rectangle {
     anchors.bottom: parent.bottom
     color: "#212121"
 
-    Rectangle {
+    function resetSettings() {
+        Footer.resetSettings();
+    }
+
+    FooterPanel {
         id: settingsMenu
         width: 300
         height: 250
-        color: "#212121"
-        opacity: 0
-        visible: false
-        radius: 8
-
-        anchors.bottom: parent.top
-        anchors.bottomMargin: 10
-        anchors.left: parent.left
-        anchors.leftMargin: 8
-
-        Behavior on opacity {
-            PropertyAnimation {
-                duration: 250
-                easing.type: Easing.InOutQuad
-            }
-        }
-
-        SequentialAnimation on visible {
-            running: false
-            loops: 1
-
-            ScriptAction {
-                script: if (settingsMenu.opacity === 0) settingsMenu.visible = false;
-            }
-        }
+        alignTo: "left"
 
         Item {
-            width: parent.width
-            height: parent.height
-
-
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.leftMargin: 10
-            anchors.rightMargin: 10
-            anchors.topMargin: 5
-            anchors.bottomMargin: 5
+            width: parent.width - 20
+            height: parent.height - 20
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
 
             ColumnLayout {
                 width: parent.width
                 height: parent.height
-                spacing: 10
 
                 Setting {
                     text: "Warnings"
@@ -83,6 +54,76 @@ Rectangle {
                     text: "Launch Info"
                     id: launchInfoSetting
                     update: "launchInfo"
+                }
+
+                MButton {
+                    text: "Reset Settings"
+                    width: 50
+                    accent: Theme.error
+                    type: MButton.Type.Outlined
+                    onClicked: {
+                        if (AppSettings.value("warnings")) {
+                            // Prompt the user to confirm the reset
+                            dialog.open();
+                        } else {
+                            Footer.resetSettings();
+                        }
+
+
+                    }
+                }
+            }
+        }
+    }
+
+
+    FooterPanel {
+        id: infoMenu
+        width: 350
+        height: 275
+        alignTo: "right"
+
+        Item {
+            width: parent.width - 20
+            height: parent.height - 20
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+
+            ColumnLayout {
+                width: parent.width
+                height: parent.height
+                spacing: 10
+
+                H4 {
+                    text: "Information"
+                    Layout.fillWidth: true
+                }
+
+                H5 {
+                    text: "Version: " + Qt.application.version
+                    Layout.fillWidth: true
+                }
+
+                H5 {
+                    // Make the first letter in SystemInformation.kernelType uppercase
+                    text: "OS: " + SystemInformation.kernelType.charAt(0).toUpperCase() + SystemInformation.kernelType.slice(1) + " " + SystemInformation.kernelVersion
+                    Layout.fillWidth: true
+                }
+
+                H5 {
+                    text: "Qt: " + QtVersion
+                    Layout.fillWidth: true
+                }
+
+                H5 {
+                    text: "Arch: " + SystemInformation.currentCpuArchitecture
+                    Layout.fillWidth: true
+                }
+
+                MButton {
+                    text: "Copy Info"
+                    width: 50
+                    accent: Theme.info
                 }
             }
         }
@@ -169,7 +210,7 @@ Rectangle {
                     }
                 }
                 onClicked: {
-                    console.log("Info clicked")
+                    Footer.toggleVisibility(infoMenu, SequentialAnimation)
                 }
                 HoverHandler {
                     acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad

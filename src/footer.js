@@ -9,3 +9,11 @@ function toggleVisibility(element, animation) {
         }
     }
 }
+
+function resetSettings() {
+    // This will trigger onCheckedChanged for each setting, which will save the new value :D
+    warningsSetting.switchValue = false;
+    rpcSetting.switchValue = false;
+    fileLoggingSetting.switchValue = false;
+    launchInfoSetting.switchValue = false;
+}

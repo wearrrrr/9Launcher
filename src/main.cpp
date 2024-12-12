@@ -17,10 +17,13 @@ int main(int argc, char *argv[])
     app.setOrganizationName("wearr");
     app.setOrganizationDomain("wearr.dev");
     app.setApplicationName("NineLauncher");
+    // Set app version
+    app.setApplicationVersion("0.0.1");
 
     QQmlApplicationEngine engine;
     static AppSettings settings("wearr", "NineLauncher");
     engine.rootContext()->setContextProperty("AppSettings", &settings);
+    engine.rootContext()->setContextProperty("QtVersion", QString(qVersion()));
     qDebug() << "Settings path: " << settings.fileName();
 
 
