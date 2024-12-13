@@ -105,6 +105,18 @@ Window {
         }
     }
 
+    MouseArea {
+        hoverEnabled: true
+        propagateComposedEvents: true
+        preventStealing: false
+        anchors.fill: parent
+        id: clickArea
+        enabled: footer.settingsMenu.enabled
+        visible: footer.settingsMenu.enabled
+        onClicked: {
+            footer.hideSettingsMenu(clickArea)
+        }
+    }
 
     Footer { id: footer }
 }

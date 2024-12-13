@@ -46,14 +46,21 @@ FetchContent_MakeAvailable(MMaterial)
 
 add_subdirectory(${mmaterial_SOURCE_DIR}/MMaterial)
 
+# Remove unused files from MMaterial
+set(MMaterialIconsPngFiles
+    ${mmaterial_SOURCE_DIR}/MMaterial/Icons/assets/png
+)
+set(MMaterialIconsSvgFiles
+    ${mmaterial_SOURCE_DIR}/MMaterial/Icons/assets/svg
+)
+file(REMOVE_RECURSE ${MMaterialIconsPngFiles})
+file(REMOVE_RECURSE ${MMaterialIconsSvgFiles})
+
 target_link_libraries(NineLauncher
     PRIVATE Qt6::Quick Qt::Gui MMaterialLibplugin Qt6::QuickControls2
 )
 
 set_target_properties(NineLauncher PROPERTIES
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
 

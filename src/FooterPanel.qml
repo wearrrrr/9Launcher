@@ -2,6 +2,7 @@ import QtCore
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls.Material
+import "footer.js" as Footer
 
 Rectangle {
     // "left" or "right"
@@ -11,6 +12,10 @@ Rectangle {
     opacity: 0
     visible: false
     radius: 8
+
+    MouseArea {
+        anchors.fill: parent
+    }
 
     anchors.bottom: parent.top
     anchors.bottomMargin: 10
@@ -25,6 +30,8 @@ Rectangle {
         PropertyAnimation {
             duration: 250
             easing.type: Easing.InOutQuad
+            // Set self to disabled when opacity is 0
+            onStopped: if (opacity === 0) enabled = false;
         }
     }
 
@@ -36,6 +43,4 @@ Rectangle {
             script: if (settingsMenu.opacity === 0) settingsMenu.visible = false;
         }
     }
-
-
 }

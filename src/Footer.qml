@@ -12,8 +12,14 @@ Rectangle {
     anchors.bottom: parent.bottom
     color: "#212121"
 
+    property alias settingsMenu: settingsMenu
+
     function resetSettings() {
         Footer.resetSettings();
+    }
+
+    function hideSettingsMenu() {
+        Footer.toggleVisibility(settingsMenu, SequentialAnimation);
     }
 
     FooterPanel {
@@ -21,6 +27,7 @@ Rectangle {
         width: 300
         height: 250
         alignTo: "left"
+        enabled: false
 
         Item {
             width: parent.width - 20
@@ -33,31 +40,31 @@ Rectangle {
                 height: parent.height
 
                 Setting {
-                    text: "Warnings"
+                    text: qsTr("Warnings")
                     id: warningsSetting
                     update: "warnings"
                 }
 
                 Setting {
-                    text: "Discord RPC"
+                    text: qsTr("Discord RPC")
                     id: rpcSetting
                     update: "rpc"
                 }
 
                 Setting {
-                    text: "File Logging"
+                    text: qsTr("File Logging")
                     id: fileLoggingSetting
                     update: "fileLogging"
                 }
 
                 Setting {
-                    text: "Launch Info"
+                    text: qsTr("Launch Info")
                     id: launchInfoSetting
                     update: "launchInfo"
                 }
 
                 MButton {
-                    text: "Reset Settings"
+                    text: qsTr("Reset Settings")
                     width: 50
                     accent: Theme.error
                     type: MButton.Type.Outlined
@@ -68,8 +75,6 @@ Rectangle {
                         } else {
                             Footer.resetSettings();
                         }
-
-
                     }
                 }
             }
@@ -95,33 +100,32 @@ Rectangle {
                 spacing: 10
 
                 H4 {
-                    text: "Information"
+                    text: qsTr("Information")
                     Layout.fillWidth: true
                 }
 
                 H5 {
-                    text: "Version: " + Qt.application.version
+                    text: qsTr("Version: ") + Qt.application.version
                     Layout.fillWidth: true
                 }
 
                 H5 {
-                    // Make the first letter in SystemInformation.kernelType uppercase
-                    text: "OS: " + SystemInformation.kernelType.charAt(0).toUpperCase() + SystemInformation.kernelType.slice(1) + " " + SystemInformation.kernelVersion
+                    text: qsTr("OS: ") + SystemInformation.kernelType.charAt(0).toUpperCase() + SystemInformation.kernelType.slice(1) + " " + SystemInformation.kernelVersion
                     Layout.fillWidth: true
                 }
 
                 H5 {
-                    text: "Qt: " + QtVersion
+                    text: qsTr("Qt: ") + QtVersion
                     Layout.fillWidth: true
                 }
 
                 H5 {
-                    text: "Arch: " + SystemInformation.currentCpuArchitecture
+                    text: qsTr("Arch: ") + SystemInformation.currentCpuArchitecture
                     Layout.fillWidth: true
                 }
 
                 MButton {
-                    text: "Copy Info"
+                    text: qsTr("Copy Info")
                     width: 50
                     accent: Theme.info
                 }
@@ -213,9 +217,9 @@ Rectangle {
                     Footer.toggleVisibility(infoMenu, SequentialAnimation)
                 }
                 HoverHandler {
+                    id: infoItem
                     acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
                     cursorShape: Qt.PointingHandCursor
-                    id: infoItem
                 }
         }
     }

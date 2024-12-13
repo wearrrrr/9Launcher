@@ -24,7 +24,6 @@ int main(int argc, char *argv[])
     static AppSettings settings("wearr", "NineLauncher");
     engine.rootContext()->setContextProperty("AppSettings", &settings);
     engine.rootContext()->setContextProperty("QtVersion", QString(qVersion()));
-    qDebug() << "Settings path: " << settings.fileName();
 
 
     engine.addImportPath(":/MMaterial");
