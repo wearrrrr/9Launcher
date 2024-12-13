@@ -110,11 +110,10 @@ Window {
         propagateComposedEvents: true
         preventStealing: false
         anchors.fill: parent
-        id: clickArea
         enabled: footer.settingsMenu.enabled || footer.infoMenu.enabled
         visible: footer.settingsMenu.enabled || footer.infoMenu.enabled
         onClicked: {
-            footer.hideMenus(clickArea)
+            footer.hideMenus()
         }
     }
 

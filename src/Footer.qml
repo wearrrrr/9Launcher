@@ -19,7 +19,7 @@ Rectangle {
         Footer.resetSettings();
     }
 
-    function hideMenus(menu) {
+    function hideMenus() {
         if (settingsMenu.enabled) {
             Footer.toggleVisibility(settingsMenu, SequentialAnimation);
         }
@@ -180,7 +180,10 @@ Rectangle {
                     }
                 }
 
-                onClicked: Footer.toggleVisibility(settingsMenu, SequentialAnimation)
+                onClicked: {
+                    hideMenus(settingsMenu)
+                    Footer.toggleVisibility(settingsMenu, SequentialAnimation)
+                }
 
                 HoverHandler {
                     id: settingsItem
@@ -221,6 +224,7 @@ Rectangle {
                     }
                 }
                 onClicked: {
+                    hideMenus()
                     Footer.toggleVisibility(infoMenu, SequentialAnimation)
                 }
                 HoverHandler {
