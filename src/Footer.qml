@@ -93,6 +93,7 @@ Rectangle {
         width: 350
         height: 275
         alignTo: "right"
+        enabled: false
 
         Item {
             width: parent.width - 20
