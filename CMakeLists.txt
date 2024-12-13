@@ -47,12 +47,9 @@ FetchContent_MakeAvailable(MMaterial)
 add_subdirectory(${mmaterial_SOURCE_DIR}/MMaterial)
 
 target_link_libraries(NineLauncher
-    PRIVATE Qt6::Quick Qt::Gui MMaterialLibplugin
+    PRIVATE Qt6::Quick Qt::Gui MMaterialLibplugin Qt6::QuickControls2
 )
 
-# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
-# If you are developing for iOS or macOS you should consider setting an
-# explicit, fixed bundle identifier manually though.
 set_target_properties(NineLauncher PROPERTIES
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -60,16 +57,10 @@ set_target_properties(NineLauncher PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-target_link_libraries(NineLauncher
-    PRIVATE Qt6::Quick
-)
-target_link_libraries(NineLauncher
-    PRIVATE Qt6::QuickControls2
-)
+set(CMAKE_EXE_LINKER_FLAGS "-s")
+set(CMAKE_BUILD_TYPE Release)
 
 include(GNUInstallDirs)
 install(TARGETS NineLauncher
-    BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
