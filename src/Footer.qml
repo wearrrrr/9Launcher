@@ -13,13 +13,19 @@ Rectangle {
     color: "#212121"
 
     property alias settingsMenu: settingsMenu
+    property alias infoMenu: infoMenu
 
     function resetSettings() {
         Footer.resetSettings();
     }
 
-    function hideSettingsMenu() {
-        Footer.toggleVisibility(settingsMenu, SequentialAnimation);
+    function hideMenus(menu) {
+        if (settingsMenu.enabled) {
+            Footer.toggleVisibility(settingsMenu, SequentialAnimation);
+        }
+        if (infoMenu.enabled) {
+            Footer.toggleVisibility(infoMenu, SequentialAnimation);
+        }
     }
 
     FooterPanel {

@@ -111,10 +111,10 @@ Window {
         preventStealing: false
         anchors.fill: parent
         id: clickArea
-        enabled: footer.settingsMenu.enabled
-        visible: footer.settingsMenu.enabled
+        enabled: footer.settingsMenu.enabled || footer.infoMenu.enabled
+        visible: footer.settingsMenu.enabled || footer.infoMenu.enabled
         onClicked: {
-            footer.hideSettingsMenu(clickArea)
+            footer.hideMenus(clickArea)
         }
     }
 
