@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
+include(FetchContent)
 
 project(nineLauncher VERSION 0.1 LANGUAGES CXX)
 
@@ -36,7 +37,14 @@ qt_add_qml_module(NineLauncher
         SOURCES src/AppSettings.h
 )
 
-add_subdirectory(src/MMaterial)
+FetchContent_Declare(
+    MMaterial
+    GIT_REPOSITORY https://github.com/MarkoStanojevic12/Material-Qt.git
+    GIT_TAG        6f173119092f0900010cea5f2298508d84e5ae2a
+)
+FetchContent_MakeAvailable(MMaterial)
+
+add_subdirectory(${mmaterial_SOURCE_DIR}/MMaterial)
 
 target_link_libraries(NineLauncher
     PRIVATE Qt6::Quick Qt::Gui MMaterialLibplugin

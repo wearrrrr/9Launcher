@@ -73,7 +73,6 @@ Window {
 
     MMaterial.Dialog {
         id: dialog
-        // TODO: Figure out why this causes the background to be white, it should be a dark color!!
         modal: true
         title: qsTr("Reset Settings")
         width: parent.width / 2
