@@ -3,10 +3,13 @@
 #include <QtLogging>
 #include <QQmlContext>
 #include <QQuickStyle>
+#include <QThread>
 
 #include "AppSettings.h"
+#include "Clipboard.h"
 #include "FileIO.h"
 #include "GameLauncher.h"
+#include "Util.h"
 
 int main(int argc, char *argv[])
 {
@@ -22,8 +25,12 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     static AppSettings settings("wearr", "NineLauncher");
+    static Clipboard clipboard = Clipboard();
+    static Util util = Util();
     engine.rootContext()->setContextProperty("AppSettings", &settings);
+    engine.rootContext()->setContextProperty("Clipboard", &clipboard);
     engine.rootContext()->setContextProperty("QtVersion", QString(qVersion()));
+    engine.rootContext()->setContextProperty("Util", &util);
 
 
     engine.addImportPath(":/MMaterial");

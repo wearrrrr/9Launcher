@@ -10,6 +10,7 @@ import "footer.js" as Footer
 
 
 Window {
+    id: window
     width: 950
     height: 600
     minimumWidth: width
@@ -69,6 +70,11 @@ Window {
             spacing: 5
             padding: 10
         }
+    }
+
+    MMaterial.AlertController {
+        id: alertController
+        edgeOf: Item.TopLeft
     }
 
     MMaterial.Dialog {

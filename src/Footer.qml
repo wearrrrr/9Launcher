@@ -107,34 +107,48 @@ Rectangle {
                 spacing: 10
 
                 H4 {
+                    id: info
                     text: qsTr("Information")
                     Layout.fillWidth: true
                 }
 
                 H5 {
+                    id: version
                     text: qsTr("Version: ") + Qt.application.version
                     Layout.fillWidth: true
                 }
 
                 H5 {
+                    id: os
                     text: qsTr("OS: ") + SystemInformation.kernelType.charAt(0).toUpperCase() + SystemInformation.kernelType.slice(1) + " " + SystemInformation.kernelVersion
                     Layout.fillWidth: true
                 }
 
                 H5 {
+                    id: qtver
                     text: qsTr("Qt: ") + QtVersion
                     Layout.fillWidth: true
                 }
 
                 H5 {
+                    id: arch
                     text: qsTr("Arch: ") + SystemInformation.currentCpuArchitecture
                     Layout.fillWidth: true
                 }
 
                 MButton {
+                    id: copyInfo
                     text: qsTr("Copy Info")
-                    width: 50
+                    Layout.preferredWidth: 100
                     accent: Theme.info
+                    onClicked: {
+                        Footer.copyInfo([info, version, os, qtver, arch], copyInfo);
+                        let details = {
+                            severity: Alert.Severity.Success,
+                            variant: Alert.Variant.Standard,
+                        }
+                        alertController.activate(qsTr("Info copied to clipboard!"), details, 3500);
+                    }
                 }
             }
         }

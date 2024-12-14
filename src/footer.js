@@ -19,3 +19,17 @@ function resetSettings() {
     fileLoggingSetting.switchValue = false;
     launchInfoSetting.switchValue = false;
 }
+
+function copyInfo(itemsToCopy, copyBtn) {
+    let clipboard = Clipboard;
+    let text = "";
+    for (let i = 0; i < itemsToCopy.length; i++) {
+        text += itemsToCopy[i].text + "\n";
+    }
+    clipboard.set(text);
+    
+    copyBtn.text = qsTr("Copied!");
+
+    Util.Sleep(500);
+    copyBtn.text = qsTr("Copy Info");
+}
