@@ -4,7 +4,9 @@ option(ENABLE_IO_THREAD "Start up a separate I/O thread, otherwise I'd need to c
 option(USE_STATIC_CRT "Use /MT[d] for dynamic library" OFF)
 option(WARNINGS_AS_ERRORS "When enabled, compiles with `-Werror` (on *nix platforms)." OFF)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
 
 set(BASE_RPC_SRC
     ${PROJECT_SOURCE_DIR}/include/discord_rpc.h
@@ -108,6 +110,8 @@ if(UNIX)
         target_link_libraries(discord-rpc PRIVATE "-framework AppKit")
     endif (APPLE)
 endif(UNIX)
+
+target_compile_options(discord-rpc PRIVATE -Oz)
 
 target_include_directories(discord-rpc PRIVATE ${RAPIDJSON}/include)
 

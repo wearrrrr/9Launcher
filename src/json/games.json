@@ -6,7 +6,6 @@
             "jp_title": "東方靈異伝",
             "img": "th01.png",
             "img_unset": "th01_unset.png",
-            "release_year": 1996,
             "game_id": "th01",
             "isPC98": true
         },
@@ -16,7 +15,6 @@
             "jp_title": "東方封魔録",
             "img": "th02.png",
             "img_unset": "th02_unset.png",
-            "release_year": 1997,
             "game_id": "th02",
             "isPC98": true
         },
@@ -26,7 +24,6 @@
             "jp_title": "東方夢時空",
             "img": "th03.png",
             "img_unset": "th03_unset.png",
-            "release_year": 1997,
             "game_id": "th03",
             "isPC98": true
         },
@@ -36,7 +33,6 @@
             "jp_title": "東方幻想郷",
             "img": "th04.png",
             "img_unset": "th04_unset.png",
-            "release_year": 1998,
             "game_id": "th04",
             "isPC98": true
         },
@@ -46,7 +42,6 @@
             "jp_title": "東方怪綺談",
             "img": "th05.png",
             "img_unset": "th05_unset.png",
-            "release_year": 1998,
             "game_id": "th05",
             "isPC98": true
         }
@@ -58,7 +53,6 @@
             "jp_title": "東方紅魔郷",
             "img": "th06.png",
             "img_unset": "th06_unset.png",
-            "release_year": 2002,
             "game_id": "th06"
         },
         "th07": {
@@ -67,7 +61,6 @@
             "jp_title": "東方妖々夢",
             "img": "th07.png",
             "img_unset": "th07_unset.png",
-            "release_year": 2003,
             "game_id": "th07"
         },
         "th08": {
@@ -76,7 +69,6 @@
             "jp_title": "東方永夜抄",
             "img": "th08.png",
             "img_unset": "th08_unset.png",
-            "release_year": 2004,
             "game_id": "th08"
         },
         "th09": {
@@ -85,7 +77,6 @@
             "jp_title": "東方花映塚",
             "img": "th09.png",
             "img_unset": "th09_unset.png",
-            "release_year": 2005,
             "game_id": "th09"
         },
         "th10": {
@@ -94,7 +85,6 @@
             "jp_title": "東方風神録",
             "img": "th10.png",
             "img_unset": "th10_unset.png",
-            "release_year": 2007,
             "game_id": "th10"
         },
         "th11": {
@@ -103,7 +93,6 @@
             "jp_title": "東方地霊殿",
             "img": "th11.png",
             "img_unset": "th11_unset.png",
-            "release_year": 2008,
             "game_id": "th11"
         },
         "th12": {
@@ -112,7 +101,6 @@
             "jp_title": "東方星蓮船",
             "img": "th12.png",
             "img_unset": "th12_unset.png",
-            "release_year": 2009,
             "game_id": "th12"
         },
         "th13": {
@@ -121,7 +109,6 @@
             "jp_title": "東方神霊廟",
             "img": "th13.png",
             "img_unset": "th13_unset.png",
-            "release_year": 2011,
             "game_id": "th13"
         },
         "th14": {
@@ -130,7 +117,6 @@
             "jp_title": "東方輝針城",
             "img": "th14.png",
             "img_unset": "th14_unset.png",
-            "release_year": 2013,
             "game_id": "th14"
         },
         "th15": {
@@ -139,7 +125,6 @@
             "jp_title": "東方紺珠伝",
             "img": "th15.png",
             "img_unset": "th15_unset.png",
-            "release_year": 2015,
             "game_id": "th15"
         },
         "th16": {
@@ -148,7 +133,6 @@
             "jp_title": "東方天空璋",
             "img": "th16.png",
             "img_unset": "th16_unset.png",
-            "release_year": 2017,
             "game_id": "th16"
         },
         "th17": {
@@ -157,7 +141,6 @@
             "jp_title": "東方鬼形獣",
             "img": "th17.png",
             "img_unset": "th17_unset.png",
-            "release_year": 2019,
             "game_id": "th17"
         },
         "th18": {
@@ -166,7 +149,6 @@
             "jp_title": "東方虹龍洞",
             "img": "th18.png",
             "img_unset": "th18_unset.png",
-            "release_year": 2021,
             "game_id": "th18"
         },
         "th19": {
@@ -175,7 +157,6 @@
             "jp_title": "東方獣王園",
             "img": "th19.png",
             "img_unset": "th19_unset.png",
-            "release_year": 2023,
             "game_id": "th19"
         }
     },
@@ -186,7 +167,6 @@
             "jp_title": "東方萃夢想",
             "img": "th07_5.png",
             "img_unset": "th07_5_unset.png",
-            "release_year": 2004,
             "game_id": "th07_5"
         },
         "th09_5": {
@@ -195,7 +175,6 @@
             "jp_title": "東方文花帖",
             "img": "th09_5.png",
             "img_unset": "th09_5_unset.png",
-            "release_year": 2005,
             "game_id": "th09_5"
         },
         "th10_5": {
@@ -204,7 +183,6 @@
             "jp_title": "東方緋想天",
             "img": "th10_5.png",
             "img_unset": "th10_5_unset.png",
-            "release_year": 2008,
             "game_id": "th10_5"
         },
         "th12_3": {
@@ -213,7 +191,6 @@
             "jp_title": "東方非想天則",
             "img": "th12_3.png",
             "img_unset": "th12_3_unset.png",
-            "release_year": 2009,
             "game_id": "th12_3"
         },
         "th12_5": {
@@ -222,7 +199,6 @@
             "jp_title": "ダブルスポイラー",
             "img": "th12_5.png",
             "img_unset": "th12_5_unset.png",
-            "release_year": 2010,
             "game_id": "th12_5"
         },
         "th12_8": {
@@ -231,7 +207,6 @@
             "jp_title": "妖精大戦争",
             "img": "th12_8.png",
             "img_unset": "th12_8_unset.png",
-            "release_year": 2010,
             "game_id": "th12_8"
         },
         "th13_5": {
@@ -240,7 +215,6 @@
             "jp_title": "東方心綺楼",
             "img": "th13_5.png",
             "img_unset": "th13_5_unset.png",
-            "release_year": 2013,
             "game_id": "th13_5"
         },
         "th14_3": {
@@ -249,7 +223,6 @@
             "jp_title": "弾幕アマノジャク",
             "img": "th14_3.png",
             "img_unset": "th14_3_unset.png",
-            "release_year": 2014,
             "game_id": "th14_3"
         },
         "th14_5": {
@@ -258,7 +231,6 @@
             "jp_title": "東方深秘録",
             "img": "th14_5.png",
             "img_unset": "th14_5_unset.png",
-            "release_year": 2015,
             "game_id": "th14_5"
         },
         "th15_5": {
@@ -267,7 +239,6 @@
             "jp_title": "東方憑依華",
             "img": "th15_5.png",
             "img_unset": "th15_5_unset.png",
-            "release_year": 2017,
             "game_id": "th15_5"
         },
         "th16_5": {
@@ -276,7 +247,6 @@
             "jp_title": "秘封ナイトメアダイアリー",
             "img": "th16_5.png",
             "img_unset": "th16_5_unset.png",
-            "release_year": 2018,
             "game_id": "th16_5"
         },
         "th18_5": {
@@ -285,7 +255,6 @@
             "jp_title": "秘封ナイトメアダイアリー",
             "img": "th18_5.png",
             "img_unset": "th18_5_unset.png",
-            "release_year": 2022,
             "game_id": "th18_5"
         }
     },
@@ -296,34 +265,7 @@
             "jp_title": "東方緋想天",
             "img": "th10_5.png",
             "img_unset": "th10_5_unset.png",
-            "release_year": 2008,
             "game_id": "th10_5"
         }
-    },
-    "validIDs": {
-        "pc-98": ["th01", "th02", "th03", "th04", "th05"],
-        "windows": [
-            "th06",
-            "th07",
-            "th08",
-            "th09",
-            "th09_5",
-            "th10",
-            "th10_5",
-            "th11",
-            "th12",
-            "th12_5",
-            "th12_8",
-            "th13",
-            "th14",
-            "th14_3",
-            "th15",
-            "th16",
-            "th16_5",
-            "th17",
-            "th18",
-            "th18_5",
-            "th19"
-        ]
     }
 }

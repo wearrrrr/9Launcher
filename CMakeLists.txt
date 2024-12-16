@@ -6,6 +6,9 @@ project(nineLauncher VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
+
 find_package(Qt6 6.5 REQUIRED COMPONENTS Quick)
 find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
 
@@ -52,6 +55,8 @@ target_include_directories(NineLauncher
     PRIVATE src/cpp
 )
 
+target_compile_options(NineLauncher PRIVATE -O3)
+
 FetchContent_Declare(
     MMaterial
     GIT_REPOSITORY https://github.com/MarkoStanojevic12/Material-Qt.git
@@ -76,8 +81,10 @@ set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(DiscordRPC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/externals/discord-rpc)
 
 set(DiscordRPCExamplesDir ${DiscordRPC_DIR}/examples)
+set(DiscordRPCDocumentationDir ${DiscordRPC_DIR}/documentation)
 
 file(REMOVE_RECURSE ${DiscordRPCExamplesDir})
+file(REMOVE_RECURSE ${DiscordRPCDocumentationDir})
 
 add_subdirectory(${DiscordRPC_DIR})
 
@@ -86,7 +93,7 @@ target_include_directories(NineLauncher
 )
 
 target_link_libraries(NineLauncher
-    PRIVATE Qt6::Quick Qt::Gui MMaterialLibplugin Qt6::QuickControls2
+    PRIVATE Qt6::Quick Qt::Gui MMaterialLibplugin Qt6::QuickControls2 discord-rpc
 )
 
 set_target_properties(NineLauncher PROPERTIES

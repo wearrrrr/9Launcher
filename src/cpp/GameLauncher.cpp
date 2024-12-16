@@ -1,4 +1,3 @@
-#include "GameLauncher.h"
 #include <QtDebug>
 #include <QUrl>
 #include <QString>
@@ -6,16 +5,24 @@
 #include <QProcess>
 #include <unistd.h>
 
+#include "RPC.h"
+#include "GameLauncher.h"
+
 GameLauncher::GameLauncher(QObject *parent) : QObject(parent) {}
 
-bool GameLauncher::LaunchThread(const QString &gamePath, const QString &gameCWD)
+bool GameLauncher::LaunchThread(const QString &gamePath, const QString &gameCWD, const QString &gameName, const QString &gameIcon)
 {
+    RPC rpc = RPC();
+    qDebug() << gameName << gameIcon;
+    rpc.setRPC("Playing " + gameName.toStdString(), gameIcon.toStdString(), gameName.toStdString());
     #ifdef Q_OS_LINUX
-    return LaunchLinux(gamePath, gameCWD);
+    bool launch = LaunchLinux(gamePath, gameCWD);
     #endif
+    rpc.setRPC("In the main menu", "", "");
+    return launch;
 }
 
-Q_INVOKABLE bool GameLauncher::launchGame(const QString &gamePath, const QString &gameCWD)
+Q_INVOKABLE bool GameLauncher::launchGame(const QString &gamePath, const QString &gameCWD, const QString &gameName, const QString &gameIcon)
 {
     const QString localPath = QUrl(gamePath).toLocalFile();
     const QString localCWD = QUrl(gameCWD).toLocalFile();
@@ -23,7 +30,7 @@ Q_INVOKABLE bool GameLauncher::launchGame(const QString &gamePath, const QString
     // Run LaunchThread in a separate thread
     QThread *thread = new QThread;
     connect(thread, &QThread::started, [=]() {
-        if (!LaunchThread(localPath, localCWD))
+        if (!LaunchThread(localPath, localCWD, gameName, gameIcon))
         {
             qCritical() << "[9L] Failed to launch game!";
         }
@@ -44,12 +51,10 @@ bool GameLauncher::LaunchLinux(const QString &gamePath, const QString &gameCWD) 
     process.setArguments({gamePath});
     process.setWorkingDirectory(gameCWD);
 
-    // Set environment variables
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     env.insert("LANG", "ja_JP.UTF-8");
     process.setProcessEnvironment(env);
 
-    // Start the process
     process.start();
     if (!process.waitForStarted()) {
         qCritical() << "Failed to start the game process!";
@@ -57,8 +62,7 @@ bool GameLauncher::LaunchLinux(const QString &gamePath, const QString &gameCWD) 
     }
 
     // Wait for the process to finish
-    process.waitForFinished(-1); // -1 means wait indefinitely
-    qInfo() << "Game process finished with exit code:" << process.exitCode();
+    process.waitForFinished(-1);
 
     return true;
 

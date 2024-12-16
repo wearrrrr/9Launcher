@@ -74,7 +74,7 @@ Window {
 
     MMaterial.AlertController {
         id: alertController
-        edgeOf: Item.TopLeft
+        edgeOf: Item.TopRight
     }
 
     MMaterial.Dialog {

@@ -10,6 +10,7 @@
 #include "FileIO.h"
 #include "GameLauncher.h"
 #include "Util.h"
+#include "RPC.h"
 
 int main(int argc, char *argv[])
 {
@@ -31,6 +32,10 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("Clipboard", &clipboard);
     engine.rootContext()->setContextProperty("QtVersion", QString(qVersion()));
     engine.rootContext()->setContextProperty("Util", &util);
+    
+    RPC rpc = RPC();
+
+    rpc.initDiscord();
 
 
     engine.addImportPath(":/MMaterial");

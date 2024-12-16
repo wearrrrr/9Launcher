@@ -55,7 +55,7 @@ function handleGameLaunch(item, installedJSON) {
     const path = gameItem.path;
     const cwd = path.substring(0, path.lastIndexOf("/"));
 
-    gameLauncher.launchGame(path, cwd, item.isPC98);
+    gameLauncher.launchGame(path, cwd, item.en_title, item.game_id);
 
     return true;
 }

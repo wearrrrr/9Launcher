@@ -4,6 +4,8 @@ project (DiscordRPC)
 include(GNUInstallDirs)
 
 option(BUILD_EXAMPLES "Build example apps" OFF)
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
 
 # format
 file(GLOB_RECURSE ALL_SOURCE_FILES
