@@ -8,17 +8,37 @@
 #include "RPC.h"
 #include "GameLauncher.h"
 
+static bool launched = false;
+
+static gameInfo currentGameInfo;
+
 GameLauncher::GameLauncher(QObject *parent) : QObject(parent) {}
 
 bool GameLauncher::LaunchThread(const QString &gamePath, const QString &gameCWD, const QString &gameName, const QString &gameIcon)
 {
     RPC rpc = RPC();
     rpc.setRPC("Playing " + gameName.toStdString(), gameIcon.toStdString(), gameName.toStdString());
+
+    currentGameInfo.gamePath = gamePath;
+    currentGameInfo.gameCWD = gameCWD;
+    currentGameInfo.gameName = gameName;
+    currentGameInfo.gameIcon = gameIcon;
+
     #ifdef Q_OS_LINUX
     bool launch = LaunchLinux(gamePath, gameCWD);
     #endif
     rpc.setRPC("In the main menu");
     return launch;
+}
+
+gameInfo GameLauncher::GetCurrentGameInfo()
+{
+    return currentGameInfo;
+}
+
+bool GameLauncher::CheckGameRunning()
+{
+    return launched;
 }
 
 Q_INVOKABLE bool GameLauncher::launchGame(const QString &gamePath, const QString &gameCWD, const QString &gameName, const QString &gameIcon)
@@ -60,8 +80,11 @@ bool GameLauncher::LaunchLinux(const QString &gamePath, const QString &gameCWD) 
         return false;
     }
 
-    // Wait for the process to finish
+    launched = true;
+
     process.waitForFinished(-1);
+
+    launched = false;
 
     return true;
 

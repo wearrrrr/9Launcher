@@ -5,6 +5,7 @@
 #include <time.h>
 
 #include "AppSettings.h"
+#include "GameLauncher.h"
 #include "RPC.h"
 #include "discord_rpc.h"
 
@@ -55,7 +56,14 @@ void RPC::initDiscord() {
 
     StartTime = time(0);
 
-    updateDiscordPresence("In the main menu");
+    // Check if a game is currently running and set the RPC accordingly
+    GameLauncher gameLauncher = GameLauncher();
+    if (gameLauncher.CheckGameRunning()) {
+        gameInfo currentGameInfo = gameLauncher.GetCurrentGameInfo();
+        updateDiscordPresence("Playing " + currentGameInfo.gameName.toStdString(), currentGameInfo.gameIcon.toStdString(), currentGameInfo.gameName.toStdString());
+    } else {
+        updateDiscordPresence("In the main menu");
+    }
 }
 
 void RPC::setRPC(string state) {
@@ -68,5 +76,6 @@ void RPC::setRPC(string state, string smallImageKey, string smallImageText) {
 
 Q_INVOKABLE void RPC::stopRPC() {
     qInfo() << "Shutting down Discord RPC";
+    Discord_ClearPresence();
     Discord_Shutdown();
 }
