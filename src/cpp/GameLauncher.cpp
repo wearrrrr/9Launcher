@@ -13,12 +13,11 @@ GameLauncher::GameLauncher(QObject *parent) : QObject(parent) {}
 bool GameLauncher::LaunchThread(const QString &gamePath, const QString &gameCWD, const QString &gameName, const QString &gameIcon)
 {
     RPC rpc = RPC();
-    qDebug() << gameName << gameIcon;
     rpc.setRPC("Playing " + gameName.toStdString(), gameIcon.toStdString(), gameName.toStdString());
     #ifdef Q_OS_LINUX
     bool launch = LaunchLinux(gamePath, gameCWD);
     #endif
-    rpc.setRPC("In the main menu", "", "");
+    rpc.setRPC("In the main menu");
     return launch;
 }
 

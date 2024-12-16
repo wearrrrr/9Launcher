@@ -14,7 +14,11 @@ public:
 
     Q_INVOKABLE void initDiscord();
 
+    void setRPC(string state);
+
     void setRPC(string state, string smallImageKey, string smallImageText);
+
+    Q_INVOKABLE void stopRPC();
 };
 
 #endif // RPC_H

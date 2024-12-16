@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <time.h>
 
+#include "AppSettings.h"
 #include "RPC.h"
 #include "discord_rpc.h"
 
@@ -13,9 +14,16 @@ RPC::RPC(QObject *parent) : QObject(parent) {}
 
 static const char* APPLICATION_ID = "1113926701735493664";
 
+static AppSettings settings("wearr", "NineLauncher");
+
 int64_t StartTime;
 
-static void updateDiscordPresence(string state, string smallImageKey = "", string smallImageText = "") {
+static void updateDiscordPresence(string state, string smallImageKey = "", string smallImageText = "")
+{
+
+    if (settings.value("rpc") == false) {
+        return;
+    }
 
     DiscordRichPresence discordPresence;
     memset(&discordPresence, 0, sizeof(discordPresence));
@@ -34,6 +42,11 @@ static void updateDiscordPresence(string state, string smallImageKey = "", strin
 }
 
 void RPC::initDiscord() {
+
+    if (settings.value("rpc") == false) {
+        return;
+    }
+
     qInfo() << "Initializing Discord RPC";
     
     DiscordEventHandlers handlers;
@@ -45,6 +58,15 @@ void RPC::initDiscord() {
     updateDiscordPresence("In the main menu");
 }
 
+void RPC::setRPC(string state) {
+    updateDiscordPresence(state, "", "");
+}
+
 void RPC::setRPC(string state, string smallImageKey, string smallImageText) {
     updateDiscordPresence(state, smallImageKey, smallImageText);
+}
+
+Q_INVOKABLE void RPC::stopRPC() {
+    qInfo() << "Shutting down Discord RPC";
+    Discord_Shutdown();
 }

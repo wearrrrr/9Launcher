@@ -28,15 +28,13 @@ int main(int argc, char *argv[])
     static AppSettings settings("wearr", "NineLauncher");
     static Clipboard clipboard = Clipboard();
     static Util util = Util();
+    static RPC rpc = RPC();
     engine.rootContext()->setContextProperty("AppSettings", &settings);
     engine.rootContext()->setContextProperty("Clipboard", &clipboard);
     engine.rootContext()->setContextProperty("QtVersion", QString(qVersion()));
     engine.rootContext()->setContextProperty("Util", &util);
-    
-    RPC rpc = RPC();
-
-    rpc.initDiscord();
-
+    // RPC is initialized when the settings are loaded in the QML 
+    engine.rootContext()->setContextProperty("RPC", &rpc);
 
     engine.addImportPath(":/MMaterial");
     engine.addImportPath("qrc:/");

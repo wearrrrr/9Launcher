@@ -19,7 +19,7 @@ This is a complete rewrite of 9Launcher v1, which was written in Tauri, now bein
 ## TODO
 - Wine Manager (currently invokes system wine, should also conditionally hide the wine manager on windows ^^)
 - Finish the settings panel
-- Finish the info panel
+- ~~Finish the info panel~~ ✅
 - Optimize the size of the output binary (cull unused MMaterial stuff)
 - OSX Support
 

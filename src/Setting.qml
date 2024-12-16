@@ -41,6 +41,14 @@ Item {
 
             function saveSetting(key, value) {
                 AppSettings.setValue(key, value);
+
+                if (key == "rpc") {
+                    if (value) {
+                        RPC.initDiscord();
+                    } else {
+                        RPC.stopRPC();
+                    }
+                }
             }
 
             onCheckedChanged: {
