@@ -70,10 +70,18 @@ Rectangle {
                 }
 
                 MButton {
+                    text: qsTr("Binary Manager")
+                    width: 50
+                    accent: Theme.primary
+                    onClicked: {
+                        // Footer.openWineManager();
+                    }
+                }
+
+                MButton {
                     text: qsTr("Reset Settings")
                     width: 50
                     accent: Theme.error
-                    type: MButton.Type.Outlined
                     onClicked: {
                         if (AppSettings.value("warnings")) {
                             // Prompt the user to confirm the reset

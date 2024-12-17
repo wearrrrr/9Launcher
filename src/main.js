@@ -52,6 +52,12 @@ function handleGameLaunch(item, installedJSON) {
         return;
     }
 
+    if (item.isPC98) {
+        // gameLauncher.launchPC98Game(gameItem.path, item.en_title, item.game_id);
+        pc98Dialog.open()
+        return
+    }
+
     const path = gameItem.path;
     const cwd = path.substring(0, path.lastIndexOf("/"));
 

@@ -111,6 +111,42 @@ Window {
         }
     }
 
+    MMaterial.Dialog {
+        id: pc98Dialog
+        modal: true
+        title: qsTr("PC-98 Emulator Not Found!")
+        width: parent.width - 100
+        anchors.centerIn: parent
+
+        closePolicy: MMaterial.Dialog.NoAutoClose
+        iconData: MMaterial.Icons.light.warning
+
+        contentItem: ColumnLayout {
+            Label {
+                text: qsTr("The PC-98 emulator was not found.\nPlease make sure it is installed and the path is set in the binary manager.")
+                color: "white"
+            }
+        }
+
+        MMaterial.Dialog.DialogCloseButton {
+            Layout.preferredWidth: parent.width / 2 - 10
+            text: qsTr("Close")
+            accent: MMaterial.Theme.error
+            onClicked: {
+                pc98Dialog.close()
+            }
+
+        }
+
+        MMaterial.Dialog.DialogButton {
+            Layout.preferredWidth: parent.width / 2 - 10
+            text: qsTr("Open Binary Manager")
+            onClicked: {
+                pc98Dialog.close()
+            }
+        }
+    }
+
     MouseArea {
         hoverEnabled: true
         propagateComposedEvents: true
