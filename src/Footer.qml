@@ -74,7 +74,7 @@ Rectangle {
                     Layout.preferredWidth: 150
                     accent: Theme.primary
                     onClicked: {
-                        // Footer.openWineManager();
+                        Footer.openBinaryManager();
                     }
                 }
 

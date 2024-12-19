@@ -28,6 +28,8 @@ qt_add_qml_module(NineLauncher
         src/Footer.qml
         src/Setting.qml
         src/FooterPanel.qml
+        src/BinaryManager.qml
+        
         src/fs.js
         src/main.js
         src/footer.js

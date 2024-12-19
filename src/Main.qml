@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.LocalStorage
 import QtQuick.Controls.Material
 import FileIO 1.0
 import "main.js" as Core

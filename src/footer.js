@@ -33,3 +33,8 @@ function copyInfo(itemsToCopy, copyBtn) {
     Util.Sleep(500);
     copyBtn.text = qsTr("Copy Info");
 }
+
+function openBinaryManager() {
+    const binaryManager = Qt.createComponent("BinaryManager.qml").createObject(window);
+    binaryManager.show();
+}
