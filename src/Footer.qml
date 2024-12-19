@@ -71,7 +71,7 @@ Rectangle {
 
                 MButton {
                     text: qsTr("Binary Manager")
-                    width: 50
+                    Layout.preferredWidth: 150
                     accent: Theme.primary
                     onClicked: {
                         // Footer.openWineManager();
@@ -80,7 +80,7 @@ Rectangle {
 
                 MButton {
                     text: qsTr("Reset Settings")
-                    width: 50
+                    Layout.preferredWidth: 150
                     accent: Theme.error
                     onClicked: {
                         if (AppSettings.value("warnings")) {

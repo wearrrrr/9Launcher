@@ -31,6 +31,23 @@ bool GameLauncher::LaunchThread(const QString &gamePath, const QString &gameCWD,
     return launch;
 }
 
+bool GameLauncher::LaunchPC98Thread(const QString &gamePath, const QString &gameName, const QString &gameIcon)
+{
+    RPC rpc = RPC();
+    rpc.setRPC("Playing " + gameName.toStdString(), gameIcon.toStdString(), gameName.toStdString());
+
+    currentGameInfo.gamePath = gamePath;
+    currentGameInfo.gameCWD = NULL;
+    currentGameInfo.gameName = gameName;
+    currentGameInfo.gameIcon = gameIcon;
+
+    #ifdef Q_OS_LINUX
+    bool launch = LaunchLinux_PC98(gamePath);
+    #endif
+    rpc.setRPC("In the main menu");
+    return launch;
+}
+
 gameInfo GameLauncher::GetCurrentGameInfo()
 {
     return currentGameInfo;
@@ -41,7 +58,7 @@ bool GameLauncher::CheckGameRunning()
     return launched;
 }
 
-Q_INVOKABLE bool GameLauncher::launchGame(const QString &gamePath, const QString &gameCWD, const QString &gameName, const QString &gameIcon)
+Q_INVOKABLE bool GameLauncher::launchGame(const QString &gamePath, const QString &gameCWD, const QString &gameName, const QString &gameIcon, const bool &isPC98)
 {
     const QString localPath = QUrl(gamePath).toLocalFile();
     const QString localCWD = QUrl(gameCWD).toLocalFile();
@@ -49,10 +66,24 @@ Q_INVOKABLE bool GameLauncher::launchGame(const QString &gamePath, const QString
     // Run LaunchThread in a separate thread
     QThread *thread = new QThread;
     connect(thread, &QThread::started, [=]() {
-        if (!LaunchThread(localPath, localCWD, gameName, gameIcon))
+        if (CheckGameRunning())
         {
-            qCritical() << "[9L] Failed to launch game!";
+            qCritical() << "[9L] Game is already running!";
+            thread->quit();
+            return;
         }
+
+        if (isPC98) {
+            if (!LaunchPC98Thread(localPath, gameName, gameIcon)) {
+                qCritical() << "[9L] Failed to launch game!";
+            }
+        } else {
+            if (!LaunchThread(localPath, localCWD, gameName, gameIcon))
+            {
+                qCritical() << "[9L] Failed to launch game!";
+            }
+        }
+
         thread->quit();
     });
     connect(thread, &QThread::finished, thread, &QThread::deleteLater);
@@ -75,6 +106,44 @@ bool GameLauncher::LaunchLinux(const QString &gamePath, const QString &gameCWD) 
     process.setProcessEnvironment(env);
 
     process.start();
+    if (!process.waitForStarted()) {
+        qCritical() << "Failed to start the game process!";
+        return false;
+    }
+
+    launched = true;
+
+    process.waitForFinished(-1);
+
+    launched = false;
+
+    return true;
+
+    #endif
+}
+
+bool GameLauncher::LaunchLinux_PC98(const QString &gamePath) {
+    #ifdef Q_OS_LINUX
+
+    qInfo() << "Launching game on Linux";
+
+    QProcess process;
+    process.setProgram("dosbox-x");
+    process.setArguments({
+        "-machine",
+        "pc98",
+        "-set",
+        "cycles=35620"
+        "-nopromptfolder",
+        "-c",
+        "IMGMOUNT A: " + gamePath,
+        "-c",
+        "A:",
+        "-c",
+        "game",
+    });
+
+    process.start();    
     if (!process.waitForStarted()) {
         qCritical() << "Failed to start the game process!";
         return false;
