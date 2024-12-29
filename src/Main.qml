@@ -9,6 +9,9 @@ import "footer.js" as Footer
 
 
 Window {
+    Material.theme: Material.Dark
+    Material.accent: Material.Blue
+
     id: window
     width: 950
     height: 600
@@ -18,6 +21,7 @@ Window {
     maximumHeight: height
     visible: true
     title: qsTr("9Launcher")
+    // Set color to the palette background
     color: "#2f2f2f"
 
     FileIO {

@@ -30,6 +30,7 @@ qt_add_qml_module(NineLauncher
         src/FooterPanel.qml
         src/BinaryManager.qml
         
+        src/BinaryManager.js
         src/fs.js
         src/main.js
         src/footer.js
@@ -41,12 +42,14 @@ qt_add_qml_module(NineLauncher
         SOURCES
             src/cpp/AppSettings.h
             src/cpp/Clipboard.h
+            src/cpp/Downloader.h
             src/cpp/FileIO.h
             src/cpp/GameLauncher.h
             src/cpp/RPC.h
             src/cpp/Util.h
 
             src/cpp/Clipboard.cpp
+            src/cpp/Downloader.cpp
             src/cpp/FileIO.cpp
             src/cpp/GameLauncher.cpp
             src/cpp/RPC.cpp

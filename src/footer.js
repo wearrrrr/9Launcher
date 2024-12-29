@@ -35,6 +35,6 @@ function copyInfo(itemsToCopy, copyBtn) {
 }
 
 function openBinaryManager() {
-    const binaryManager = Qt.createComponent("BinaryManager.qml").createObject(window);
-    binaryManager.show();
+    const binaryManager = Qt.createComponent("BinaryManager.qml")
+    binaryManager.createObject(window).show();
 }

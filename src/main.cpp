@@ -4,8 +4,10 @@
 #include <QQmlContext>
 #include <QQuickStyle>
 #include <QThread>
+#include <QPalette>
 
 #include "AppSettings.h"
+#include "Downloader.h"
 #include "Clipboard.h"
 #include "FileIO.h"
 #include "GameLauncher.h"
@@ -23,14 +25,15 @@ int main(int argc, char *argv[])
     app.setApplicationName("NineLauncher");
     // Set app version
     app.setApplicationVersion("0.0.1");
-
     QQmlApplicationEngine engine;
     static AppSettings settings("wearr", "NineLauncher");
     static Clipboard clipboard = Clipboard();
+    static Downloader downloader = Downloader();
     static Util util = Util();
     static RPC rpc = RPC();
     engine.rootContext()->setContextProperty("AppSettings", &settings);
     engine.rootContext()->setContextProperty("Clipboard", &clipboard);
+    engine.rootContext()->setContextProperty("Downloader", &downloader);
     engine.rootContext()->setContextProperty("QtVersion", QString(qVersion()));
     engine.rootContext()->setContextProperty("Util", &util);
     // RPC is initialized when the settings are loaded in the QML 
@@ -40,6 +43,7 @@ int main(int argc, char *argv[])
     engine.addImportPath("qrc:/");
     QQuickStyle::setStyle("Material");
 
+    qmlRegisterType<Downloader>("Downloader", 1, 0, "Downloader");
     qmlRegisterType<FileIO>("FileIO", 1, 0, "FileIO");
     qmlRegisterType<GameLauncher>("GameLauncher", 1, 0, "GameLauncher");
 

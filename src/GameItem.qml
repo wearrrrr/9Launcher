@@ -1,8 +1,8 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import QtCore
 import QtQuick.Controls.Material
+import QtCore
 import QtQuick.Dialogs
 import FileIO 1.0
 import GameLauncher 1.0
