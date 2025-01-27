@@ -26,9 +26,16 @@ bool GameLauncher::LaunchThread(const QString &gamePath, const QString &gameCWD,
 
     #ifdef Q_OS_LINUX
     bool launch = LaunchLinux(gamePath, gameCWD);
-    #endif
     rpc.setRPC("In the main menu");
     return launch;
+    #endif
+    #ifdef Q_OS_WINDOWS
+    bool launch = LaunchWindows(gamePath, gameCWD);
+    rpc.setRPC("In the main menu");
+    return launch;
+    #endif
+    qCritical() << "Platform not supported! Please make an issue on the Github.";
+    return false;
 }
 
 bool GameLauncher::LaunchPC98Thread(const QString &gamePath, const QString &gameName, const QString &gameIcon)
@@ -43,9 +50,14 @@ bool GameLauncher::LaunchPC98Thread(const QString &gamePath, const QString &game
 
     #ifdef Q_OS_LINUX
     bool launch = LaunchLinux_PC98(gamePath);
-    #endif
     rpc.setRPC("In the main menu");
     return launch;
+    #endif
+    #ifdef Q_OS_WINDOWS
+    // TODO implement this!
+    // bool launch = LaunchWindows_PC98(gamePath);
+    #endif
+    return false;
 }
 
 gameInfo GameLauncher::GetCurrentGameInfo()
@@ -92,9 +104,31 @@ Q_INVOKABLE bool GameLauncher::launchGame(const QString &gamePath, const QString
     return true;
 }
 
+bool GameLauncher::LaunchWindows(const QString &gamePath, const QString &gameCWD) {
+    qInfo() << "Launching Game...";
+
+    QProcess process;
+    process.setProgram(gamePath);
+    process.setWorkingDirectory(gameCWD);
+
+    process.start();
+
+    if (!process.waitForStarted()) {
+        qCritical() << "Failed to start the game process!";
+        return false;
+    }
+
+    launched = true;
+
+    process.waitForFinished(-1);
+
+    launched = false;
+
+    return true;
+};
+
 bool GameLauncher::LaunchLinux(const QString &gamePath, const QString &gameCWD) {
-    #ifdef Q_OS_LINUX
-    qInfo() << "Launching game on Linux";
+    qInfo() << "Launching Game...";
 
     QProcess process;
     process.setProgram("wine");
@@ -118,13 +152,9 @@ bool GameLauncher::LaunchLinux(const QString &gamePath, const QString &gameCWD) 
     launched = false;
 
     return true;
-
-    #endif
 }
 
 bool GameLauncher::LaunchLinux_PC98(const QString &gamePath) {
-    #ifdef Q_OS_LINUX
-
     qInfo() << "Launching game on Linux";
 
     QProcess process;
@@ -156,6 +186,4 @@ bool GameLauncher::LaunchLinux_PC98(const QString &gamePath) {
     launched = false;
 
     return true;
-
-    #endif
 }

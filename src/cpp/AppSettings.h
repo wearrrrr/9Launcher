@@ -1,6 +1,7 @@
 #include <QObject>
 #include <QSettings>
 #include <QVariant>
+#include <QMetaType>
 
 class AppSettings : public QSettings {
     Q_OBJECT
@@ -13,7 +14,7 @@ public:
         QVariant result = QSettings::value(key, defaultValue);
 
         // Boolean conversion BS.
-        if (result.typeId() == QVariant::String) {
+        if (result.typeId() == QMetaType::QString) {
             QString strValue = result.toString().toLower();
             if (strValue == "true") return true;
             if (strValue == "false") return false;

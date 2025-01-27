@@ -1,18 +1,12 @@
 cmake_minimum_required(VERSION 3.16)
-include(FetchContent)
-
 project(nineLauncher VERSION 0.1 LANGUAGES CXX)
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
-
-find_package(Qt6 6.5 REQUIRED COMPONENTS Quick)
+find_package(Qt6 REQUIRED COMPONENTS Quick)
 find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
-
-qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(NineLauncher
     src/main.cpp
@@ -23,21 +17,21 @@ qt_add_qml_module(NineLauncher
     VERSION 1.0
     RESOURCE_PREFIX /
     QML_FILES
-        src/Main.qml
-        src/GameItem.qml
-        src/Footer.qml
-        src/Setting.qml
-        src/FooterPanel.qml
-        src/BinaryManager.qml
+        src/qml/Main.qml
+        src/qml/GameItem.qml
+        src/qml/Footer.qml
+        src/qml/Setting.qml
+        src/qml/FooterPanel.qml
+        src/qml/BinaryManager.qml
         
-        src/BinaryManager.js
-        src/fs.js
-        src/main.js
-        src/footer.js
+        src/qml/main.js
+        src/qml/BinaryManager.js
+        src/qml/fs.js
+        src/qml/footer.js
 
         RESOURCES
             src/json/games.json
-            src/game-images/th01.png src/game-images/th01_unset.png src/game-images/th02.png src/game-images/th02_unset.png src/game-images/th03.png src/game-images/th03_unset.png src/game-images/th04.png src/game-images/th04_unset.png src/game-images/th05.png src/game-images/th05_unset.png src/game-images/th06.png src/game-images/th06_unset.png src/game-images/th07.png src/game-images/th07_5.png src/game-images/th07_5_unset.png src/game-images/th07_unset.png src/game-images/th08.png src/game-images/th08_unset.png src/game-images/th09.png src/game-images/th09_5.png src/game-images/th09_5_unset.png src/game-images/th09_unset.png src/game-images/th10.png src/game-images/th10_5.png src/game-images/th10_5_unset.png src/game-images/th10_unset.png src/game-images/th11.png src/game-images/th11_unset.png src/game-images/th12.png src/game-images/th12_3.png src/game-images/th12_3_unset.png src/game-images/th12_5.png src/game-images/th12_5_unset.png src/game-images/th12_8.png src/game-images/th12_8_unset.png src/game-images/th12_unset.png src/game-images/th13.png src/game-images/th13_5.png src/game-images/th13_5_unset.png src/game-images/th13_unset.png src/game-images/th14.png src/game-images/th14_3.png src/game-images/th14_3_unset.png src/game-images/th14_5.png src/game-images/th14_5_unset.png src/game-images/th14_unset.png src/game-images/th15.png src/game-images/th15_5.png src/game-images/th15_5_unset.png src/game-images/th15_unset.png src/game-images/th16.png src/game-images/th16_5.png src/game-images/th16_5_unset.png src/game-images/th16_unset.png src/game-images/th17.png src/game-images/th17_unset.png src/game-images/th18.png src/game-images/th18_5.png src/game-images/th18_5_unset.png src/game-images/th18_unset.png src/game-images/th19.png src/game-images/th19_unset.png
+            game-images/th01.png game-images/th01_unset.png game-images/th02.png game-images/th02_unset.png game-images/th03.png game-images/th03_unset.png game-images/th04.png game-images/th04_unset.png game-images/th05.png game-images/th05_unset.png game-images/th06.png game-images/th06_unset.png game-images/th07.png game-images/th07_5.png game-images/th07_5_unset.png game-images/th07_unset.png game-images/th08.png game-images/th08_unset.png game-images/th09.png game-images/th09_5.png game-images/th09_5_unset.png game-images/th09_unset.png game-images/th10.png game-images/th10_5.png game-images/th10_5_unset.png game-images/th10_unset.png game-images/th11.png game-images/th11_unset.png game-images/th12.png game-images/th12_3.png game-images/th12_3_unset.png game-images/th12_5.png game-images/th12_5_unset.png game-images/th12_8.png game-images/th12_8_unset.png game-images/th12_unset.png game-images/th13.png game-images/th13_5.png game-images/th13_5_unset.png game-images/th13_unset.png game-images/th14.png game-images/th14_3.png game-images/th14_3_unset.png game-images/th14_5.png game-images/th14_5_unset.png game-images/th14_unset.png game-images/th15.png game-images/th15_5.png game-images/th15_5_unset.png game-images/th15_unset.png game-images/th16.png game-images/th16_5.png game-images/th16_5_unset.png game-images/th16_unset.png game-images/th17.png game-images/th17_unset.png game-images/th18.png game-images/th18_5.png game-images/th18_5_unset.png game-images/th18_unset.png game-images/th19.png game-images/th19_unset.png
         
         SOURCES
             src/cpp/AppSettings.h
@@ -62,24 +56,7 @@ target_include_directories(NineLauncher
 
 target_compile_options(NineLauncher PRIVATE -O3)
 
-FetchContent_Declare(
-    MMaterial
-    GIT_REPOSITORY https://github.com/MarkoStanojevic12/Material-Qt.git
-    GIT_TAG        6f173119092f0900010cea5f2298508d84e5ae2a
-)
-FetchContent_MakeAvailable(MMaterial)
-
-# Remove unused files from MMaterial
-set(MMaterialIconsPngFiles
-    ${mmaterial_SOURCE_DIR}/MMaterial/Icons/assets/png
-)
-set(MMaterialIconsSvgFiles
-    ${mmaterial_SOURCE_DIR}/MMaterial/Icons/assets/svg
-)
-file(REMOVE_RECURSE ${MMaterialIconsPngFiles})
-file(REMOVE_RECURSE ${MMaterialIconsSvgFiles})
-
-add_subdirectory(${mmaterial_SOURCE_DIR}/MMaterial)
+add_subdirectory(MMaterial)
 
 set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
@@ -97,8 +74,9 @@ target_include_directories(NineLauncher
     PRIVATE ${DiscordRPC_DIR}/include
 )
 
+set_target_properties(MMaterialLib PROPERTIES AUTOMOC ON)
 target_link_libraries(NineLauncher
-    PRIVATE Qt6::Quick Qt::Gui MMaterialLibplugin Qt6::QuickControls2 discord-rpc
+    PRIVATE Qt6::Quick Qt::Gui discord-rpc
 )
 
 set_target_properties(NineLauncher PROPERTIES
@@ -108,7 +86,8 @@ set_target_properties(NineLauncher PROPERTIES
 set(CMAKE_EXE_LINKER_FLAGS "-s")
 set(CMAKE_BUILD_TYPE Release)
 
-include(GNUInstallDirs)
 install(TARGETS NineLauncher
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}}
 )

@@ -2,9 +2,9 @@
 #include <QQmlApplicationEngine>
 #include <QtLogging>
 #include <QQmlContext>
-#include <QQuickStyle>
 #include <QThread>
 #include <QPalette>
+#include <QDebug>
 
 #include "AppSettings.h"
 #include "Downloader.h"
@@ -17,7 +17,9 @@
 int main(int argc, char *argv[])
 {
     // For some reason, the stock file picker is partially broken :D, so it's GTK time until that gets fixed, or maybe forever.
-    qputenv("QT_QPA_PLATFORMTHEME", "gtk3");
+    #ifdef Q_OS_LINUX
+        qputenv("QT_QPA_PLATFORMTHEME", "gtk3");
+    #endif
     qputenv("QML_XHR_ALLOW_FILE_READ", "1");
     QGuiApplication app(argc, argv);
     app.setOrganizationName("wearr");
@@ -41,7 +43,6 @@ int main(int argc, char *argv[])
 
     engine.addImportPath(":/MMaterial");
     engine.addImportPath("qrc:/");
-    QQuickStyle::setStyle("Material");
 
     qmlRegisterType<Downloader>("Downloader", 1, 0, "Downloader");
     qmlRegisterType<FileIO>("FileIO", 1, 0, "FileIO");
