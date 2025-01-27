@@ -34,13 +34,13 @@ qt_add_qml_module(NineLauncher
             game-images/th01.png game-images/th01_unset.png game-images/th02.png game-images/th02_unset.png game-images/th03.png game-images/th03_unset.png game-images/th04.png game-images/th04_unset.png game-images/th05.png game-images/th05_unset.png game-images/th06.png game-images/th06_unset.png game-images/th07.png game-images/th07_5.png game-images/th07_5_unset.png game-images/th07_unset.png game-images/th08.png game-images/th08_unset.png game-images/th09.png game-images/th09_5.png game-images/th09_5_unset.png game-images/th09_unset.png game-images/th10.png game-images/th10_5.png game-images/th10_5_unset.png game-images/th10_unset.png game-images/th11.png game-images/th11_unset.png game-images/th12.png game-images/th12_3.png game-images/th12_3_unset.png game-images/th12_5.png game-images/th12_5_unset.png game-images/th12_8.png game-images/th12_8_unset.png game-images/th12_unset.png game-images/th13.png game-images/th13_5.png game-images/th13_5_unset.png game-images/th13_unset.png game-images/th14.png game-images/th14_3.png game-images/th14_3_unset.png game-images/th14_5.png game-images/th14_5_unset.png game-images/th14_unset.png game-images/th15.png game-images/th15_5.png game-images/th15_5_unset.png game-images/th15_unset.png game-images/th16.png game-images/th16_5.png game-images/th16_5_unset.png game-images/th16_unset.png game-images/th17.png game-images/th17_unset.png game-images/th18.png game-images/th18_5.png game-images/th18_5_unset.png game-images/th18_unset.png game-images/th19.png game-images/th19_unset.png
         
         SOURCES
-            src/cpp/AppSettings.h
-            src/cpp/Clipboard.h
-            src/cpp/Downloader.h
-            src/cpp/FileIO.h
-            src/cpp/GameLauncher.h
-            src/cpp/RPC.h
-            src/cpp/Util.h
+            src/cpp/include/AppSettings.h
+            src/cpp/include/Clipboard.h
+            src/cpp/include/Downloader.h
+            src/cpp/include/FileIO.h
+            src/cpp/include/GameLauncher.h
+            src/cpp/include/RPC.h
+            src/cpp/include/Util.h
 
             src/cpp/Clipboard.cpp
             src/cpp/Downloader.cpp
@@ -51,7 +51,7 @@ qt_add_qml_module(NineLauncher
 )
 
 target_include_directories(NineLauncher
-    PRIVATE src/cpp
+    PRIVATE src/cpp/include/
 )
 
 target_compile_options(NineLauncher PRIVATE -O3)
@@ -82,9 +82,6 @@ target_link_libraries(NineLauncher
 set_target_properties(NineLauncher PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
-
-set(CMAKE_EXE_LINKER_FLAGS "-s")
-set(CMAKE_BUILD_TYPE Release)
 
 install(TARGETS NineLauncher
     BUNDLE DESTINATION .

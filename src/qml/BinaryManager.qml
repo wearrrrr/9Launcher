@@ -23,10 +23,6 @@ Window {
     Downloader {
         id: downloader
 
-        Component.onCompleted: {
-            console.log("here!");
-        }
-
         onDownloadFinished: {
             console.log("Download finished!")
         }

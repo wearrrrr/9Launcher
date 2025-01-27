@@ -12,19 +12,10 @@ qt_add_qml_module(MMaterialLib
         MMaterial.Network
 )
 
-file(GLOB PNG_ASSETS "Media/assets/other/*.png")
-file(GLOB JPEG_ASSETS "Media/assets/other/*.jpeg")
-file(GLOB SVG_ASSETS "Media/assets/svg/*.svg")
-
 qt_add_resources(MMaterialLib
     "mmaterial_assets"
     BASE "${CMAKE_CURRENT_SOURCE_DIR}"
     PREFIX "MMaterial"
-    BIG_RESOURCES
-    FILES
-        ${PNG_ASSETS}
-        ${JPEG_ASSETS}
-        ${SVG_ASSETS}
 )
 
 set_target_properties(MMaterialLib PROPERTIES AUTOMOC ON)

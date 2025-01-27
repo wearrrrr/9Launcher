@@ -13,13 +13,18 @@ void Downloader::download(const QString &url, const QString &filePath) {
 
     currentlyDownloading.push_back(reply);
 
-    // Emit progress signal
     connect(reply, &QNetworkReply::downloadProgress, this, [=](qint64 bytesReceived, qint64 bytesTotal) {
         qDebug() << "Downloaded" << bytesReceived << "of" << bytesTotal << "bytes";
         emit downloadProgress(bytesReceived, bytesTotal);
     });
 
     connect(reply, &QNetworkReply::finished, this, [=]() {
+
+        currentlyDownloading.erase(
+            std::remove(currentlyDownloading.begin(), currentlyDownloading.end(), reply),
+            currentlyDownloading.end()
+        );
+
         if (reply->error()) {
             emit downloadFailed(reply->errorString());
             reply->deleteLater();
@@ -43,7 +48,7 @@ void Downloader::download(const QString &url, const QString &filePath) {
 }
 
 void Downloader::CancelDownloads() {
-    qDebug() << "Cancelling downloads";
+    if (currentlyDownloading.size() == 0) return;
     for (QNetworkReply *reply : currentlyDownloading) {
         reply->abort();
         reply->deleteLater();
