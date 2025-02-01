@@ -1,5 +1,6 @@
 pragma ComponentBehavior: Bound
 
+import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls.Material
 import QtCore
@@ -32,7 +33,12 @@ Button {
         id: gameImage
         width: parent.width
         height: parent.height
-        source: "qrc:/nineLauncher/game-images/" + parent.item.img_unset 
+        source: "qrc:/nineLauncher/game-images/" + parent.item.img
+
+        layer.enabled: !isInstalled
+        layer.effect: ShaderEffect {
+            fragmentShader: "qrc:/src/shaders/grayscale.frag.qsb"
+        }
 
         Component.onCompleted: {
             const path = StandardPaths.writableLocation(StandardPaths.AppDataLocation) + "/installed.json";
@@ -50,7 +56,6 @@ Button {
 
             items.installed.forEach((item) => {
                 if (item.game_id == button.item.game_id) {
-                    gameImage.source = "qrc:/nineLauncher/game-images/" + item.img;
                     button.isInstalled = true;
                 }
             })

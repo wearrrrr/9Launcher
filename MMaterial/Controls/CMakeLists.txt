@@ -12,7 +12,6 @@ list(APPEND CONTROLS_QML_FILES
     BadgeNumber.qml
     BadgeDot.qml
     Badge.qml
-    Accordion.qml
     Alert.qml
     AlertGenerator.qml
     Avatar.qml

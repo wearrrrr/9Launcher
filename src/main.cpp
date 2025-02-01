@@ -38,7 +38,6 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("Downloader", &downloader);
     engine.rootContext()->setContextProperty("QtVersion", QString(qVersion()));
     engine.rootContext()->setContextProperty("Util", &util);
-    // RPC is initialized when the settings are loaded in the QML 
     engine.rootContext()->setContextProperty("RPC", &rpc);
 
     engine.addImportPath(":/MMaterial");

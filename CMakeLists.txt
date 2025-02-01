@@ -7,12 +7,13 @@ set(CMAKE_AUTOMOC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
+find_package(Qt6 COMPONENTS ShaderTools)
 
 qt_add_executable(NineLauncher
     src/main.cpp
 )
 
-file(GLOB ICONS RELATIVE ${CMAKE_SOURCE_DIR} "${CMAKE_SOURCE_DIR}/game-images/*.png")
+file(GLOB ICONS RELATIVE ${CMAKE_SOURCE_DIR} "${CMAKE_SOURCE_DIR}/game-images/*.webp")
 
 qt_add_qml_module(NineLauncher
     URI nineLauncher
@@ -52,11 +53,17 @@ qt_add_qml_module(NineLauncher
             src/cpp/Util.cpp
 )
 
+qt6_add_shaders(NineLauncher "ninelauncher_shaders"
+    PREFIX /
+    FILES 
+        src/shaders/grayscale.frag
+)
+
 target_include_directories(NineLauncher
     PRIVATE src/cpp/include/
 )
 
-target_compile_options(NineLauncher PRIVATE -O3)
+target_compile_options(NineLauncher PRIVATE -Oz)
 
 add_subdirectory(MMaterial)
 
@@ -64,21 +71,14 @@ set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 set(DiscordRPC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/externals/discord-rpc)
 
-set(DiscordRPCExamplesDir ${DiscordRPC_DIR}/examples)
-set(DiscordRPCDocumentationDir ${DiscordRPC_DIR}/documentation)
-
-file(REMOVE_RECURSE ${DiscordRPCExamplesDir})
-file(REMOVE_RECURSE ${DiscordRPCDocumentationDir})
-
 add_subdirectory(${DiscordRPC_DIR})
 
 target_include_directories(NineLauncher
     PRIVATE ${DiscordRPC_DIR}/include
 )
 
-set_target_properties(MMaterialLib PROPERTIES AUTOMOC ON)
 target_link_libraries(NineLauncher
-    PRIVATE Qt6::Quick Qt::Gui discord-rpc
+    PRIVATE Qt6::Quick Qt::Gui MMaterialLib discord-rpc
 )
 
 set_target_properties(NineLauncher PROPERTIES

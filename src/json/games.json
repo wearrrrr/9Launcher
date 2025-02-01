@@ -1,271 +1,230 @@
 {
     "pc-98": {
         "th01": {
-            "long_title": "東方靈異伝　～ Highly Responsive to Prayers",
             "en_title": "Highly Responsive to Prayers",
             "jp_title": "東方靈異伝",
-            "img": "th01.png",
-            "img_unset": "th01_unset.png",
+            "img": "th01.webp",
+            "img_unset": "th01_unset.webp",
             "game_id": "th01",
             "isPC98": true
         },
         "th02": {
-            "long_title": "東方封魔録　～ the Story of Eastern Wonderland",
             "en_title": "Story of Eastern Wonderland",
             "jp_title": "東方封魔録",
-            "img": "th02.png",
-            "img_unset": "th02_unset.png",
+            "img": "th02.webp",
+            "img_unset": "th02_unset.webp",
             "game_id": "th02",
             "isPC98": true
         },
         "th03": {
-            "long_title": "東方夢時空　～ Phantasmagoria of Dim.Dream",
             "en_title": "Phantasmagoria of Dim.Dream",
             "jp_title": "東方夢時空",
-            "img": "th03.png",
-            "img_unset": "th03_unset.png",
+            "img": "th03.webp",
+            "img_unset": "th03_unset.webp",
             "game_id": "th03",
             "isPC98": true
         },
         "th04": {
-            "long_title": "東方幻想郷　～ Lotus Land Story",
             "en_title": "Lotus Land Story",
             "jp_title": "東方幻想郷",
-            "img": "th04.png",
-            "img_unset": "th04_unset.png",
+            "img": "th04.webp",
+            "img_unset": "th04_unset.webp",
             "game_id": "th04",
             "isPC98": true
         },
         "th05": {
-            "long_title": "東方怪綺談　～ Mystic Square",
             "en_title": "Mystic Square",
             "jp_title": "東方怪綺談",
-            "img": "th05.png",
-            "img_unset": "th05_unset.png",
+            "img": "th05.webp",
+            "img_unset": "th05_unset.webp",
             "game_id": "th05",
             "isPC98": true
         }
     },
     "modern": {
         "th06": {
-            "long_title": "東方紅魔郷　～ The Embodiment of Scarlet Devil",
             "en_title": "Embodiment of Scarlet Devil",
             "jp_title": "東方紅魔郷",
-            "img": "th06.png",
-            "img_unset": "th06_unset.png",
+            "img": "th06.webp",
+            "img_unset": "th06_unset.webp",
             "game_id": "th06"
         },
         "th07": {
-            "long_title": "東方妖々夢　～ Perfect Cherry Blossom",
             "en_title": "Perfect Cherry Blossom",
             "jp_title": "東方妖々夢",
-            "img": "th07.png",
-            "img_unset": "th07_unset.png",
+            "img": "th07.webp",
+            "img_unset": "th07_unset.webp",
             "game_id": "th07"
         },
         "th08": {
-            "long_title": "東方永夜抄　～ Imperishable Night",
             "en_title": "Imperishable Night",
             "jp_title": "東方永夜抄",
-            "img": "th08.png",
-            "img_unset": "th08_unset.png",
+            "img": "th08.webp",
+            "img_unset": "th08_unset.webp",
             "game_id": "th08"
         },
         "th09": {
-            "long_title": "東方花映塚　～ Phantasmagoria of Flower View",
             "en_title": "Phantasmagoria of Flower View",
             "jp_title": "東方花映塚",
-            "img": "th09.png",
-            "img_unset": "th09_unset.png",
+            "img": "th09.webp",
+            "img_unset": "th09_unset.webp",
             "game_id": "th09"
         },
         "th10": {
-            "long_title": "東方風神録　～ Mountain of Faith",
             "en_title": "Mountain of Faith",
             "jp_title": "東方風神録",
-            "img": "th10.png",
-            "img_unset": "th10_unset.png",
+            "img": "th10.webp",
+            "img_unset": "th10_unset.webp",
             "game_id": "th10"
         },
         "th11": {
-            "long_title": "東方地霊殿　～ Subterranean Animism",
             "en_title": "Subterranean Animism",
             "jp_title": "東方地霊殿",
-            "img": "th11.png",
-            "img_unset": "th11_unset.png",
+            "img": "th11.webp",
+            "img_unset": "th11_unset.webp",
             "game_id": "th11"
         },
         "th12": {
-            "long_title": "東方星蓮船　～ Undefined Fantastic Object",
             "en_title": "Undefined Fantastic Object",
             "jp_title": "東方星蓮船",
-            "img": "th12.png",
-            "img_unset": "th12_unset.png",
+            "img": "th12.webp",
+            "img_unset": "th12_unset.webp",
             "game_id": "th12"
         },
         "th13": {
-            "long_title": "東方神霊廟　～ Ten Desires",
             "en_title": "Ten Desires",
             "jp_title": "東方神霊廟",
-            "img": "th13.png",
-            "img_unset": "th13_unset.png",
+            "img": "th13.webp",
+            "img_unset": "th13_unset.webp",
             "game_id": "th13"
         },
         "th14": {
-            "long_title": "東方輝針城　～ Double Dealing Character",
             "en_title": "Double Dealing Character",
             "jp_title": "東方輝針城",
-            "img": "th14.png",
-            "img_unset": "th14_unset.png",
+            "img": "th14.webp",
+            "img_unset": "th14_unset.webp",
             "game_id": "th14"
         },
         "th15": {
-            "long_title": "東方紺珠伝　～ Legacy of Lunatic Kingdom",
             "en_title": "Legacy of Lunatic Kingdom",
             "jp_title": "東方紺珠伝",
-            "img": "th15.png",
-            "img_unset": "th15_unset.png",
+            "img": "th15.webp",
+            "img_unset": "th15_unset.webp",
             "game_id": "th15"
         },
         "th16": {
-            "long_title": "東方天空璋　～ Hidden Star in Four Seasons",
             "en_title": "Hidden Star in Four Seasons",
             "jp_title": "東方天空璋",
-            "img": "th16.png",
-            "img_unset": "th16_unset.png",
+            "img": "th16.webp",
+            "img_unset": "th16_unset.webp",
             "game_id": "th16"
         },
         "th17": {
-            "long_title": "東方鬼形獣　～ Wily Beast and Weakest Creature",
             "en_title": "Wily Beast and Weakest Creature",
             "jp_title": "東方鬼形獣",
-            "img": "th17.png",
-            "img_unset": "th17_unset.png",
+            "img": "th17.webp",
+            "img_unset": "th17_unset.webp",
             "game_id": "th17"
         },
         "th18": {
-            "long_title": "東方虹龍洞　～ Unconnected Marketeers",
             "en_title": "Unconnected Marketeers",
             "jp_title": "東方虹龍洞",
-            "img": "th18.png",
-            "img_unset": "th18_unset.png",
+            "img": "th18.webp",
+            "img_unset": "th18_unset.webp",
             "game_id": "th18"
         },
         "th19": {
-            "long_title": "東方獣王園　～ Unfinished Dream of All Living Ghost.",
             "en_title": "Unfinished Dream of All Living Ghost",
             "jp_title": "東方獣王園",
-            "img": "th19.png",
-            "img_unset": "th19_unset.png",
+            "img": "th19.webp",
+            "img_unset": "th19_unset.webp",
             "game_id": "th19"
         }
     },
     "spinoffs": {
         "th07_5": {
-            "long_title": "東方萃夢想　～ Immaterial and Missing Power",
             "en_title": "Immaterial and Missing Power",
             "jp_title": "東方萃夢想",
-            "img": "th07_5.png",
-            "img_unset": "th07_5_unset.png",
+            "img": "th07_5.webp",
+            "img_unset": "th07_5_unset.webp",
             "game_id": "th07_5"
         },
         "th09_5": {
-            "long_title": "東方文花帖　～ Shoot the Bullet",
             "en_title": "Shoot the Bullet",
             "jp_title": "東方文花帖",
-            "img": "th09_5.png",
-            "img_unset": "th09_5_unset.png",
+            "img": "th09_5.webp",
+            "img_unset": "th09_5_unset.webp",
             "game_id": "th09_5"
         },
         "th10_5": {
-            "long_title": "東方緋想天　～ Scarlet Weather Rhapsody",
             "en_title": "Scarlet Weather Rhapsody",
             "jp_title": "東方緋想天",
-            "img": "th10_5.png",
-            "img_unset": "th10_5_unset.png",
+            "img": "th10_5.webp",
+            "img_unset": "th10_5_unset.webp",
             "game_id": "th10_5"
         },
         "th12_3": {
-            "long_title": "東方非想天則　～ 超弩級ギニョルの謎を追え",
             "en_title": "Hisoutensoku",
             "jp_title": "東方非想天則",
-            "img": "th12_3.png",
-            "img_unset": "th12_3_unset.png",
+            "img": "th12_3.webp",
+            "img_unset": "th12_3_unset.webp",
             "game_id": "th12_3"
         },
         "th12_5": {
-            "long_title": "ダブルスポイラー　～ Double Spoiler",
             "en_title": "Double Spoiler",
             "jp_title": "ダブルスポイラー",
-            "img": "th12_5.png",
-            "img_unset": "th12_5_unset.png",
+            "img": "th12_5.webp",
+            "img_unset": "th12_5_unset.webp",
             "game_id": "th12_5"
         },
         "th12_8": {
-            "long_title": "妖精大戦争　～ Great Fairy Wars",
             "en_title": "Great Fairy Wars",
             "jp_title": "妖精大戦争",
-            "img": "th12_8.png",
-            "img_unset": "th12_8_unset.png",
+            "img": "th12_8.webp",
+            "img_unset": "th12_8_unset.webp",
             "game_id": "th12_8"
         },
         "th13_5": {
-            "long_title": "東方心綺楼　～ Hopeless Masquerade",
             "en_title": "Hopeless Masquerade",
             "jp_title": "東方心綺楼",
-            "img": "th13_5.png",
-            "img_unset": "th13_5_unset.png",
+            "img": "th13_5.webp",
+            "img_unset": "th13_5_unset.webp",
             "game_id": "th13_5"
         },
         "th14_3": {
-            "long_title": "弾幕アマノジャク　～ Impossible Spell Card",
             "en_title": "Impossible Spell Card",
             "jp_title": "弾幕アマノジャク",
-            "img": "th14_3.png",
-            "img_unset": "th14_3_unset.png",
+            "img": "th14_3.webp",
+            "img_unset": "th14_3_unset.webp",
             "game_id": "th14_3"
         },
         "th14_5": {
-            "long_title": "東方深秘録　～ Urban Legend in Limbo",
             "en_title": "Urban Legend in Limbo",
             "jp_title": "東方深秘録",
-            "img": "th14_5.png",
-            "img_unset": "th14_5_unset.png",
+            "img": "th14_5.webp",
+            "img_unset": "th14_5_unset.webp",
             "game_id": "th14_5"
         },
         "th15_5": {
-            "long_title": "東方憑依華　～ Antinomy of Common Flowers",
             "en_title": "Antinomy of Common Flowers",
             "jp_title": "東方憑依華",
-            "img": "th15_5.png",
-            "img_unset": "th15_5_unset.png",
+            "img": "th15_5.webp",
+            "img_unset": "th15_5_unset.webp",
             "game_id": "th15_5"
         },
         "th16_5": {
-            "long_title": "秘封ナイトメアダイアリー　～ Violet Detector",
             "en_title": "Violet Detector",
             "jp_title": "秘封ナイトメアダイアリー",
-            "img": "th16_5.png",
-            "img_unset": "th16_5_unset.png",
+            "img": "th16_5.webp",
+            "img_unset": "th16_5_unset.webp",
             "game_id": "th16_5"
         },
         "th18_5": {
-            "long_title": "秘封ナイトメアダイアリー　～ 100th Black Market",
             "en_title": "100th Black Market",
             "jp_title": "秘封ナイトメアダイアリー",
-            "img": "th18_5.png",
-            "img_unset": "th18_5_unset.png",
+            "img": "th18_5.webp",
+            "img_unset": "th18_5_unset.webp",
             "game_id": "th18_5"
-        }
-    },
-    "twilight-frontier": {
-        "th10_5": {
-            "long_title": "東方緋想天　～ Scarlet Weather Rhapsody",
-            "en_title": "Scarlet Weather Rhapsody",
-            "jp_title": "東方緋想天",
-            "img": "th10_5.png",
-            "img_unset": "th10_5_unset.png",
-            "game_id": "th10_5"
         }
     }
 }

@@ -3,13 +3,8 @@ project (DiscordRPC)
 
 include(GNUInstallDirs)
 
-option(BUILD_EXAMPLES "Build example apps" OFF)
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
-
 # format
 file(GLOB_RECURSE ALL_SOURCE_FILES
-    examples/*.cpp examples/*.h examples/*.c
     include/*.h
     src/*.cpp src/*.h src/*.c
 )
@@ -53,6 +48,3 @@ add_library(rapidjson STATIC IMPORTED ${RAPIDJSON})
 # add subdirs
 
 add_subdirectory(src)
-if (BUILD_EXAMPLES)
-    add_subdirectory(examples/send-presence)
-endif(BUILD_EXAMPLES)

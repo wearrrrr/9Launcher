@@ -1,7 +1,6 @@
 list(APPEND QML_ICON_SINGLETONS
     IconFont.qml
     Icons.qml
-    Images.qml
 )
 
 list(APPEND ICON_ASSETS

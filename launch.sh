@@ -1,1 +1,2 @@
-sh build.sh && ./build/NineLauncher
+#!/bin/bash
+./build.sh && ./build/NineLauncher

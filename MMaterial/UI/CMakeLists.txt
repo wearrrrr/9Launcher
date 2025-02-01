@@ -14,13 +14,10 @@ list(APPEND QML_UI_SINGLETONS
 )
 
 list(APPEND FONT_ASSETS
-    Families/PublicSans/PublicSans-ExtraBold.ttf
-    Families/PublicSans/PublicSans-Bold.ttf
     Families/PublicSans/PublicSans-SemiBold.ttf
     Families/PublicSans/PublicSans-Medium.ttf
     Families/PublicSans/PublicSans-Regular.ttf
     Families/PublicSans/PublicSans-Light.ttf
-    Families/PublicSans/PublicSans-ExtraLight.ttf
 )
 
 list(APPEND UI_QML_FILES
