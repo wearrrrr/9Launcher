@@ -13,12 +13,12 @@ void Downloader::download(const QString &url, const QString &filePath) {
 
     currentlyDownloading.push_back(reply);
 
-    connect(reply, &QNetworkReply::downloadProgress, this, [=](qint64 bytesReceived, qint64 bytesTotal) {
+    connect(reply, &QNetworkReply::downloadProgress, [=, this](qint64 bytesReceived, qint64 bytesTotal) {
         qDebug() << "Downloaded" << bytesReceived << "of" << bytesTotal << "bytes";
         emit downloadProgress(bytesReceived, bytesTotal);
     });
 
-    connect(reply, &QNetworkReply::finished, this, [=]() {
+    connect(reply, &QNetworkReply::finished, [=, this]() {
 
         currentlyDownloading.erase(
             std::remove(currentlyDownloading.begin(), currentlyDownloading.end(), reply),
