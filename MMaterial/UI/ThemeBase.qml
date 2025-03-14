@@ -19,7 +19,7 @@ QtObject{
 	required property UI.PaletteOther other
 
 	required property UI.PaletteGrey main
-	required property UI.PaletteSocial social
+	// required property UI.PaletteSocial social
 
 	property UI.PaletteCommon common: UI.PaletteCommon{}
 

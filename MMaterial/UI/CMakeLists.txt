@@ -4,12 +4,12 @@ list(APPEND QML_UI_SINGLETONS
     DarkTheme.qml
     LightTheme.qml
     ThemeList.qml
-    BasicRed.qml
-    BasicGreen.qml
+    # BasicRed.qml
+    # BasicGreen.qml
     BasicPurple.qml
-    BasicBlue.qml
-    BasicOrange.qml
-    BasicLightBlue.qml
+    # BasicBlue.qml
+    # BasicOrange.qml
+    # BasicLightBlue.qml
     Size.qml
 )
 
@@ -27,7 +27,7 @@ list(APPEND UI_QML_FILES
     PaletteText.qml
     PaletteBasic.qml
     PaletteGrey.qml
-    PaletteSocial.qml
+    # PaletteSocial.qml
     PaletteOther.qml
     PaletteAction.qml
     ThemeBase.qml

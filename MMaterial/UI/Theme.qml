@@ -42,7 +42,7 @@ UI.ThemeBase{
     warning: currentTheme?.warning ?? null
     error: currentTheme?.error ?? null
     main: currentTheme?.main ?? null
-    social: currentTheme?.social ?? null
+    // social: currentTheme?.social ?? null
     background: currentTheme?.background ?? null
     other: currentTheme?.other ?? null
     text: currentTheme?.text ?? null

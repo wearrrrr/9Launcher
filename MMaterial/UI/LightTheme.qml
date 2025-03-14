@@ -44,12 +44,12 @@ UI.ThemeBase{
         contrastText: "#FFFFFF"
     }
 
-	social: UI.PaletteSocial{
-        facebook: "#1877F2"
-        twitter: "#00AAEC"
-        instagram: "#E02D69"
-        linkedin: "#007EBB"
-    }
+	// social: UI.PaletteSocial{
+    //     facebook: "#1877F2"
+    //     twitter: "#00AAEC"
+    //     instagram: "#E02D69"
+    //     linkedin: "#007EBB"
+    // }
 
 	text: UI.PaletteText{
         primary: "#212B36"

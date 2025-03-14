@@ -7,8 +7,8 @@ UI.ThemeBase{
 
     objectName: "Dark UI.Theme"
 
-	primary: UI.BasicGreen
-	secondary: UI.BasicBlue
+	primary: UI.BasicPurple
+	secondary: UI.BasicPurple
 
 	info: UI.PaletteBasic{
         darker: "#CAFDF5"
@@ -46,12 +46,12 @@ UI.ThemeBase{
         contrastText: "#FFFFFF"
     }
 
-	social: UI.PaletteSocial{
-        facebook: "#1877F2"
-        twitter: "#00AAEC"
-        instagram: "#E02D69"
-        linkedin: "#007EBB"
-    }
+	// social: UI.PaletteSocial{
+    //     facebook: "#1877F2"
+    //     twitter: "#00AAEC"
+    //     instagram: "#E02D69"
+    //     linkedin: "#007EBB"
+    // }
 
 	text: UI.PaletteText{
         primary: "#FFFFFF"

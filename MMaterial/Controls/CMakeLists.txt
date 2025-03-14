@@ -3,7 +3,6 @@ list(APPEND CONTROLS_QML_FILES
     MToggleButton.qml
     MFabButton.qml
     MCheckbox.qml
-    CheckedGroup.qml
     Checkable.qml
     MRadioButton.qml
     MSwitch.qml
@@ -17,7 +16,7 @@ list(APPEND CONTROLS_QML_FILES
     Avatar.qml
     MProgressBar.qml
     MCircularProgressBar.qml
-    BusyIndicator.qml
+    # BusyIndicator.qml
     MScrollIndicator.qml
     MToolTip.qml
     MLoader.qml
@@ -31,9 +30,6 @@ list(APPEND CONTROLS_QML_FILES
     Menu.qml
     MenuItem.qml
     MenuSeparator.qml
-    ListItem.qml
-    ListItemContact.qml
-    AbstractListItem.qml
 )
 
 qt_add_qml_module(ControlsLib
@@ -42,12 +38,12 @@ qt_add_qml_module(ControlsLib
     STATIC
 
     IMPORTS
-        MMaterial.Controls.Inputs
+        # MMaterial.Controls.Inputs
 
     OPTIONAL_IMPORTS
         MMaterial.Controls.Dialogs
-        MMaterial.Controls.Pagination
-        MMaterial.Controls.Sidebar
+        # MMaterial.Controls.Pagination
+        # MMaterial.Controls.Sidebar
 
     QML_FILES ${CONTROLS_QML_FILES}
     SOURCES
@@ -64,6 +60,6 @@ target_include_directories(ControlsLib PUBLIC
 )
 
 add_subdirectory(Dialogs)
-add_subdirectory(Inputs)
+# add_subdirectory(Inputs)
 add_subdirectory(Pagination)
 add_subdirectory(Sidebar)

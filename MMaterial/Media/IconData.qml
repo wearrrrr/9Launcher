@@ -1,7 +1,7 @@
 import QtQuick
 
 QtObject {
-    enum RenderType { Heavy, Light }
+    enum RenderType { Light }
 
     property string path
     property int type

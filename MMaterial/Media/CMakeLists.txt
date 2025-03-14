@@ -21,7 +21,6 @@ qt_add_qml_module(MediaLib
         Icon.qml
         LightIcon.qml
         IconData.qml
-        HeavyIcon.qml
         IconBase.qml
         IconSet.qml
 

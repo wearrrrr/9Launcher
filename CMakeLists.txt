@@ -13,7 +13,7 @@ qt_add_executable(NineLauncher
     src/main.cpp
 )
 
-file(GLOB ICONS RELATIVE ${CMAKE_SOURCE_DIR} "${CMAKE_SOURCE_DIR}/game-images/*.webp")
+file(GLOB GAME_IMAGES RELATIVE ${CMAKE_SOURCE_DIR} "${CMAKE_SOURCE_DIR}/game-images/*.webp")
 
 qt_add_qml_module(NineLauncher
     URI nineLauncher
@@ -34,7 +34,7 @@ qt_add_qml_module(NineLauncher
 
         RESOURCES
             src/json/games.json
-            ${ICONS}
+            ${GAME_IMAGES}
 
         SOURCES
             src/cpp/include/AppSettings.h
@@ -63,7 +63,7 @@ target_include_directories(NineLauncher
     PRIVATE src/cpp/include/
 )
 
-target_compile_options(NineLauncher PRIVATE -Oz)
+target_compile_options(NineLauncher PRIVATE -O3)
 
 add_subdirectory(MMaterial)
 
