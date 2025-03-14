@@ -59,3 +59,4 @@ function handleGameLaunch(item, installedJSON) {
 
     return true;
 }
+

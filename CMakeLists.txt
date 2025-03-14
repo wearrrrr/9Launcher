@@ -67,8 +67,6 @@ target_compile_options(NineLauncher PRIVATE -Oz)
 
 add_subdirectory(MMaterial)
 
-set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-
 set(DiscordRPC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/externals/discord-rpc)
 
 add_subdirectory(${DiscordRPC_DIR})

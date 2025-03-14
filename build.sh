@@ -3,4 +3,8 @@ mkdir -p build
 cmake -B build -S . -Wno-dev
 cd build
 make -j12
-strip NineLauncher
+
+if ([ -f NineLauncher ]); then
+    strip NineLauncher
+fi
+

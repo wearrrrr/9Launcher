@@ -30,7 +30,7 @@ Rectangle {
 
     FooterPanel {
         id: settingsMenu
-        width: 300
+        width: 330
         height: 250
         alignTo: "left"
         enabled: false
@@ -69,25 +69,28 @@ Rectangle {
                     update: "launchInfo"
                 }
 
-                MButton {
-                    text: qsTr("Binary Manager")
-                    Layout.preferredWidth: 150
-                    accent: Theme.primary
-                    onClicked: {
-                        Footer.openBinaryManager();
+                RowLayout {
+                    spacing: 10
+                    MButton {
+                        text: qsTr("Reset Settings")
+                        Layout.preferredWidth: 150
+                        accent: Theme.error
+                        onClicked: {
+                            if (AppSettings.value("warnings")) {
+                                // Prompt the user to confirm the reset
+                                dialog.open();
+                            } else {
+                                Footer.resetSettings();
+                            }
+                        }
                     }
-                }
 
-                MButton {
-                    text: qsTr("Reset Settings")
-                    Layout.preferredWidth: 150
-                    accent: Theme.error
-                    onClicked: {
-                        if (AppSettings.value("warnings")) {
-                            // Prompt the user to confirm the reset
-                            dialog.open();
-                        } else {
-                            Footer.resetSettings();
+                    MButton {
+                        text: qsTr("Binary Manager")
+                        Layout.preferredWidth: 150
+                        accent: Theme.primary
+                        onClicked: {
+                            Footer.openBinaryManager();
                         }
                     }
                 }

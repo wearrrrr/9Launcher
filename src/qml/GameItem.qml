@@ -1,6 +1,5 @@
-pragma ComponentBehavior: Bound
+pragma ComponentBehavior: Bound 
 
-import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls.Material
 import QtCore
@@ -9,17 +8,18 @@ import FileIO 1.0
 import GameLauncher 1.0
 import "main.js" as Core
 
-
 Button {
     property var item: {}
     property bool isPC98: false
     property bool isInstalled: false
     id: button
 
-    onClicked: isInstalled ? (function () {
+    function launchGame(item) {
         const installedJSON = JSON.parse(fileIO.read(StandardPaths.writableLocation(StandardPaths.AppDataLocation) + "/installed.json"));
         Core.handleGameLaunch(item, installedJSON);
-    }()) : gameDialog.open();
+    }
+
+    onClicked: isInstalled ? launchGame(item) : gameDialog.open();
 
     FileIO {
         id: fileIO
