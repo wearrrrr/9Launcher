@@ -155,11 +155,12 @@ Rectangle {
                     accent: Theme.info
                     onClicked: {
                         Footer.copyInfo([info, version, os, qtver, arch], copyInfo);
-                        let details = {
-                            severity: Alert.Severity.Success,
-                            variant: Alert.Variant.Standard,
-                        }
-                        Controls.AlertController.alert("Info copied to clipboard!", details, 3500);
+                        console.log("Info copied to clipboard!");
+                        // let details = {
+                        //     severity: Alert.Severity.Success,
+                        //     variant: Alert.Variant.Standard,
+                        // }
+                        // Controls.AlertController.alert("Info copied to clipboard!", details, 3500);
                     }
                 }
             }
