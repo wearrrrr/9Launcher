@@ -41,6 +41,7 @@ qt_add_qml_module(NineLauncher
             src/cpp/include/AppSettings.h
             src/cpp/include/Clipboard.h
             src/cpp/include/Downloader.h
+            src/cpp/include/Extractor.h
             src/cpp/include/FileIO.h
             src/cpp/include/GameLauncher.h
             src/cpp/include/RPC.h
@@ -48,6 +49,7 @@ qt_add_qml_module(NineLauncher
 
             src/cpp/Clipboard.cpp
             src/cpp/Downloader.cpp
+            src/cpp/Extractor.cpp
             src/cpp/FileIO.cpp
             src/cpp/GameLauncher.cpp
             src/cpp/RPC.cpp

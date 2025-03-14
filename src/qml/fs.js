@@ -17,3 +17,13 @@ function read(path) {
         return null;
     }
 }
+
+function loadJSON(path) {
+    let response = read(path);
+    if (response && response.status === 200) {
+        let games = JSON.parse(response.content);
+        return games;
+    } else {
+        return null;
+    }
+}

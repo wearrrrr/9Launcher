@@ -2,9 +2,9 @@ import QtQuick
 import QtQuick.Controls.Material
 import QtCore
 import QtQuick.Layouts
+
 import MMaterial
 import Downloader 1.0
-
 import "BinaryManager.js" as BinaryManager
 
 Window {
@@ -16,6 +16,8 @@ Window {
     maximumWidth: width
     maximumHeight: height
 
+    property string appData: StandardPaths.writableLocation(StandardPaths.AppDataLocation)
+
     onClosing: {
         downloader.CancelDownloads()
     }
@@ -24,6 +26,9 @@ Window {
         id: downloader
         onDownloadFinished: {
             console.log("Download finished!")
+            statusOutput.color = "#70fa6b"
+            statusOutput.text = "Download finished!"
+
         }
         onDownloadProgress: function (bytesReceived, bytesTotal) {
             var progress = Math.round((bytesReceived / bytesTotal) * 100);
@@ -32,7 +37,8 @@ Window {
         onDownloadFailed: function (errorString) {
             console.log("Download error! " + errorString)
             progressBar.value = 0;
-            // TODO: Show error message
+            statusOutput.color = "#ff4040"
+            statusOutput.text = errorString
         }
     }
 
@@ -156,19 +162,36 @@ Window {
                 console.log("Install")
             }
         }
+
         MButton {
-            text: qsTr("Proton GE 9.21")
+            text: qsTr("Proton GE 9.26")
             Layout.preferredWidth: 150
-            onClicked: {
-                BinaryManager.downloadProton("9-21", StandardPaths.writableLocation(StandardPaths.AppDataLocation) + "/proton/9-21.tar.gz", downloader)
-            }
+            onClicked: BinaryManager.downloadProton("9-26", appData + "/proton/9-26.tar.gz", downloader)
         }
         MButton {
             text: qsTr("Proton GE 8.32")
             Layout.preferredWidth: 150
-            onClicked: {
-                console.log("Install")
-            }
+            onClicked: BinaryManager.downloadProton("8-32", appData + "/proton/8-32.tar.gz", downloader)
         }
     }
+
+    Rectangle {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.topMargin: 275
+
+        width: parent.width - 50
+
+        Text {
+            id: statusOutput
+            text: ""
+            color: "#ff4040"
+            font.pixelSize: 16
+            width: parent.width
+
+            wrapMode: Text.WordWrap
+        }
+    }
+
+
 }

@@ -1,7 +1,7 @@
 .import "fs.js" as File
 
 function populateGamesList() {
-    const games = loadGamesJSON("../json/games.json");
+    const games = File.loadJSON("../json/games.json");
     if (games == null) {
         throw new Error("games.json failed to load!");
     }
@@ -34,15 +34,7 @@ function createGameItem(name, value, layout) {
     }
 }
 
-function loadGamesJSON(path) {
-    let response = File.read(path);
-    if (response && response.status === 200) {
-        let games = JSON.parse(response.content);
-        return games;
-    } else {
-        return null;
-    }
-}
+
 
 function handleGameLaunch(item, installedJSON) {
     const gameItem = installedJSON.installed.filter(game => game.game_id === item.game_id)[0];
