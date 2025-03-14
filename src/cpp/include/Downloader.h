@@ -1,7 +1,5 @@
-#ifndef DOWNLOADER_H
-#define DOWNLOADER_H
+#pragma once
 
-#include <QObject>
 #include <QtNetwork>
 #include <vector>
 
@@ -23,5 +21,3 @@ signals:
     void downloadFinished();
     void downloadFailed(const QString &errorString);
 };
-
-#endif // DOWNLOADER_H

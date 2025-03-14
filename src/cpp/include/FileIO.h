@@ -1,5 +1,4 @@
-#ifndef FILEIO_H
-#define FILEIO_H
+#pragma once
 
 #include <QObject>
 #include <QString>
@@ -15,5 +14,3 @@ public:
 
     Q_INVOKABLE bool exists(const QString &filePath);
 };
-
-#endif // FILEIO_H

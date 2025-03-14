@@ -1,5 +1,4 @@
-#ifndef GAMELAUNCHER_H
-#define GAMELAUNCHER_H
+#pragma once
 
 #include <QObject>
 
@@ -29,5 +28,3 @@ private:
     bool LaunchLinux_PC98(const QString &gamePath);
     bool LaunchWindows(const QString &gamePath, const QString &gameCWD);
 };
-
-#endif // GAMELAUNCHER_H

@@ -27,11 +27,6 @@ function copyInfo(itemsToCopy, copyBtn) {
         text += itemsToCopy[i].text + "\n";
     }
     clipboard.set(text);
-    
-    copyBtn.text = qsTr("Copied!");
-
-    Util.Sleep(500);
-    copyBtn.text = qsTr("Copy Info");
 }
 
 function openBinaryManager() {

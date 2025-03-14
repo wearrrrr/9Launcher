@@ -38,8 +38,8 @@ list(APPEND UI_QML_FILES
     H4.qml
     H5.qml
     H6.qml
-    Subtitle1.qml
-    Subtitle2.qml
+    # Subtitle1.qml
+    # Subtitle2.qml
     B1.qml
     B2.qml
     # Caption.qml

@@ -63,7 +63,7 @@ target_include_directories(NineLauncher
     PRIVATE src/cpp/include/
 )
 
-target_compile_options(NineLauncher PRIVATE -O3)
+target_compile_options(NineLauncher PRIVATE -Oz)
 
 add_subdirectory(MMaterial)
 

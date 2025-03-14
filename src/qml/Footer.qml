@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import QtQuick.Controls.Material
 
 import MMaterial
+import MMaterial.Controls as Controls
 import "footer.js" as Footer
 
 Rectangle {
@@ -158,7 +159,7 @@ Rectangle {
                             severity: Alert.Severity.Success,
                             variant: Alert.Variant.Standard,
                         }
-                        MMaterial.Controls.AlertController.alert(qsTr("Info copied to clipboard!"), details, 3500);
+                        Controls.AlertController.alert("Info copied to clipboard!", details, 3500);
                     }
                 }
             }

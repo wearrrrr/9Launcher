@@ -1,5 +1,4 @@
-#ifndef CLIPBOARD_H
-#define CLIPBOARD_H
+#pragma once
 
 #include <QObject>
 #include <QString>
@@ -14,5 +13,3 @@ public:
 
     Q_INVOKABLE QString get();
 };
-
-#endif // CLIPBOARD_H

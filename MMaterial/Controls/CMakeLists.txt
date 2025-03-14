@@ -10,7 +10,7 @@ list(APPEND CONTROLS_QML_FILES
     # MTabs.qml
     # BadgeNumber.qml
     # BadgeDot.qml
-    Badge.qml
+    # Badge.qml
     Alert.qml
     AlertGenerator.qml
     # Avatar.qml
@@ -61,5 +61,5 @@ target_include_directories(ControlsLib PUBLIC
 
 add_subdirectory(Dialogs)
 # add_subdirectory(Inputs)
-add_subdirectory(Pagination)
-add_subdirectory(Sidebar)
+# add_subdirectory(Pagination)
+# add_subdirectory(Sidebar)

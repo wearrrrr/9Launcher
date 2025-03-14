@@ -9,7 +9,7 @@ import "BinaryManager.js" as BinaryManager
 
 Window {
     color: "#2f2f2f"
-    width:  500
+    width: 500
     height: 600
     minimumWidth: width
     minimumHeight: height
@@ -22,16 +22,13 @@ Window {
 
     Downloader {
         id: downloader
-
         onDownloadFinished: {
             console.log("Download finished!")
         }
-        
         onDownloadProgress: function (bytesReceived, bytesTotal) {
             var progress = Math.round((bytesReceived / bytesTotal) * 100);
             progressBar.value = progress;
         }
-
         onDownloadFailed: function (errorString) {
             console.log("Download error! " + errorString)
             progressBar.value = 0;

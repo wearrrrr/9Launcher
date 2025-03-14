@@ -5,8 +5,7 @@ import FileIO 1.0
 import "main.js" as Core
 
 import MMaterial as MMaterial
-import MMaterial.Controls as Controls
-import MMaterial.Controls.Dialogs as Dialogs
+import MMaterial.Controls.Dialogs
 import "footer.js" as Footer
 
 
@@ -77,14 +76,14 @@ Window {
         }
     }
 
-    Dialogs.Dialog {
+    Dialog {
         id: dialog
         modal: true
         title: qsTr("Reset Settings")
         width: parent.width / 2
         anchors.centerIn: parent
 
-        closePolicy: Dialogs.Dialog.NoAutoClose
+        closePolicy: Dialog.NoAutoClose
         iconData: MMaterial.Icons.light.warning
 
         contentItem: ColumnLayout {
@@ -94,14 +93,14 @@ Window {
             }
         }
 
-        Dialogs.Dialog.DialogCloseButton {
+        Dialog.DialogCloseButton {
             Layout.preferredWidth: parent.width / 2 - 10
             text: qsTr("Close")
             onClicked: dialog.close()
 
         }
 
-        Dialogs.Dialog.DialogButton {
+        Dialog.DialogButton {
             Layout.preferredWidth: parent.width / 2 - 10
             text: qsTr("Reset")
             onClicked: {
@@ -111,34 +110,33 @@ Window {
         }
     }
 
-    Dialogs.Dialog {
+    Dialog {
         id: pc98Dialog
         modal: true
         title: qsTr("PC-98 Emulator Not Found!")
         width: parent.width - 100
         anchors.centerIn: parent
 
-        closePolicy: Dialogs.Dialog.NoAutoClose
+        closePolicy: Dialog.NoAutoClose
         iconData: MMaterial.Icons.light.warning
 
         contentItem: ColumnLayout {
             Label {
-                text: qsTr("The PC-98 emulator was not found.\nPlease make sure it is installed and the path is set in the binary manager.")
+                text: qsTr("No valid PC-98 emulator was not found!\nPlease make sure it is installed and the path is set in the binary manager.")
                 color: "white"
             }
         }
 
-        Dialogs.Dialog.DialogCloseButton {
+        Dialog.DialogCloseButton {
             Layout.preferredWidth: parent.width / 2 - 10
             text: qsTr("Close")
             accent: MMaterial.Theme.error
             onClicked: {
                 pc98Dialog.close()
             }
-
         }
 
-        Dialogs.Dialog.DialogButton {
+        Dialog.DialogButton {
             Layout.preferredWidth: parent.width / 2 - 10
             text: qsTr("Open Binary Manager")
             onClicked: {
@@ -150,13 +148,10 @@ Window {
     MouseArea {
         hoverEnabled: true
         propagateComposedEvents: true
-        preventStealing: false
         anchors.fill: parent
         enabled: footer.settingsMenu.enabled || footer.infoMenu.enabled
         visible: footer.settingsMenu.enabled || footer.infoMenu.enabled
-        onClicked: {
-            footer.hideMenus()
-        }
+        onClicked: footer.hideMenus()
     }
 
     Footer { id: footer }
