@@ -15,9 +15,9 @@ list(APPEND QML_UI_SINGLETONS
 
 list(APPEND FONT_ASSETS
     Families/PublicSans/PublicSans-SemiBold.ttf
-    Families/PublicSans/PublicSans-Medium.ttf
+    # Families/PublicSans/PublicSans-Medium.ttf
     Families/PublicSans/PublicSans-Regular.ttf
-    Families/PublicSans/PublicSans-Light.ttf
+    # Families/PublicSans/PublicSans-Light.ttf
 )
 
 list(APPEND UI_QML_FILES
@@ -42,8 +42,8 @@ list(APPEND UI_QML_FILES
     Subtitle2.qml
     B1.qml
     B2.qml
-    Caption.qml
-    Overline.qml
+    # Caption.qml
+    # Overline.qml
     BaseText.qml
     EasedAnimation.qml
     ElasticAnimation.qml

@@ -1,35 +1,35 @@
 list(APPEND CONTROLS_QML_FILES
     MButton.qml
-    MToggleButton.qml
-    MFabButton.qml
+    # MToggleButton.qml
+    # MFabButton.qml
     MCheckbox.qml
     Checkable.qml
-    MRadioButton.qml
+    # MRadioButton.qml
     MSwitch.qml
-    MTabButton.qml
-    MTabs.qml
-    BadgeNumber.qml
-    BadgeDot.qml
+    # MTabButton.qml
+    # MTabs.qml
+    # BadgeNumber.qml
+    # BadgeDot.qml
     Badge.qml
     Alert.qml
     AlertGenerator.qml
-    Avatar.qml
+    # Avatar.qml
     MProgressBar.qml
-    MCircularProgressBar.qml
+    # MCircularProgressBar.qml
     # BusyIndicator.qml
-    MScrollIndicator.qml
+    # MScrollIndicator.qml
     MToolTip.qml
-    MLoader.qml
-    MSlider.qml
-    MRectangle.qml
-    MBorder.qml
-    CornerRadii.qml
-    MaskedImage.qml
-    Popup.qml
-    ScrollBar.qml
-    Menu.qml
-    MenuItem.qml
-    MenuSeparator.qml
+    # MLoader.qml
+    # MSlider.qml
+    # MRectangle.qml
+    # MBorder.qml
+    # CornerRadii.qml
+    # MaskedImage.qml
+    # Popup.qml
+    # ScrollBar.qml
+    # Menu.qml
+    # MenuItem.qml
+    # MenuSeparator.qml
 )
 
 qt_add_qml_module(ControlsLib

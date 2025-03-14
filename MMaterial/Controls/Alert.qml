@@ -102,7 +102,7 @@ Rectangle {
             iconData: _root.icon
         }
 
-		UI.B2 {
+		UI.H2 {
             id: _text
 
             Layout.fillWidth: true
