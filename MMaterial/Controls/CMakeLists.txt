@@ -11,8 +11,8 @@ list(APPEND CONTROLS_QML_FILES
     # BadgeNumber.qml
     # BadgeDot.qml
     # Badge.qml
-    Alert.qml
-    AlertGenerator.qml
+    # Alert.qml
+    # AlertGenerator.qml
     # Avatar.qml
     MProgressBar.qml
     # MCircularProgressBar.qml
@@ -46,8 +46,8 @@ qt_add_qml_module(ControlsLib
         # MMaterial.Controls.Sidebar
 
     QML_FILES ${CONTROLS_QML_FILES}
-    SOURCES
-        src/AlertController.h src/AlertController.cpp
+    # SOURCES
+    #     src/AlertController.h src/AlertController.cpp
 )
 
 set_target_properties(ControlsLib PROPERTIES AUTOMOC ON)
