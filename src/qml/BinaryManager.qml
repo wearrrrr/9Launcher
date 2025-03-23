@@ -17,6 +17,7 @@ Window {
     maximumHeight: height
 
     property string appData: StandardPaths.writableLocation(StandardPaths.AppDataLocation)
+    property string wineVerToSave: ""
 
     onClosing: {
         downloader.CancelDownloads()
@@ -28,7 +29,7 @@ Window {
             console.log("Download finished!")
             statusOutput.color = "#70fa6b"
             statusOutput.text = "Download finished!"
-
+            AppSettings.setValue("wine", wineVerToSave)
         }
         onDownloadProgress: function (bytesReceived, bytesTotal) {
             var progress = Math.round((bytesReceived / bytesTotal) * 100);
@@ -159,19 +160,25 @@ Window {
             text: qsTr("Use System Wine")
             Layout.preferredWidth: 150
             onClicked: {
-                console.log("Install")
+                AppSettings.setValue("wine", "system")
             }
         }
 
         MButton {
             text: qsTr("Proton GE 9.26")
             Layout.preferredWidth: 150
-            onClicked: BinaryManager.downloadProton("9-26", appData + "/proton/9-26.tar.gz", downloader)
+            onClicked: {
+                BinaryManager.downloadProton("9-26", appData + "/proton/9-26.tar.gz", downloader)
+                wineVerToSave = "9-26"
+            }
         }
         MButton {
             text: qsTr("Proton GE 8.32")
             Layout.preferredWidth: 150
-            onClicked: BinaryManager.downloadProton("8-32", appData + "/proton/8-32.tar.gz", downloader)
+            onClicked: {
+                wineVerToSave = "8-32"
+                BinaryManager.downloadProton("8-32", appData + "/proton/8-32.tar.gz", downloader)
+            }
         }
     }
 
