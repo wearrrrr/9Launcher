@@ -24,6 +24,7 @@ public:
     GameInfo GetCurrentGameInfo();
 
 private:
+    const QString GetWinePathFromSettings();
     bool LaunchLinux(const QString &gamePath, const QString &gameCWD);
     bool LaunchLinux_PC98(const QString &gamePath);
     bool LaunchWindows(const QString &gamePath, const QString &gameCWD);

@@ -7,10 +7,14 @@
 
 #include "RPC.h"
 #include "GameLauncher.h"
+#include "AppSettings.h"
+
+static AppSettings settings("wearr", "NineLauncher");
 
 static bool launched = false;
 
 static GameInfo currentGameInfo;
+
 
 GameLauncher::GameLauncher(QObject *parent) : QObject(parent) {}
 
@@ -127,11 +131,23 @@ bool GameLauncher::LaunchWindows(const QString &gamePath, const QString &gameCWD
     return true;
 };
 
+const QString GameLauncher::GetWinePathFromSettings() {
+    QString option = settings.value("wine").toString();
+    if (option == "system") {
+        return "wine";
+    }
+    /* 
+        TODO!!: Make this actually get the path where the proton download is stored. This will be something like
+        /home/<USER>/.local/share/wearr/NineLauncher/proton/GE-Proton-<VERSION_FROM_SETTINGS>/files/bin/wine
+    */
+    return "wine";
+}
+
 bool GameLauncher::LaunchLinux(const QString &gamePath, const QString &gameCWD) {
     qInfo() << "Launching Game...";
 
     QProcess process;
-    process.setProgram("wine");
+    process.setProgram(GetWinePathFromSettings());
     process.setArguments({gamePath});
     process.setWorkingDirectory(gameCWD);
 
