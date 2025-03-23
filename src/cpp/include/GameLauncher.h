@@ -2,7 +2,7 @@
 
 #include <QObject>
 
-struct gameInfo {
+struct GameInfo {
     QString gamePath;
     QString gameCWD;
     QString gameName;
@@ -21,7 +21,7 @@ public:
 
     bool CheckGameRunning();
 
-    gameInfo GetCurrentGameInfo();
+    GameInfo GetCurrentGameInfo();
 
 private:
     bool LaunchLinux(const QString &gamePath, const QString &gameCWD);

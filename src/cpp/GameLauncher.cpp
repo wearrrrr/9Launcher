@@ -10,7 +10,7 @@
 
 static bool launched = false;
 
-static gameInfo currentGameInfo;
+static GameInfo currentGameInfo;
 
 GameLauncher::GameLauncher(QObject *parent) : QObject(parent) {}
 
@@ -60,7 +60,7 @@ bool GameLauncher::LaunchPC98Thread(const QString &gamePath, const QString &game
     return false;
 }
 
-gameInfo GameLauncher::GetCurrentGameInfo()
+GameInfo GameLauncher::GetCurrentGameInfo()
 {
     return currentGameInfo;
 }

@@ -59,7 +59,7 @@ void RPC::initDiscord() {
     // Check if a game is currently running and set the RPC accordingly
     GameLauncher gameLauncher = GameLauncher();
     if (gameLauncher.CheckGameRunning()) {
-        gameInfo currentGameInfo = gameLauncher.GetCurrentGameInfo();
+        GameInfo currentGameInfo = gameLauncher.GetCurrentGameInfo();
         updateDiscordPresence("Playing " + currentGameInfo.gameName.toStdString(), currentGameInfo.gameIcon.toStdString(), currentGameInfo.gameName.toStdString());
     } else {
         updateDiscordPresence("In the main menu");
