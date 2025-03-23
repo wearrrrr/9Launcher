@@ -5,6 +5,7 @@ import QtQuick.Layouts
 
 import MMaterial
 import Downloader 1.0
+import FileIO 1.0
 import "BinaryManager.js" as BinaryManager
 
 Window {
@@ -21,6 +22,10 @@ Window {
 
     onClosing: {
         downloader.CancelDownloads()
+    }
+
+    FileIO {
+        id: fileIO;   
     }
 
     Downloader {
@@ -165,21 +170,31 @@ Window {
         }
 
         MButton {
-            text: qsTr("Proton GE 9.26")
+            text: qsTr("Proton GE 7.55")
             Layout.preferredWidth: 150
             onClicked: {
-                BinaryManager.downloadProton("9-26", appData + "/proton/9-26.tar.gz", downloader)
-                wineVerToSave = "9-26"
+                wineVerToSave = "7-55"
+                const dl = BinaryManager.downloadProton("7-55", appData, "/proton/7-55.tar.gz", downloader, fileIO)
+                if (!dl) {
+                    statusOutput.color = "#e3e3e3"
+                    statusOutput.text = "Proton version already downloaded! Setting to default game launcher.."
+                    AppSettings.setValue("wine", wineVerToSave)
+                }
             }
         }
-        MButton {
-            text: qsTr("Proton GE 8.32")
-            Layout.preferredWidth: 150
-            onClicked: {
-                wineVerToSave = "8-32"
-                BinaryManager.downloadProton("8-32", appData + "/proton/8-32.tar.gz", downloader)
-            }
-        }
+        // MButton {
+        //     text: qsTr("Proton GE 8.32")
+        //     Layout.preferredWidth: 150
+        //     onClicked: {
+        //         wineVerToSave = "8-32"
+        //         const dl = BinaryManager.downloadProton("8-32", appData, "/proton/8-32.tar.gz", downloader, fileIO)
+        //         if (!dl) {
+        //             statusOutput.color = "#e3e3e3"
+        //             statusOutput.text = "Proton version already downloaded! Setting to default game launcher.."
+        //             AppSettings.setValue("wine", wineVerToSave)
+        //         }
+        //     }
+        // }
     }
 
     Rectangle {

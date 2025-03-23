@@ -3,7 +3,10 @@
 #include <QString>
 #include <QThread>
 #include <QProcess>
+#include <QStandardPaths>
+#ifdef Q_OS_LINUX
 #include <unistd.h>
+#endif
 
 #include "RPC.h"
 #include "GameLauncher.h"
@@ -133,21 +136,20 @@ bool GameLauncher::LaunchWindows(const QString &gamePath, const QString &gameCWD
 
 const QString GameLauncher::GetWinePathFromSettings() {
     QString option = settings.value("wine").toString();
-    if (option == "system") {
+    if (option == "system" || option == "") {
         return "wine";
     }
-    /* 
-        TODO!!: Make this actually get the path where the proton download is stored. This will be something like
-        /home/<USER>/.local/share/wearr/NineLauncher/proton/GE-Proton-<VERSION_FROM_SETTINGS>/files/bin/wine
-    */
-    return "wine";
+    QString appData = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    return appData + "/proton/GE-Proton" + option + "/files/bin/wine";
 }
 
 bool GameLauncher::LaunchLinux(const QString &gamePath, const QString &gameCWD) {
     qInfo() << "Launching Game...";
 
     QProcess process;
-    process.setProgram(GetWinePathFromSettings());
+    QString winePath = GetWinePathFromSettings();
+    printf("%s\n", winePath.toStdString().c_str());
+    process.setProgram(winePath);
     process.setArguments({gamePath});
     process.setWorkingDirectory(gameCWD);
 
