@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 project(nineLauncher VERSION 0.1 LANGUAGES CXX)
 
+# set(Qt6_DIR "/home/wearr/Qt-ubuntu/6.8.2/gcc_64/lib/cmake/Qt6/")
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -70,6 +72,7 @@ target_compile_options(NineLauncher PRIVATE -Oz)
 
 add_subdirectory(MMaterial)
 
+
 set(DiscordRPC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/externals/discord-rpc)
 
 add_subdirectory(${DiscordRPC_DIR})
@@ -78,8 +81,9 @@ target_include_directories(NineLauncher
     PRIVATE ${DiscordRPC_DIR}/include
 )
 
+set_target_properties(MMaterialLib PROPERTIES AUTOMOC ON)
 target_link_libraries(NineLauncher
-    PRIVATE Qt6::Quick Qt::Gui MMaterialLib discord-rpc
+    PRIVATE Qt6::Quick Qt::Gui discord-rpc
 )
 
 set_target_properties(NineLauncher PROPERTIES
@@ -89,5 +93,5 @@ set_target_properties(NineLauncher PROPERTIES
 install(TARGETS NineLauncher
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )

@@ -77,7 +77,7 @@ Q_INVOKABLE bool GameLauncher::launchGame(const QString &gamePath, const QString
 
     // Run LaunchThread in a separate thread
     QThread *thread = new QThread;
-    connect(thread, &QThread::started, [=]() {
+    connect(thread, &QThread::started, [=, this]() {
         if (CheckGameRunning())
         {
             qCritical() << "[9L] Game is already running!";
