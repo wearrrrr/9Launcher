@@ -37,6 +37,8 @@ jobs:
       - name: Install dependencies (from package manager)
         run: |
              sudo apt-get install libgl-dev libxkbcommon-x11-dev libx11-xcb-dev libzstd-dev -y;
+             sudo apt-get install libxcb1 libxkbcommon0 libxkbcommon-x11-0 libx11-xcb1 -y
+             sudo apt-get install libwayland-client0 libwayland-cursor0 libwayland-egl1 libwayland-server0 -y
              sudo apt-get install cmake ninja-build pkgconf libtool -y;
              sudo apt-get install libfuse2 appstream -y;
 
