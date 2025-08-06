@@ -147,7 +147,7 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: ${{env.QT_VERSION}}
-          arch: 'win64_msvc2019_64'
+          arch: 'win64_msvc2022_64'
 
       # Build application
       - name: Build application
