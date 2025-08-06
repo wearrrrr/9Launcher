@@ -59,7 +59,7 @@ if [[ $create_package = true ]] ; then
     # cleanup undeployable Qt plugins (present, but missing their own dependencies)
     # only if we are on a GitHub Action server, because this remove the plugins from the Qt directory
     echo '---- Remove undeployable Qt plugins'
-    rm $QT_ROOT_DIR/plugins/position/qtposition_nmea.dll
+    rm $QT_ROOT_DIR\\plugins\\position\\qtposition_nmea.dll
   fi
 fi
 
