@@ -1,2 +1,0 @@
-json_key_file("fastlane/gplay_serviceaccountkey.json")
-package_name("io.emeric.qmlapptemplate")

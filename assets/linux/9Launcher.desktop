@@ -2,6 +2,6 @@
 Type=Application
 Name=9Launcher
 Comment=Universal Launcher for Touhou Games written in QT
-Exec=9Launcher.sh
+Exec=9Launcher
 Icon=9Launcher
 Categories=Utility;
