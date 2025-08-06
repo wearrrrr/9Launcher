@@ -17,8 +17,6 @@ find_package(Threads REQUIRED)
 
 if (LINUX)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Oz")
-elseif (WIN32)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /O3")
 endif()
 
 find_package(Qt6 REQUIRED COMPONENTS Quick)
@@ -99,10 +97,10 @@ target_link_libraries(NineLauncher
 
 set_target_properties(NineLauncher PROPERTIES
     WIN32_EXECUTABLE TRUE
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin"
 )
 
 install(TARGETS NineLauncher
-    BUNDLE DESTINATION .
+    BUNDLE DESTINATION "${CMAKE_SOURCE_DIR}/bin"
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )

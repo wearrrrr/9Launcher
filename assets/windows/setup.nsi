@@ -5,10 +5,10 @@ Unicode True
 !include "FileFunc.nsh"
 !include "LogicLib.nsh"
 
-!define APPNAME                      "QmlAppTemplate"
-!define EXECNAME                     "QmlAppTemplate"
-!define COMPANYNAME                  "Emeric Grange"
-!define DESCRIPTION                  "A Qt6 / QML application template"
+!define APPNAME                      "9Launcher"
+!define EXECNAME                     "9Launcher"
+!define COMPANYNAME                  "wearr"
+!define DESCRIPTION                  "A Qt6 Launcher for Touhou Project Games"
 !define VERSIONMAJOR                 0
 !define VERSIONMINOR                 8
 !define VERSIONBUILD                 0
