@@ -45,7 +45,7 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: ${{env.QT_VERSION}}
-          modules: 'qtshadertools'
+          modules: 'qtshadertools qtimageformats'
 
       # Build application
       - name: Build application
@@ -57,7 +57,7 @@ jobs:
       # Deploy application
       - name: Deploy application
         run: |
-             ./deploy_linux.sh -c -p
+             ./deploy_linux.sh -i -c -p
 
       # Upload application ZIP
       - name: Upload application ZIP
@@ -149,7 +149,7 @@ jobs:
         with:
           version: ${{env.QT_VERSION}}
           arch: 'win64_msvc2022_64'
-          modules: 'qtshadertools'
+          modules: 'qtshadertools qtimageformats'
 
       # Build application
       - name: Build application
