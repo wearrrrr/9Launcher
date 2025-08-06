@@ -1,38 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2022 Emeric Grange <emeric.grange@gmail.com> -->
-
 <component type="desktop-application">
-  <id>io.emeric.qmlapptemplate</id>
-  <name>QmlAppTemplate</name>
-  <launchable type="desktop-id">QmlAppTemplate.desktop</launchable>
+  <id>dev.wearr.ninelauncher</id>
+  <name>9Launcher</name>
+  <launchable type="desktop-id">9Launcher.desktop</launchable>
 
-  <summary>QML Application Template</summary>
+  <summary>Universal Launcher for Touhou Games written in QT</summary>
   <description>
-    <p>QmlAppTemplate is a Qt6 / QML Application Template</p>
+    <p>Universal Launcher for Touhou Games written in QT</p>
   </description>
 
   <project_license>GPL-3.0+</project_license>
   <metadata_license>CC0-1.0</metadata_license>
   <content_rating type="oars-1.1" />
 
-  <developer id="io.emeric">
-    <name>Emeric Grange</name>
+  <developer id="dev.wearr">
+    <name>wearr</name>
   </developer>
 
-  <url type="homepage">https://emeric.io/QmlAppTemplate</url>
-  <url type="bugtracker">https://github.com/emericg/QmlAppTemplate/issues</url>
-  <url type="translate">https://github.com/emericg/QmlAppTemplate/blob/master/i18n/README.md</url>
-  <url type="donation">https://paypal.me/EmericGrange</url>
+<!--  <url type="homepage">https://emeric.io/QmlAppTemplate</url>-->
+  <url type="bugtracker">https://github.com/wearrrrr/9Launcher/issues</url>
+<!--  <url type="translate">https://github.com/emericg/QmlAppTemplate/blob/master/i18n/README.md</url>
+  <url type="donation">https://paypal.me/EmericGrange</url>-->
 
   <releases>
-    <release version="0.8" date="2024-12-12" />
-    <release version="0.7" date="2024-10-24" />
-    <release version="0.6" date="2023-12-12" />
-    <release version="0.5" date="2023-09-16" />
-    <release version="0.4" date="2022-06-06" />
+    <release version="0.0.1" date="2025-8-6" />
   </releases>
 
-  <screenshots>
+<!--  <screenshots>
     <screenshot type="default">
       <image>https://i.imgur.com/tqCeaEC.png</image>
       <caption>Device screen</caption>
@@ -45,15 +39,14 @@
       <image>https://i.imgur.com/wnG32fh.png</image>
       <caption>GPS screen</caption>
     </screenshot>
-  </screenshots>
+  </screenshots>-->
 
-  <requires>
+<!--  <requires>
     <display_length>360</display_length>
-  </requires>
+  </requires>-->
   <supports>
     <control>keyboard</control>
     <control>pointing</control>
-    <control>touch</control>
   </supports>
 
   <categories>
@@ -63,6 +56,6 @@
   <keywords>
     <keyword>qt</keyword>
     <keyword>qml</keyword>
-    <keyword>template</keyword>
+    <keyword>touhou</keyword>
   </keywords>
 </component>
