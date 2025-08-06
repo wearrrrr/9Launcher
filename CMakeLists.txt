@@ -8,6 +8,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_AUTOMOC ON)
 
+set(CMAKE_THREAD_LIBS_INIT "-lpthread")
+set(CMAKE_HAVE_THREADS_LIBRARY 1)
+set(CMAKE_USE_WIN32_THREADS_INIT 0)
+set(CMAKE_USE_PTHREADS_INIT 1)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Oz")
+
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
 find_package(Qt6 COMPONENTS ShaderTools)
@@ -29,7 +38,7 @@ qt_add_qml_module(NineLauncher
         src/qml/Setting.qml
         src/qml/FooterPanel.qml
         src/qml/BinaryManager.qml
-        
+
         src/qml/main.js
         src/qml/BinaryManager.js
         src/qml/fs.js
@@ -60,15 +69,13 @@ qt_add_qml_module(NineLauncher
 
 qt6_add_shaders(NineLauncher "ninelauncher_shaders"
     PREFIX /
-    FILES 
+    FILES
         src/shaders/grayscale.frag
 )
 
 target_include_directories(NineLauncher
     PRIVATE src/cpp/include/
 )
-
-target_compile_options(NineLauncher PRIVATE -Oz)
 
 add_subdirectory(MMaterial)
 
