@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+
+	<key>CFBundleName</key>
+	<string>QmlAppTemplate</string>
+
+	<key>CFBundleDisplayName</key>
+	<string>QmlAppTemplate</string>
+
+	<key>CFBundleExecutable</key>
+	<string>QmlAppTemplate</string>
+
+	<key>CFBundleIdentifier</key>
+	<string>io.emeric.qmlapptemplate</string>
+
+	<key>CFBundleIconFile</key>
+	<string>QmlAppTemplate.icns</string>
+
+	<key>CFBundleVersion</key>
+	<string>000801</string>
+
+	<key>CFBundleShortVersionString</key>
+	<string>0.8</string>
+
+	<key>LSMinimumSystemVersion</key>
+	<string>11.0</string>
+
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.utilities</string>
+
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright Emeric Grange 2024</string>
+
+	<key>NSHighResolutionCapable</key>
+	<true/>
+
+	<key>NSSupportsAutomaticGraphicsSwitching</key>
+	<true/>
+</dict>
+</plist>

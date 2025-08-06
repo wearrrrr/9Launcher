@@ -1,0 +1,15 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+
+default_platform(:android)
+
+platform :android do
+  desc "Deploy Android App Bundle to the Google Play"
+  lane :deploy do
+    upload_to_play_store(
+      track: 'internal',
+      release_status: 'draft',
+      aab: 'build/android-build/build/outputs/bundle/release/android-build-release.aab'
+    )
+  end
+end

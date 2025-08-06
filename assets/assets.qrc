@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/assets">
+        <file>gfx/logos/logo.svg</file>
+        <file>gfx/logos/github.svg</file>
+        <file>gfx/logos/gitlab.svg</file>
+    </qresource>
+</RCC>

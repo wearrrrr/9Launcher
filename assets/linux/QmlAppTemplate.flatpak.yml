@@ -1,0 +1,130 @@
+app-id: io.emeric.qmlapptemplate
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+command: QmlAppTemplate
+
+rename-desktop-file: QmlAppTemplate.desktop
+rename-appdata-file: QmlAppTemplate.appdata.xml
+rename-icon: QmlAppTemplate
+
+finish-args:
+  # Our UI is GPU accelerated
+  - --device=dri
+  # X11 + XShm access
+  - --share=ipc
+  - --socket=fallback-x11
+  # Wayland access
+  - --socket=wayland
+
+modules:
+  - name: qt-base
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DQT_BUILD_EXAMPLES=OFF
+      - -DQT_BUILD_TESTS=OFF
+    sources:
+      - type: archive
+        url: https://download.qt.io/archive/qt/6.8/6.8.0/submodules/qtbase-everywhere-src-6.8.0.tar.xz
+        sha256: 1bad481710aa27f872de6c9f72651f89a6107f0077003d0ebfcc9fd15cba3c75
+        x-checker-data:
+          type: anitya
+          project-id: 7927
+          stable-only: true
+          url-template: https://download.qt.io/archive/qt/$major.$minor/$version/submodules/qtbase-everywhere-src-$version.tar.xz
+    cleanup:
+      - /bin
+
+  - name: qt-tools
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DQT_BUILD_EXAMPLES=OFF
+      - -DQT_BUILD_TESTS=OFF
+    sources:
+      - type: archive
+        url: https://download.qt.io/archive/qt/6.8/6.8.0/submodules/qttools-everywhere-src-6.8.0.tar.xz
+        sha256: 403115d8268503c6cc6e43310c8ae28eb9e605072a5d04e4a2de8b6af39981f7
+        x-checker-data:
+          type: anitya
+          project-id: 7927
+          stable-only: true
+          url-template: https://download.qt.io/archive/qt/$major.$minor/$version/submodules/qttools-everywhere-src-$version.tar.xz
+
+  - name: qt-shadertools
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DQT_BUILD_EXAMPLES=OFF
+      - -DQT_BUILD_TESTS=OFF
+    sources:
+      - type: archive
+        url: https://download.qt.io/archive/qt/6.8/6.8.0/submodules/qtshadertools-everywhere-src-6.8.0.tar.xz
+        sha256: 44692dc93482374bf3b39e96c881fa08275f0bf82958b68a7e3c796b76d4c4cb
+        x-checker-data:
+          type: anitya
+          project-id: 7927
+          stable-only: true
+          url-template: https://download.qt.io/archive/qt/$major.$minor/$version/submodules/qtshadertools-everywhere-src-$version.tar.xz
+
+  - name: qtdeclarative
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DQT_BUILD_EXAMPLES=OFF
+      - -DQT_BUILD_TESTS=OFF
+    sources:
+      - type: archive
+        url: https://download.qt.io/archive/qt/6.8/6.8.0/submodules/qtdeclarative-everywhere-src-6.8.0.tar.xz
+        sha256: 3b41a36b42e919a3aa0da1f71107591504200f41707bee2ad8e8d4f99b5644c2
+        x-checker-data:
+          type: anitya
+          project-id: 7927
+          stable-only: true
+          url-template: https://download.qt.io/archive/qt/$major.$minor/$version/submodules/qtdeclarative-everywhere-src-$version.tar.xz
+
+  - name: qtwayland
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DQT_BUILD_EXAMPLES=OFF
+      - -DQT_BUILD_TESTS=OFF
+    sources:
+      - type: archive
+        url: https://download.qt.io/archive/qt/6.8/6.8.0/submodules/qtwayland-everywhere-src-6.8.0.tar.xz
+        sha256: 175758591638ebf1c6fbb66ac11c7fa0eb8d4ed52e9243cc59075d06a6a2060a
+        x-checker-data:
+          type: anitya
+          project-id: 7927
+          stable-only: true
+          url-template: https://download.qt.io/archive/qt/$major.$minor/$version/submodules/qtwayland-everywhere-src-$version.tar.xz
+    cleanup:
+      - /bin
+
+  - name: qtsvg
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DQT_BUILD_EXAMPLES=OFF
+      - -DQT_BUILD_TESTS=OFF
+    sources:
+      - type: archive
+        url: https://download.qt.io/archive/qt/6.8/6.8.0/submodules/qtsvg-everywhere-src-6.8.0.tar.xz
+        sha256: cf7a593d5e520f8177240610d9e55d5b75b0887fe5f385554ff64377f1646199
+        x-checker-data:
+          type: anitya
+          project-id: 7927
+          stable-only: true
+          url-template: https://download.qt.io/archive/qt/$major.$minor/$version/submodules/qtsvg-everywhere-src-$version.tar.xz
+
+  - name: qmlapptemplate
+    buildsystem: cmake-ninja
+    sources:
+      - type: archive
+        url: https://github.com/emericg/qmlapptemplate/archive/refs/tags/v0.8.tar.gz
+        sha256:

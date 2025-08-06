@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=QmlAppTemplate
+Comment=QmlAppTemplate is a Qt6 / QML Application Template
+Exec=QmlAppTemplate
+Icon=QmlAppTemplate
+Categories=Utility;Qt;
