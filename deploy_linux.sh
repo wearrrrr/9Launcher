@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export APP_NAME="9Launcher"
+export APP_NAME="NineLauncher"
 export APP_VERSION=0.0.1
 export GIT_VERSION=$(git rev-parse --short HEAD)
 

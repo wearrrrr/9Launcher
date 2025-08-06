@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export APP_NAME="9Launcher"
+export APP_NAME="NineLauncher"
 export APP_VERSION=0.0.1
 export GIT_VERSION=$(git rev-parse --short HEAD)
 
@@ -54,24 +54,24 @@ fi
 
 ## APP DEPLOY ##################################################################
 
-if [[ $create_package = true ]] ; then
-  if [[ -v QT_ROOT_DIR ]]; then
-    # cleanup undeployable Qt plugins (present, but missing their own dependencies)
-    # only if we are on a GitHub Action server, because this remove the plugins from the Qt directory
-    echo '---- Remove undeployable Qt plugins'
-    rm $QT_ROOT_DIR\\plugins\\position\\qtposition_nmea.dll
-  fi
-fi
+# if [[ $create_package = true ]] ; then
+#   if [[ -v QT_ROOT_DIR ]]; then
+#     # cleanup undeployable Qt plugins (present, but missing their own dependencies)
+#     # only if we are on a GitHub Action server, because this remove the plugins from the Qt directory
+#     echo '---- Remove undeployable Qt plugins'
+#     rm $QT_ROOT_DIR\\plugins\\position\\qtposition_nmea.dll
+#   fi
+# fi
 
 echo '---- Running windeployqt'
-windeployqt bin/ --qmldir qml/
+windeployqt bin/ --qmldir src/qml/
 
 #echo '---- MapLibre deployment hack'
 #cp $QT_ROOT_DIR/bin/QMapLibre.dll bin/QMapLibre.dll
 #cp $QT_ROOT_DIR/bin/QMapLibreLocation.dll bin/QMapLibreLocation.dll
 
-#echo '---- Installation directory content recap (after windeployqt):'
-#find bin/
+echo '---- Installation directory content recap (after windeployqt):'
+find bin/
 
 #echo '---- Clean installation directory'
 #rm bin/.gitkeep
