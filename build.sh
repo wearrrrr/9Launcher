@@ -7,6 +7,6 @@ cmake -B build -S . -Wno-dev
 cd build
 make -j$NPROC
 
-if ([ -f NineLauncher ]); then
-    strip NineLauncher
+if ([ -f 9Launcher ]); then
+    strip 9Launcher
 fi

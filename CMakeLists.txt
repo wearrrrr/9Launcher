@@ -23,13 +23,13 @@ find_package(Qt6 REQUIRED COMPONENTS Quick)
 find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
 find_package(Qt6 COMPONENTS ShaderTools)
 
-qt_add_executable(NineLauncher
+qt_add_executable(9Launcher
     src/main.cpp
 )
 
 file(GLOB GAME_IMAGES RELATIVE ${CMAKE_SOURCE_DIR} "${CMAKE_SOURCE_DIR}/game-images/*.webp")
 
-qt_add_qml_module(NineLauncher
+qt_add_qml_module(9Launcher
     URI nineLauncher
     VERSION 1.0
     RESOURCE_PREFIX /
@@ -69,13 +69,13 @@ qt_add_qml_module(NineLauncher
             src/cpp/Util.cpp
 )
 
-qt6_add_shaders(NineLauncher "ninelauncher_shaders"
+qt6_add_shaders(9Launcher "ninelauncher_shaders"
     PREFIX /
     FILES
         src/shaders/grayscale.frag
 )
 
-target_include_directories(NineLauncher
+target_include_directories(9Launcher
     PRIVATE src/cpp/include/
 )
 
@@ -86,21 +86,21 @@ set(DiscordRPC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/externals/discord-rpc)
 
 add_subdirectory(${DiscordRPC_DIR})
 
-target_include_directories(NineLauncher
+target_include_directories(9Launcher
     PRIVATE ${DiscordRPC_DIR}/include
 )
 
 set_target_properties(MMaterialLib PROPERTIES AUTOMOC ON)
-target_link_libraries(NineLauncher
+target_link_libraries(9Launcher
     PRIVATE Qt6::Quick Qt::Gui discord-rpc
 )
 
-set_target_properties(NineLauncher PROPERTIES
+set_target_properties(9Launcher PROPERTIES
     WIN32_EXECUTABLE TRUE
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin"
 )
 
-install(TARGETS NineLauncher
+install(TARGETS 9Launcher
     BUNDLE DESTINATION "${CMAKE_SOURCE_DIR}/bin"
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
