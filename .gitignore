@@ -1,14 +1,10 @@
 .vscode
-
-# qtcreator generated files
-*.pro.user*
-CMakeLists.txt.user*
-
-# Binaries
-# --------
+bin/9Launcher
 *.dll
 *.exe
 
-# Build and cache directories
+# qtcreator generated files
+CMakeLists.txt.user*
+
 build/
 .cache/

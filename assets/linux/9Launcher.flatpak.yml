@@ -2,19 +2,17 @@ app-id: io.emeric.qmlapptemplate
 runtime: org.freedesktop.Platform
 runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
-command: QmlAppTemplate
+command: 9Launcher
 
-rename-desktop-file: QmlAppTemplate.desktop
-rename-appdata-file: QmlAppTemplate.appdata.xml
+rename-desktop-file: 9Launcher.desktop
+rename-appdata-file: 9Launcher.appdata.xml
 rename-icon: QmlAppTemplate
 
 finish-args:
-  # Our UI is GPU accelerated
   - --device=dri
-  # X11 + XShm access
   - --share=ipc
+
   - --socket=fallback-x11
-  # Wayland access
   - --socket=wayland
 
 modules:
@@ -106,25 +104,25 @@ modules:
     cleanup:
       - /bin
 
-  - name: qtsvg
-    buildsystem: cmake-ninja
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
-      - -DQT_BUILD_EXAMPLES=OFF
-      - -DQT_BUILD_TESTS=OFF
-    sources:
-      - type: archive
-        url: https://download.qt.io/archive/qt/6.8/6.8.0/submodules/qtsvg-everywhere-src-6.8.0.tar.xz
-        sha256: cf7a593d5e520f8177240610d9e55d5b75b0887fe5f385554ff64377f1646199
-        x-checker-data:
-          type: anitya
-          project-id: 7927
-          stable-only: true
-          url-template: https://download.qt.io/archive/qt/$major.$minor/$version/submodules/qtsvg-everywhere-src-$version.tar.xz
+  # - name: qtsvg
+  #   buildsystem: cmake-ninja
+  #   config-opts:
+  #     - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+  #     - -DQT_BUILD_EXAMPLES=OFF
+  #     - -DQT_BUILD_TESTS=OFF
+  #   sources:
+  #     - type: archive
+  #       url: https://download.qt.io/archive/qt/6.8/6.8.0/submodules/qtsvg-everywhere-src-6.8.0.tar.xz
+  #       sha256: cf7a593d5e520f8177240610d9e55d5b75b0887fe5f385554ff64377f1646199
+  #       x-checker-data:
+  #         type: anitya
+  #         project-id: 7927
+  #         stable-only: true
+  #         url-template: https://download.qt.io/archive/qt/$major.$minor/$version/submodules/qtsvg-everywhere-src-$version.tar.xz
 
-  - name: qmlapptemplate
+  - name: 9Launcher
     buildsystem: cmake-ninja
     sources:
       - type: archive
-        url: https://github.com/emericg/qmlapptemplate/archive/refs/tags/v0.8.tar.gz
+        url: TODO!
         sha256:

@@ -79,7 +79,7 @@ chmod a+x contribs/deploy/linuxdeploy-plugin-qt-x86_64.AppImage
 # linuxdeploy qt settings
 export EXTRA_PLATFORM_PLUGINS="libqxcb.so;libqwayland-egl.so;libqwayland-generic.so"
 export EXTRA_QT_PLUGINS="wayland-shell-integration;waylandclient;wayland-graphics-integration-client;"
-export EXTRA_QT_MODULES="svg;qmlmodels;"
+export EXTRA_QT_MODULES=""
 export QML_SOURCES_PATHS="$(pwd)/src/qml/"
 export QML_MODULES_PATHS=""
 
@@ -120,8 +120,8 @@ if [[ $create_package = true ]] ; then
   mv bin/$APP_NAME bin/usr/bin/$APP_NAME
   cp assets/linux/$APP_NAME_LOWERCASE.appdata.xml bin/usr/share/appdata/$APP_NAME_LOWERCASE.appdata.xml
   cp assets/linux/$APP_NAME_LOWERCASE.desktop bin/usr/share/applications/$APP_NAME_LOWERCASE.desktop
-  cp assets/linux/$APP_NAME_LOWERCASE.svg bin/usr/share/pixmaps/$APP_NAME_LOWERCASE.svg
-  cp assets/linux/$APP_NAME_LOWERCASE.svg  bin/usr/share/icons/hicolor/scalable/apps/$APP_NAME_LOWERCASE.svg
+  cp assets/linux/$APP_NAME_LOWERCASE.png bin/usr/share/pixmaps/$APP_NAME_LOWERCASE.png
+  cp assets/linux/$APP_NAME_LOWERCASE.png bin/usr/share/icons/hicolor/128x128/apps/$APP_NAME_LOWERCASE.png
 
   echo '---- Running AppImage packager'
   ./contribs/deploy/linuxdeploy-x86_64.AppImage --appdir bin --plugin qt --output appimage
@@ -142,7 +142,7 @@ if [[ $create_package = true ]] ; then
   mv bin/usr/qml bin/$APP_NAME/
   mv bin/usr/share/appdata/$APP_NAME_LOWERCASE.appdata.xml bin/$APP_NAME/
   mv bin/usr/share/applications/$APP_NAME_LOWERCASE.desktop bin/$APP_NAME/
-  mv bin/usr/share/pixmaps/$APP_NAME_LOWERCASE.svg bin/$APP_NAME/
+  mv bin/usr/share/pixmaps/$APP_NAME_LOWERCASE.png bin/$APP_NAME/
   printf '[Paths]\nPrefix = .\nPlugins = plugins\nImports = qml\n' > bin/$APP_NAME/qt.conf
   printf '#!/bin/sh\nappname=`basename $0 | sed s,\.sh$,,`\ndirname=`dirname $0`\nexport LD_LIBRARY_PATH=$dirname\n$dirname/$appname' > bin/$APP_NAME/$APP_NAME_LOWERCASE.sh
   chmod +x bin/$APP_NAME/$APP_NAME_LOWERCASE.sh
