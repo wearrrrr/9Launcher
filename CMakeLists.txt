@@ -1,12 +1,16 @@
 cmake_minimum_required(VERSION 3.16)
-project(nineLauncher VERSION 0.1 LANGUAGES CXX)
+set(CMAKE_C_COMPILER clang)
+set(CMAKE_CXX_COMPILER clang++)
 
-# set(Qt6_DIR "/home/wearr/Qt-ubuntu/6.8.2/gcc_64/lib/cmake/Qt6/")
+project(nineLauncher VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_AUTOMOC ON)
+
+set(QT_QML_GENERATE_QMLLS_INI ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_THREAD_LIBS_INIT "-lpthread")
 set(CMAKE_HAVE_THREADS_LIBRARY 1)
@@ -29,6 +33,18 @@ qt_add_executable(9Launcher
 
 file(GLOB GAME_IMAGES RELATIVE ${CMAKE_SOURCE_DIR} "${CMAKE_SOURCE_DIR}/game-images/*.webp")
 
+qt_add_qml_module(downloader
+    URI Downloader
+    VERSION 1.0
+    SOURCES
+        src/cpp/Downloader.cpp
+        src/cpp/include/Downloader.h
+    OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Downloader"
+)
+target_include_directories(downloader
+    PRIVATE src/cpp/include/
+)
+
 qt_add_qml_module(9Launcher
     URI nineLauncher
     VERSION 1.0
@@ -46,6 +62,8 @@ qt_add_qml_module(9Launcher
         src/qml/fs.js
         src/qml/footer.js
 
+
+
         RESOURCES
             src/json/games.json
             ${GAME_IMAGES}
@@ -53,15 +71,14 @@ qt_add_qml_module(9Launcher
         SOURCES
             src/cpp/include/AppSettings.h
             src/cpp/include/Clipboard.h
-            src/cpp/include/Downloader.h
             src/cpp/include/Extractor.h
             src/cpp/include/FileIO.h
             src/cpp/include/GameLauncher.h
             src/cpp/include/RPC.h
             src/cpp/include/Util.h
 
+            src/cpp/AppSettings.cpp
             src/cpp/Clipboard.cpp
-            src/cpp/Downloader.cpp
             src/cpp/Extractor.cpp
             src/cpp/FileIO.cpp
             src/cpp/GameLauncher.cpp
@@ -91,9 +108,8 @@ target_include_directories(9Launcher
 )
 
 set_target_properties(MMaterialLib PROPERTIES AUTOMOC ON)
-target_link_libraries(9Launcher
-    PRIVATE Qt6::Quick Qt::Gui discord-rpc
-)
+target_link_libraries(9Launcher PRIVATE downloader)
+target_link_libraries(9Launcher PRIVATE Qt6::Quick Qt::Gui discord-rpc)
 
 set_target_properties(9Launcher PROPERTIES
     WIN32_EXECUTABLE TRUE

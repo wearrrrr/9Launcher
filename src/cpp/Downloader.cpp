@@ -51,7 +51,7 @@ void Downloader::download(const QString &url, const QString &filePath, const boo
         }
 
         file.write(reply->readAll());
-        
+
         if (extractTGZ) {
             qDebug() << "Beginning Extraction";
             QProcess proc;
@@ -70,7 +70,7 @@ void Downloader::download(const QString &url, const QString &filePath, const boo
 
             qDebug() << "Extraction complete!";
         }
-        
+
         file.close();
 
         emit downloadFinished();

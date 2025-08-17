@@ -4,11 +4,13 @@ import QtCore
 import QtQuick.Layouts
 
 import MMaterial
-import Downloader 1.0
-import FileIO 1.0
+import AppSettings
+import Downloader
+import FileIO
 import "BinaryManager.js" as BinaryManager
 
 Window {
+    id: root
     color: "#2f2f2f"
     width: 500
     height: 600
@@ -25,7 +27,7 @@ Window {
     }
 
     FileIO {
-        id: fileIO;   
+        id: fileIO;
     }
 
     Downloader {
@@ -34,7 +36,7 @@ Window {
             console.log("Download finished!")
             statusOutput.color = "#70fa6b"
             statusOutput.text = "Download finished!"
-            AppSettings.setValue("wine", wineVerToSave)
+            AppSettings.setValue("wine", root.wineVerToSave)
         }
         onDownloadProgress: function (bytesReceived, bytesTotal) {
             var progress = Math.round((bytesReceived / bytesTotal) * 100);
@@ -139,7 +141,7 @@ Window {
                 }
             }
         }
-        
+
         H5 {
             text: parseInt(progressBar.value) + "%"
             Layout.topMargin: 7

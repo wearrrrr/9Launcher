@@ -1,4 +1,4 @@
-pragma ComponentBehavior: Bound 
+pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtQuick.Controls.Material
@@ -33,7 +33,7 @@ Button {
         id: gameImage
         width: parent.width
         height: parent.height
-        source: "qrc:/nineLauncher/game-images/" + parent.item.img
+        source: "qrc:/nineLauncher/game-images/" + parent.item.game_id + ".webp"
 
         layer.enabled: !isInstalled
         layer.effect: ShaderEffect {
@@ -130,7 +130,7 @@ Button {
 
             currentInstalled.installed.push(targetItem);
 
-            gameImage.source = "qrc:/nineLauncher/game-images/" + button.item.img
+            gameImage.source = "qrc:/nineLauncher/game-images/" + button.item.game_id + ".webp";
             button.isInstalled = true
 
             fileIO.write(path, JSON.stringify(currentInstalled));

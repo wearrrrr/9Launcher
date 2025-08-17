@@ -2,36 +2,19 @@
 #include <QSettings>
 #include <QVariant>
 #include <QMetaType>
+#include <qobject.h>
 
 class AppSettings : public QSettings {
     Q_OBJECT
 
 public:
-    AppSettings(const QString &organization, const QString &application)
-        : QSettings(organization, application) {}
+    AppSettings(const QString &organization, const QString &application) : QSettings(organization, application) {}
 
-    Q_INVOKABLE QVariant value(const QString &key, const QVariant &defaultValue) const {
-        QVariant result = QSettings::value(key, defaultValue);
+    Q_INVOKABLE QVariant value(const QString &key, const QVariant &defaultValue) const;
 
-        // Boolean conversion BS.
-        if (result.typeId() == QMetaType::QString) {
-            QString strValue = result.toString().toLower();
-            if (strValue == "true") return true;
-            if (strValue == "false") return false;
-        }
+    Q_INVOKABLE QVariant value(const QString &key) const;
 
-        return result;
-    }
+    Q_INVOKABLE void setValue(const QString &key, const QVariant &value);
 
-    Q_INVOKABLE QVariant value(const QString &key) const {
-        return QSettings::value(key);
-    }
-
-    Q_INVOKABLE void setValue(const QString &key, const QVariant &value) {
-        return QSettings::setValue(key, value);
-    }
-
-    Q_INVOKABLE void clear() {
-        return QSettings::clear();
-    }
+    Q_INVOKABLE void clear();
 };

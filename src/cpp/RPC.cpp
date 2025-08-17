@@ -9,17 +9,15 @@
 #include "RPC.h"
 #include "discord_rpc.h"
 
-using std::string;
-
 RPC::RPC(QObject *parent) : QObject(parent) {}
 
-static const char* APPLICATION_ID = "1113926701735493664";
+static const char* APPLICATION_ID = "1406730276524003482";
 
 static AppSettings settings("wearr", "NineLauncher");
 
 int64_t StartTime;
 
-static void updateDiscordPresence(string state, string smallImageKey = "", string smallImageText = "")
+static void updateDiscordPresence(std::string state, std::string smallImageKey = "", std::string smallImageText = "")
 {
 
     if (settings.value("rpc") == false) {
@@ -49,7 +47,7 @@ void RPC::initDiscord() {
     }
 
     qInfo() << "Initializing Discord RPC";
-    
+
     DiscordEventHandlers handlers;
     memset(&handlers, 0, sizeof(handlers));
     Discord_Initialize(APPLICATION_ID, &handlers, 1, NULL);

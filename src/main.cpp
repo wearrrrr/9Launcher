@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     static Downloader downloader = Downloader();
     static Util util = Util();
     static RPC rpc = RPC();
-    engine.rootContext()->setContextProperty("AppSettings", &settings);
+    qmlRegisterSingletonInstance<AppSettings>("NineLauncher", 1, 0, "AppSettings", &settings);
     engine.rootContext()->setContextProperty("Clipboard", &clipboard);
     engine.rootContext()->setContextProperty("Downloader", &downloader);
     engine.rootContext()->setContextProperty("QtVersion", QString(qVersion()));
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection
     );
-    
+
     engine.loadFromModule("nineLauncher", "Main");
 
     int ret = app.exec();
