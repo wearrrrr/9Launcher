@@ -6,13 +6,10 @@ import "main.js" as Core
 
 import MMaterial as MMaterial
 import MMaterial.Controls.Dialogs
-import "footer.js" as Footer
-
 
 Window {
-    Material.theme: Material.Dark
-
     id: window
+    Material.theme: Material.Dark
     width: 950
     height: 600
     minimumWidth: width
@@ -29,9 +26,8 @@ Window {
     function populateGamesList() {
         mainModel = [];
         spinoffModel = [];
-        Core.populateGamesList()
+        Core.populateGamesList();
     }
-
 
     ColumnLayout {
         id: appLayout
@@ -121,15 +117,14 @@ Window {
             Layout.preferredWidth: parent.width / 2 - 10
             text: qsTr("Close")
             onClicked: dialog.close()
-
         }
 
         Dialog.DialogButton {
             Layout.preferredWidth: parent.width / 2 - 10
             text: qsTr("Reset")
             onClicked: {
-                dialog.close()
-                footer.resetSettings()
+                dialog.close();
+                footer.resetSettings();
             }
         }
     }
@@ -156,7 +151,7 @@ Window {
             text: qsTr("Close")
             accent: MMaterial.Theme.error
             onClicked: {
-                pc98Dialog.close()
+                pc98Dialog.close();
             }
         }
 
@@ -164,7 +159,7 @@ Window {
             Layout.preferredWidth: parent.width / 2 - 10
             text: qsTr("Open Binary Manager")
             onClicked: {
-                pc98Dialog.close()
+                pc98Dialog.close();
             }
         }
     }
@@ -178,5 +173,7 @@ Window {
         onClicked: footer.hideMenus()
     }
 
-    Footer { id: footer }
+    Footer {
+        id: footer
+    }
 }

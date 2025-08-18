@@ -69,6 +69,7 @@ void Downloader::download(const QString &url, const QString &filePath, const boo
             proc.waitForFinished(-1);
 
             qDebug() << "Extraction complete!";
+            file.remove();
         }
 
         file.close();

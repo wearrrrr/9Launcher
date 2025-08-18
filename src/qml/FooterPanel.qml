@@ -5,42 +5,68 @@ import QtQuick.Controls.Material
 import "footer.js" as Footer
 
 Rectangle {
-    // "left" or "right"
-    property var alignTo: null
+    id: panel
+
+    property string alignTo: "left"
+    property int anchorMargin: 8
 
     color: "#212121"
     opacity: 0
     visible: false
     radius: 8
 
+    anchors.bottom: parent.top
+    anchors.bottomMargin: 10
+
     MouseArea {
         anchors.fill: parent
     }
 
-    anchors.bottom: parent.top
-    anchors.bottomMargin: 10
+    states: [
+        State {
+            name: "left"
+            AnchorChanges {
+                target: panel
+                anchors.left: parent.left
+                anchors.right: undefined
+            }
+            PropertyChanges {
+                panel.anchors.leftMargin: settingsMenu.anchorMargin
+                panel.anchors.rightMargin: 0
+            }
+        },
+        State {
+            name: "right"
+            AnchorChanges {
+                target: panel
+                anchors.right: parent.right
+                anchors.left: undefined
+            }
+            PropertyChanges {
+                panel.anchors.rightMargin: panel.anchorMargin
+                panel.anchors.leftMargin: 0
+            }
+        }
+    ]
 
-    anchors.left: alignTo === "left" ? parent.left : undefined
-    anchors.right: alignTo === "right" ? parent.right : undefined
-    
-    anchors.leftMargin: alignTo === "left" ? 8 : undefined
-    anchors.rightMargin: alignTo === "right" ? 8 : undefined
+    state: alignTo
 
     Behavior on opacity {
         PropertyAnimation {
             duration: 250
             easing.type: Easing.InOutQuad
-            // Set self to disabled when opacity is 0
-            onStopped: if (opacity === 0) enabled = false;
+            onStopped: if (opacity === 0)
+                enabled = false
         }
     }
 
-    SequentialAnimation on visible {
+    SequentialAnimation {
         running: false
         loops: 1
 
         ScriptAction {
-            script: if (settingsMenu.opacity === 0) settingsMenu.visible = false;
+            script: if (panel.opacity === 0)
+                panel.visible = false
         }
     }
 }

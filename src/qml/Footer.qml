@@ -192,15 +192,14 @@ Rectangle {
             }
             Icon {
                 id: settingsIcon
-                color: Theme.text.primary
+                color: Theme.text.primary.toString()
                 iconData: Icons.light["settings"]
                 states: [
                     State {
                             name: "hovered"
                             when: settingsItem.hovered
                             PropertyChanges {
-                                target: settingsIcon
-                                color: "#bfbfbf"
+                                settingsIcon.color: "#bfbfbf"
                             }
                         }
                     ]
@@ -236,15 +235,14 @@ Rectangle {
             }
             Icon {
                 id: infoIcon
-                color: Theme.text.primary
+                color: Theme.text.primary.toString()
                 iconData: Icons.light["info"]
                 states: [
                     State {
                             name: "hovered"
                             when: infoItem.hovered
                             PropertyChanges {
-                                target: infoIcon
-                                color: "#bfbfbf"
+                                infoIcon.color: "#bfbfbf"
                             }
                         }
                     ]

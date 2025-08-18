@@ -1,3 +1,5 @@
+import NineLauncher
+
 import QtQuick
 import QtQuick.Controls.Material
 import QtCore
@@ -110,7 +112,7 @@ Window {
             id: progressBar
             from: 0
             to: 100
-            height: 15
+            implicitHeight: 15
 
             background: Rectangle {
                 color: "transparent"
@@ -183,19 +185,6 @@ Window {
                 }
             }
         }
-        // MButton {
-        //     text: qsTr("Proton GE 8.32")
-        //     Layout.preferredWidth: 150
-        //     onClicked: {
-        //         wineVerToSave = "8-32"
-        //         const dl = BinaryManager.downloadProton("8-32", appData, "/proton/8-32.tar.gz", downloader, fileIO)
-        //         if (!dl) {
-        //             statusOutput.color = "#e3e3e3"
-        //             statusOutput.text = "Proton version already downloaded! Setting to default game launcher.."
-        //             AppSettings.setValue("wine", wineVerToSave)
-        //         }
-        //     }
-        // }
     }
 
     Rectangle {
