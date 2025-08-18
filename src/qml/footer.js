@@ -18,6 +18,11 @@ function resetSettings() {
     rpcSetting.switchValue = false;
     fileLoggingSetting.switchValue = false;
     launchInfoSetting.switchValue = false;
+
+    // Clear games
+    const path = StandardPaths.writableLocation(StandardPaths.AppDataLocation) + "/installed.json";
+    fileIO.write(path, '{ "installed": [] }');
+    window.populateGamesList();
 }
 
 function copyInfo(itemsToCopy, copyBtn) {
@@ -30,6 +35,11 @@ function copyInfo(itemsToCopy, copyBtn) {
 }
 
 function openBinaryManager() {
+  try {
     const binaryManager = Qt.createComponent("BinaryManager.qml")
-    binaryManager.createObject(window).show();
+    const object = binaryManager.createObject(window);
+    if (object) object.show();
+  } catch (error) {
+    console.error("Error opening BinaryManager:", error);
+  }
 }

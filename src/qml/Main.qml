@@ -11,7 +11,6 @@ import "footer.js" as Footer
 
 Window {
     Material.theme: Material.Dark
-    Material.accent: Material.Blue
 
     id: window
     width: 950
@@ -22,14 +21,20 @@ Window {
     maximumHeight: height
     visible: true
     title: qsTr("9Launcher")
-    // Set color to the palette background
     color: "#2f2f2f"
 
-    FileIO {
-        id: fileIO
+    property var mainModel: []
+    property var spinoffModel: []
+
+    function populateGamesList() {
+        mainModel = [];
+        spinoffModel = [];
+        Core.populateGamesList()
     }
 
+
     ColumnLayout {
+        id: appLayout
         width: parent.width
         spacing: 0
 
@@ -52,7 +57,16 @@ Window {
             spacing: 5
             padding: 10
 
-            Component.onCompleted: Core.populateGamesList()
+            Component.onCompleted: populateGamesList()
+            Repeater {
+                model: window.mainModel
+                delegate: GameItem {
+                    width: 150
+                    height: 55
+                    item: modelData
+                    isPC98: modelData.isPC98 ? true : false
+                }
+            }
         }
 
         Item {
@@ -73,6 +87,16 @@ Window {
             Layout.alignment: Qt.AlignTop
             spacing: 5
             padding: 10
+
+            Repeater {
+                model: window.spinoffModel
+                delegate: GameItem {
+                    width: 150
+                    height: 55
+                    item: modelData
+                    isPC98: false
+                }
+            }
         }
     }
 

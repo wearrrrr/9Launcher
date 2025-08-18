@@ -1,3 +1,5 @@
+import NineLauncher
+
 import QtCore
 import QtQuick
 import QtQuick.Layouts
@@ -6,6 +8,7 @@ import QtQuick.Controls.Material
 import MMaterial
 import MMaterial.Controls as Controls
 import "footer.js" as Footer
+import FileIO
 
 Rectangle {
     width: parent.width
@@ -27,6 +30,10 @@ Rectangle {
         if (infoMenu.enabled) {
             Footer.toggleVisibility(infoMenu, SequentialAnimation);
         }
+    }
+
+    FileIO {
+        id: fileIO;
     }
 
     FooterPanel {
@@ -73,7 +80,7 @@ Rectangle {
                 RowLayout {
                     spacing: 10
                     MButton {
-                        text: qsTr("Reset Settings")
+                        text: qsTr("Reset")
                         Layout.preferredWidth: 150
                         accent: Theme.error
                         onClicked: {
@@ -166,7 +173,7 @@ Rectangle {
             }
         }
     }
-    
+
     RowLayout {
         width: parent.width
         height: parent.height

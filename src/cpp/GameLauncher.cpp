@@ -148,7 +148,6 @@ bool GameLauncher::LaunchLinux(const QString &gamePath, const QString &gameCWD) 
 
     QProcess process;
     QString winePath = GetWinePathFromSettings();
-    printf("%s\n", winePath.toStdString().c_str());
     process.setProgram(winePath);
     process.setArguments({gamePath});
     process.setWorkingDirectory(gameCWD);
@@ -181,7 +180,7 @@ bool GameLauncher::LaunchLinux_PC98(const QString &gamePath) {
         "-machine",
         "pc98",
         "-set",
-        "cycles=35620"
+        "cycles=35620",
         "-nopromptfolder",
         "-c",
         "IMGMOUNT A: " + gamePath,
@@ -191,7 +190,7 @@ bool GameLauncher::LaunchLinux_PC98(const QString &gamePath) {
         "game",
     });
 
-    process.start();    
+    process.start();
     if (!process.waitForStarted()) {
         qCritical() << "Failed to start the game process!";
         return false;

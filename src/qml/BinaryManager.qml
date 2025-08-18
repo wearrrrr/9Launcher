@@ -4,7 +4,6 @@ import QtCore
 import QtQuick.Layouts
 
 import MMaterial
-import AppSettings
 import Downloader
 import FileIO
 import "BinaryManager.js" as BinaryManager
