@@ -17,7 +17,7 @@ Rectangle {
     width: parent.width
     height: 40
     anchors.bottom: parent.bottom
-    color: "#212121"
+    color: UI.Theme.background.paper
 
     property alias settingsMenu: settingsMenu
     property alias infoMenu: infoMenu
@@ -203,7 +203,7 @@ Rectangle {
             }
             Icon {
                 id: settingsIcon
-                color: Theme.text.primary.toString()
+                color: Theme.text.primary
                 iconData: Icons.light["settings"]
                 states: [
                     State {

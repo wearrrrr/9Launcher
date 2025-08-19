@@ -23,8 +23,7 @@ if (LINUX)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os")
 endif()
 
-find_package(Qt6 REQUIRED COMPONENTS Quick)
-find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
+find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2)
 find_package(Qt6 COMPONENTS ShaderTools)
 
 qt_add_executable(9Launcher
@@ -62,8 +61,6 @@ qt_add_qml_module(9Launcher
         src/qml/fs.js
         src/qml/footer.js
 
-
-
         RESOURCES
             src/json/games.json
             ${GAME_IMAGES}
@@ -71,7 +68,6 @@ qt_add_qml_module(9Launcher
         SOURCES
             src/cpp/include/AppSettings.h
             src/cpp/include/Clipboard.h
-            src/cpp/include/Extractor.h
             src/cpp/include/FileIO.h
             src/cpp/include/GameLauncher.h
             src/cpp/include/RPC.h
@@ -79,7 +75,6 @@ qt_add_qml_module(9Launcher
 
             src/cpp/AppSettings.cpp
             src/cpp/Clipboard.cpp
-            src/cpp/Extractor.cpp
             src/cpp/FileIO.cpp
             src/cpp/GameLauncher.cpp
             src/cpp/RPC.cpp

@@ -71,6 +71,6 @@ qt_add_qml_module(UILib
 )
 
 set_target_properties(UILib PROPERTIES AUTOMOC ON)
-target_link_libraries(UILib PRIVATE Qt6::Quick)
+target_link_libraries(UILib PRIVATE Qt6::Quick Qt6::QuickControls2)
 
 target_compile_definitions(UILib PRIVATE QT_QUICKCONTROLS_MATERIAL_STYLE)

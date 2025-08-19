@@ -21,7 +21,13 @@ Window {
     maximumHeight: height
     visible: true
     title: qsTr("9Launcher")
-    color: "#2f2f2f"
+    color: UI.Theme.background.main
+
+    Component.onCompleted: () => {
+        UI.Theme.primary = UI.BasicBlue;
+        UI.Theme.background.main = "#263238"
+        UI.Theme.background.paper = "#182024"
+    };
 
     property var mainModel: []
     property var spinoffModel: []
@@ -40,11 +46,9 @@ Window {
         Item {
             Layout.preferredHeight: 30
             Layout.alignment: Qt.AlignLeft
-            Text {
+            UI.H4 {
                 text: "Mainline Games"
-                color: "white"
                 font.bold: true
-                font.pixelSize: 24
                 padding: 5
             }
         }
@@ -71,11 +75,9 @@ Window {
         Item {
             Layout.preferredHeight: 30
             Layout.alignment: Qt.AlignLeft
-            Text {
+            UI.H4 {
                 text: "Spinoffs"
-                color: "white"
                 font.bold: true
-                font.pixelSize: 24
                 padding: 5
             }
         }

@@ -2,6 +2,9 @@ import QtCore
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls.Material
+
+import MMaterial.UI as UI
+
 import "footer.js" as Footer
 
 Rectangle {
@@ -10,7 +13,7 @@ Rectangle {
     property string alignTo: "left"
     property int anchorMargin: 8
 
-    color: "#212121"
+    color: UI.Theme.background.paper
     opacity: 0
     visible: false
     radius: 8

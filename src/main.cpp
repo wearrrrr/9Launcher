@@ -1,18 +1,14 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QtLogging>
 #include <QQmlContext>
-#include <QThread>
-#include <QPalette>
-#include <QDebug>
 
 #include "AppSettings.h"
-#include "Downloader.h"
 #include "Clipboard.h"
+#include "Downloader.h"
 #include "FileIO.h"
 #include "GameLauncher.h"
-#include "Util.h"
 #include "RPC.h"
+#include "Util.h"
 
 int main(int argc, char *argv[])
 {
@@ -25,7 +21,6 @@ int main(int argc, char *argv[])
     app.setOrganizationName("wearr");
     app.setOrganizationDomain("wearr.dev");
     app.setApplicationName("NineLauncher");
-    // Set app version
     app.setApplicationVersion("0.0.1");
     QQmlApplicationEngine engine;
     static AppSettings settings("wearr", "NineLauncher");
