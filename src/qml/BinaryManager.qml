@@ -151,8 +151,6 @@ Window {
         }
     }
 
-
-
     NumberAnimation {
         id: progressAnimation
         target: progressBar

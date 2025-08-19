@@ -13,19 +13,3 @@ function populateGamesList() {
 
     window.spinoffModel = Object.values(games.spinoffs);
 }
-
-function handleGameLaunch(item, installedJSON) {
-    const gameItem = installedJSON.installed.filter(game => game.game_id === item.game_id)[0];
-
-    if (gameItem == null) {
-        console.log("Game is not installed: " + item.game_id + "!");
-        return;
-    }
-
-    const path = gameItem.path;
-    const cwd = path.substring(0, path.lastIndexOf("/"));
-
-    gameLauncher.launchGame(path, cwd, item.en_title, item.game_id, item.isPC98 ? true : false);
-
-    return true;
-}

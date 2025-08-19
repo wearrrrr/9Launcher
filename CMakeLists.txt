@@ -87,9 +87,11 @@ qt_add_qml_module(9Launcher
 )
 
 qt6_add_shaders(9Launcher "ninelauncher_shaders"
-    PREFIX /
+    PREFIX /shaders
     FILES
         src/shaders/grayscale.frag
+    OUTPUTS
+        grayscale.frag.qsb
 )
 
 target_include_directories(9Launcher

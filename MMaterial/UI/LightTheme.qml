@@ -3,6 +3,8 @@ pragma Singleton
 import MMaterial.UI as UI
 
 UI.ThemeBase{
+    id: root
+
     objectName: "Light UI.Theme"
 
 	primary: UI.BasicGreen
@@ -44,37 +46,37 @@ UI.ThemeBase{
         contrastText: "#FFFFFF"
     }
 
-	// social: UI.PaletteSocial{
-    //     facebook: "#1877F2"
-    //     twitter: "#00AAEC"
-    //     instagram: "#E02D69"
-    //     linkedin: "#007EBB"
-    // }
+	social: UI.PaletteSocial{
+        facebook: "#1877F2"
+        twitter: "#00AAEC"
+        instagram: "#E02D69"
+        linkedin: "#007EBB"
+    }
 
 	text: UI.PaletteText{
-        primary: "#212B36"
-        secondary: "#637381"
-        disabled: "#919EAB"
+        primary: root.main.p800
+        secondary: root.main.p600
+        disabled: root.main.p500
     }
 
 	background: UI.PaletteBackground{
         main: "#FFFFFF"
         paper: "#fafafa"
-        neutral: "#F4F6F8"
+        neutral: root.main.p200
     }
 
 	action: UI.PaletteAction{
-        active: "#637381"
-        hover: Qt.rgba(0, 0, 0, 0.03)
-        selected: Qt.rgba(0, 0, 0, 0.06)
-        disabled: Qt.rgba(0, 0, 0, 0.2)
-        disabledBackground: Qt.rgba(0, 0, 0, 0.05)
-        focus: Qt.rgba(0, 0, 0, 0.14)
+        active: root.main.p600
+        hover: root.main.transparent.p8
+        selected: root.main.transparent.p16
+        disabled: Qt.rgba(active.r, active.g, active.b, 0.80)
+        disabledBackground: root.main.transparent.p20
+        focus: root.main.transparent.p24
     }
 
 	other: UI.PaletteOther{
-        divider: "#919EAB"
-        outline: Qt.rgba(145, 158, 171, 0.32)
+        divider: root.main.p500
+        outline: Qt.rgba(divider.r, divider.g, divider.b, 0.2)
     }
 
 	main: UI.PaletteGrey{
@@ -85,7 +87,7 @@ UI.ThemeBase{
         p500: "#919EAB"
         p600: "#637381"
         p700: "#454F5B"
-        p800: "#212B36"
-        p900: "#161C24"
+        p800: "#1C252E"
+        p900: "#141A21"
     }
 }

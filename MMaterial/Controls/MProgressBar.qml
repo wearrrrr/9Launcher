@@ -9,8 +9,8 @@ RowLayout {
 	property real lineWidth: UI.Size.pixel4
 
 	property UI.PaletteBasic accent: UI.Theme.primary
-    // property color foregroundColor: accent.main
-    property color bgColor: accent.transparent.p24
+    property color foregroundColor: accent.main
+    property color backgroundColor: accent.transparent.p24
     property bool showLabel: false
     
     property alias barHeight: _bar.height
@@ -28,7 +28,7 @@ RowLayout {
         Layout.fillWidth: true
         Layout.preferredHeight: _root.lineWidth
 
-        color: _root.bgColor
+        color: _root.backgroundColor
         radius: 50
 
         Rectangle {
@@ -42,7 +42,7 @@ RowLayout {
 
             width: _root.progress * _bar.width / 100
 
-            color: accent.main
+            color: _root.foregroundColor
             radius: _bar.radius
 
             Behavior on width { SmoothedAnimation { duration: 50;} }

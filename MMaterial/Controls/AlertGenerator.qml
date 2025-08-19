@@ -12,6 +12,7 @@ Popup {
 	objectName: "default" // Preferably set this to a unique name for each instance of the component
 
     property int edgeOf: Item.TopLeft //TopRight, BottomLeft, BottomRight
+    property int defaultVariant: Alert.Variant.Standard
 
     x: _root.edgeOf === Item.TopLeft || _root.edgeOf === Item.BottomLeft || _root.edgeOf === Item.Left ? 20 : Overlay.overlay.width - 20 - width
     y: _root.edgeOf === Item.TopLeft || _root.edgeOf === Item.TopRight || _root.edgeOf === Item.Top ? 20 : Overlay.overlay.height - 20 - height
@@ -53,7 +54,7 @@ Popup {
 
             text: item && item.text ? item.text : ""
             severity: item && item.severity ? item.severity : severity
-            variant: item && item.variant ? item.variant : variant
+            variant: item && item.variant ? item.variant : _root.defaultVariant
 
             dismissButton {
                 text: item && item.dismissButton && item.dismissButton.text ? item.dismissButton.text : dismissButton.text

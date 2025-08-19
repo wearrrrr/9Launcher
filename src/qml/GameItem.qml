@@ -16,7 +16,17 @@ Button {
 
     function launchGame(item) {
         const installedJSON = JSON.parse(fileIO.read(StandardPaths.writableLocation(StandardPaths.AppDataLocation) + "/installed.json"));
-        Core.handleGameLaunch(item, installedJSON);
+        const gameItem = installedJSON.installed.filter(game => game.game_id === item.game_id)[0];
+
+        if (gameItem == null) {
+            console.log(item.game_id + " is not installed but launchGame was called! This is a bug.");
+            return;
+        }
+
+        const path = gameItem.path;
+        const cwd = path.substring(0, path.lastIndexOf("/"));
+
+        gameLauncher.launchGame(path, cwd, item.en_title, item.game_id, item.isPC98 ? true : false);
     }
 
     onClicked: isInstalled ? launchGame(item) : gameDialog.open();
@@ -33,11 +43,11 @@ Button {
         id: gameImage
         width: parent.width
         height: parent.height
-        source: "qrc:/nineLauncher/game-images/" + parent.item.game_id + ".webp"
+        source: "/nineLauncher/game-images/" + parent.item.game_id + ".webp"
 
         layer.enabled: !isInstalled
         layer.effect: ShaderEffect {
-            fragmentShader: "qrc:/src/shaders/grayscale.frag.qsb"
+            fragmentShader: "/shaders/grayscale.frag.qsb"
         }
 
         Component.onCompleted: {
@@ -89,8 +99,7 @@ Button {
                 name: "hovered"
                 when: mouse.hovered
                 PropertyChanges {
-                    target: rect
-                    color: "#80000000"
+                    rect.color: "#80000000"
                 }
             }
         ]
@@ -130,7 +139,7 @@ Button {
 
             currentInstalled.installed.push(targetItem);
 
-            gameImage.source = "qrc:/nineLauncher/game-images/" + button.item.game_id + ".webp";
+            gameImage.source = "/nineLauncher/game-images/" + button.item.game_id + ".webp";
             button.isInstalled = true
 
             fileIO.write(path, JSON.stringify(currentInstalled));

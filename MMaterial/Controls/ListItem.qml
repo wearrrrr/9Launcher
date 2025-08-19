@@ -29,9 +29,10 @@ AbstractListItem{
 			Layout.rightMargin: UI.Size.pixel16
             Layout.alignment: Qt.AlignVCenter
 
-			iconData: Media.IconData{}
+			iconData: Media.IconData {}
 			color: _title.color.toString()
-			visible: iconData.path != "" }
+			visible: iconData.path !== ""
+		}
 
 		UI.B2 {
             id: _title
@@ -40,7 +41,8 @@ AbstractListItem{
             Layout.alignment: Qt.AlignVCenter
 
             verticalAlignment: Qt.AlignVCenter
-			font.family: _root.selected ? UI.PublicSans.semiBold : UI.PublicSans.regular
+            font.family: UI.Font.normal
+            font.variableAxes: { "wght": _root.selected ? 600 : 400 }
 			color: _root.selected ? UI.Theme.text.primary : UI.Theme.text.secondary
         }
     }

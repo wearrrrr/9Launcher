@@ -9,7 +9,9 @@ Media.IconBase {
     id: _root
 
     Image{
-        anchors.fill: _root
+		anchors.centerIn: _root
+		height: _root.size
+		width: _root.size
 
         fillMode: Image.PreserveAspectFit
         source: (visible ? _root.iconData?.path ?? "" : "").toString()

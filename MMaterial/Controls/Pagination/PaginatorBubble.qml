@@ -10,13 +10,13 @@ ListView {
 
     required property SwipeView indexView
 
-    property int numberOfPages: indexView.count
+    property int numberOfPages: _root.indexView.count
 
     implicitWidth: childrenRect.width
     implicitHeight: UI.Size.pixel24
 
     model: numberOfPages
-    currentIndex: indexView.currentIndex
+    currentIndex: _root.indexView.currentIndex
 
     clip: true
     interactive: false

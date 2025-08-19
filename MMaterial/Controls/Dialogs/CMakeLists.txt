@@ -4,10 +4,10 @@ qt_add_qml_module(DialogsLib
     STATIC
     QML_FILES
         Dialog.qml
-        # DialogButtonBox.qml
-        # LargeImageDialog.qml
-        # MediumImageDialog.qml
-        # InputDialog.qml
+        DialogButtonBox.qml
+        LargeImageDialog.qml
+        MediumImageDialog.qml
+        InputDialog.qml
 )
 
 set_target_properties(DialogsLib PROPERTIES AUTOMOC ON)

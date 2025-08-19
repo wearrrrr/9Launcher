@@ -102,7 +102,7 @@ Item {
         opacity: 0.1
 
         border {
-            width: UI.Size.pixel8
+            width: UI.Size.pixel8 * (root.size / (150 * UI.Size.scale))
             color: UI.Theme.primary.light
         }
     }
@@ -120,7 +120,7 @@ Item {
         }
 
         border {
-            width: 3 * UI.Size.scale
+            width: 3 * UI.Size.scale  * (root.size / (150 * UI.Size.scale))
             color: UI.Theme.primary.light
         }
     }

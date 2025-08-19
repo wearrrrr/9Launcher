@@ -7,6 +7,7 @@ T.Slider {
     id: control
 
 	property UI.PaletteBasic accent: UI.Theme.primary
+    property int decimals: 1
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             implicitHandleWidth + leftPadding + rightPadding)
@@ -26,8 +27,8 @@ T.Slider {
         implicitHeight: 24
 
         MToolTip {
-            visible: control.hovered
-            text: control.value.toFixed(1)
+            visible: control.hovered || control.pressed
+            text: control.value.toFixed(control.decimals)
             delay: 200
         }
 

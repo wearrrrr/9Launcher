@@ -83,10 +83,8 @@ Item {
             horizontalPadding: 0
             verticalPadding: 0
 
-            title.font {
-                bold: ListView.isCurrentItem
-				family: ListView.isCurrentItem ? UI.PublicSans.semiBold : UI.PublicSans.regular
-            }
+            title.font.family: UI.Font.normal
+            title.font.variableAxes: { "wght": ListView.isCurrentItem ? 600 : 400 }
 
             onClicked: _root.indexView.currentIndex = index;
         }

@@ -12,17 +12,19 @@ qt_add_qml_module(InputsLib
     VERSION 1.0
     STATIC
     QML_FILES
-        MDropdown.qml
+    ComboBox.qml
         TimePicker.qml
         MCalendar.qml
         AvatarInput.qml
         DatePicker.qml
-        MTextField.qml
+        TextField.qml
         ColorPicker.qml
         ColorPreview.qml
         ColorSelection.qml
         ColorSlider.qml
         OpacitySlider.qml
+        InputsBackground.qml
+        TextArea.qml
     SOURCES
         ${INPUTS_SOURCES}
 )

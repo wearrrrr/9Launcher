@@ -9,7 +9,7 @@ Rectangle {
 
     required property SwipeView indexView
 
-    property int numberOfPages: indexView.count
+    property int numberOfPages: _root.indexView.count
 
     implicitWidth: height * 3 - UI.Size.pixel4
     implicitHeight: UI.Size.pixel32

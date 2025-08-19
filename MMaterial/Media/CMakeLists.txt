@@ -1,6 +1,7 @@
 list(APPEND QML_ICON_SINGLETONS
     IconFont.qml
     Icons.qml
+    Images.qml
 )
 
 list(APPEND ICON_ASSETS
@@ -19,9 +20,9 @@ qt_add_qml_module(MediaLib
     QML_FILES
         ${QML_ICON_SINGLETONS}
         Icon.qml
-        # HeavyIcon.qml
         LightIcon.qml
         IconData.qml
+        HeavyIcon.qml
         IconBase.qml
         IconSet.qml
 

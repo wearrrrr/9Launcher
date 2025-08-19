@@ -67,6 +67,7 @@ Item {
                 icon.iconData: _delegate.data.icon
                 category: _delegate.data.category
                 model: _delegate.data.model ?? []
+                hidden: _delegate.data.hidden
 
                 onClicked: typeof _delegate.data.onClicked === "function" ? _delegate.data.onClicked() : () => {}
 

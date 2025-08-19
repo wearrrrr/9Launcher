@@ -9,6 +9,7 @@ Item {
     property alias source: sourceImageItem.source
     property alias fillMode: sourceImageItem.fillMode
 
+	property alias mask: mask
     property alias radius: mask.radius
     property alias topLeftRadius: mask.topLeftRadius
     property alias topRightRadius: mask.topRightRadius
@@ -46,7 +47,7 @@ Item {
         layer.enabled: true
         visible: false
         radius: width / 2
-        color: "black"
-        antialiasing: true
+		color: "black"
+		antialiasing: true
     }
 }

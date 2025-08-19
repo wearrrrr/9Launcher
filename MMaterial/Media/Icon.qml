@@ -26,8 +26,7 @@ Loader {
     Layout.preferredHeight: _root.size
     Layout.preferredWidth: _root.size
 
-	// sourceComponent: iconData?.type == Media.IconData.Light ? lightIcon : heavyIcon
-    sourceComponent: lightIcon
+	sourceComponent: iconData?.type == Media.IconData.Light ? lightIcon : heavyIcon
     asynchronous: true
     // visible: _root.status == Loader.Ready
 
@@ -45,17 +44,17 @@ Loader {
         }
     }
 
-    // Component {
-    //     id: heavyIcon
+    Component {
+        id: heavyIcon
 
-	// 	Media.HeavyIcon {
-    //         iconData: _root.iconData
-    //         size: _root.size
-    //         color: _root.color
-    //         interactive: _root.interactive
-    //         hoverable: _root.hoverable
+		Media.HeavyIcon {
+            iconData: _root.iconData
+            size: _root.size
+            color: _root.color
+            interactive: _root.interactive
+            hoverable: _root.hoverable
 
-    //         onClicked: _root.clicked()
-    //     }
-    // }
+            onClicked: _root.clicked()
+        }
+    }
 }

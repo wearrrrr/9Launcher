@@ -5,6 +5,9 @@ import FileIO 1.0
 import "main.js" as Core
 
 import MMaterial as MMaterial
+import MMaterial.UI as UI
+import MMaterial.Controls as Controls
+import MMaterial.Controls.Inputs as Inputs
 import MMaterial.Controls.Dialogs
 
 Window {
@@ -96,6 +99,13 @@ Window {
         }
     }
 
+   	Controls.AlertGenerator {
+        id: alerts
+
+        objectName: "AlertGenerator"
+        width: parent.width > 400 ? 400 * UI.Size.scale : parent.width * 0.9
+    }
+
     Dialog {
         id: dialog
         modal: true
@@ -169,7 +179,7 @@ Window {
         propagateComposedEvents: true
         anchors.fill: parent
         enabled: footer.settingsMenu.enabled || footer.infoMenu.enabled
-        visible: footer.settingsMenu.enabled || footer.infoMenu.enabled
+        visible: enabled
         onClicked: footer.hideMenus()
     }
 

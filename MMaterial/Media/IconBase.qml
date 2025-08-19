@@ -13,7 +13,7 @@ Item {
     property string color: ""
     property bool interactive: false
     property bool hoverable: true
-    property bool containsMouse: mouseArea.containsMouse
+	property bool containsMouse: mouseArea.containsMouse
 
     signal clicked
 
@@ -22,12 +22,12 @@ Item {
 
     states: [
         State {
-            when: mouseArea.pressed && _root.interactive
+			when: mouseArea.pressed && _root.interactive
             name: "pressed"
             PropertyChanges { target: _root; scale: 0.8; }
         },
         State {
-            when: _root.interactive
+			when: _root.interactive
             name: "default"
             PropertyChanges { target: _root; scale: 1; }
         }
@@ -44,16 +44,16 @@ Item {
         }
     ]
 
-    MouseArea {
-        id: mouseArea
+	MouseArea {
+		id: mouseArea
 
-        anchors.fill: _root
+		anchors.fill: _root
 
-        enabled: visible
-        visible: _root.interactive
-        hoverEnabled: _root.hoverable
+		enabled: visible
+		visible: _root.interactive
+		hoverEnabled: _root.hoverable
         cursorShape: containsMouse && _root.interactive ? Qt.PointingHandCursor : Qt.ArrowCursor
 
-        onClicked: if(_root.interactive){ _root.clicked(); }
-    }
+		onClicked: if(_root.interactive){ _root.clicked(); }
+	}
 }

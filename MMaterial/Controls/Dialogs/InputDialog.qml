@@ -54,7 +54,7 @@ T.Dialog {
     }
 
     font {
-        family: UI.PublicSans.regular
+        family: UI.Font.normal
         pixelSize: UI.Size.pixel16
     }
 
@@ -121,14 +121,14 @@ T.Dialog {
                 color: control.textColor
             }
 
-			Inputs.MTextField {
+			Inputs.TextField {
                 id: textField
 
                 Layout.fillWidth: true
-				type: Inputs.MTextField.Type.Outlined
+				type: Inputs.TextField.Type.Outlined
                 accent: UI.Theme.primary
-                placeholder: control.placeholder
-                input.anchors.rightMargin: button.visible ? button.width + button.anchors.margins : UI.Size.pixel14
+				placeholderText: control.placeholder
+				anchors.rightMargin: button.visible ? button.width + button.anchors.margins : UI.Size.pixel14
 
                 Controls.MButton {
                     id: button

@@ -130,6 +130,7 @@ Item {
                 category: _delegate.data.category
                 model: _delegate.data.model ?? []
                 chip: _delegate.data.chip
+                hidden: _delegate.data.hidden
 
                 onClicked: typeof _delegate.data.onClicked === "function" ? _delegate.data.onClicked() : () => {}
             }

@@ -10,6 +10,7 @@ T.MenuItem {
 
     property color color: control.highlighted ? UI.Theme.text.primary : UI.Theme.text.secondary
 	property Media.IconData iconData: null
+	property bool useIcons: true
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             implicitContentWidth + leftPadding + rightPadding)
@@ -27,7 +28,7 @@ T.MenuItem {
     }
 
     font {
-		family: UI.PublicSans.regular
+        family: UI.Font.normal
         pixelSize: UI.Size.pixel14
     }
 
@@ -42,21 +43,18 @@ T.MenuItem {
         opacity: control.enabled ? 1.0 : 0.48
 
         RowLayout {
-            anchors {
-                fill: contentItemRoot
-                rightMargin: control.indicator.visible || control.arrow.visible ? control.icon.width + control.padding * 2 : 0
-            }
-            spacing: control.spacing
+			spacing: control.spacing
 
             anchors {
                 fill: contentItemRoot
-                leftMargin: control.padding
-                rightMargin: control.padding
+				rightMargin: control.indicator.visible || control.arrow.visible ? control.icon.width + control.rightPadding * 2 : 0
+				leftMargin: control.useIcons ? 0 : control.horizontalPadding
             }
 
 			Media.Icon {
                 size: control.icon.height
                 iconData: control.iconData
+				visible: control.useIcons
 
 				color: Qt.color(control.color)
             }
@@ -82,14 +80,14 @@ T.MenuItem {
         visible: control.checked
 		iconData: control.checkable ? Media.Icons.light.check : null
 		color: Qt.color(control.color)
-        size: control.icon.height + UI.Size.pixel4
+		size: control.icon.height
     }
 
 	arrow: Media.Icon {
         x: control.mirrored ? control.leftPadding : control.width - width - control.padding * 2
         y: control.topPadding + (control.availableHeight - height) / 2
 
-        size: control.icon.height - UI.Size.pixel4
+		size: control.icon.height
         visible: control.subMenu
 		iconData: control.subMenu ? Media.Icons.light.chevronRight : null
 		color: Qt.color(control.color)

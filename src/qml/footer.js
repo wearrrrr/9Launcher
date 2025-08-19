@@ -16,7 +16,6 @@ function resetSettings() {
     // This will trigger onCheckedChanged for each setting, which will save the new value :D
     warningsSetting.switchValue = true;
     rpcSetting.switchValue = false;
-    fileLoggingSetting.switchValue = false;
     launchInfoSetting.switchValue = false;
 
     // Clear games

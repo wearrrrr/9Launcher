@@ -6,12 +6,12 @@ import MMaterial.Media as Media
 Media.IconBase {
     id: _root
 
-    Text {
+	Text {
         anchors {
             centerIn: _root
         }
 
-        text: _root.iconData ? _root.iconData.path : ""
+        text: _root.iconData.path
 		color: _root.color == "" ? UI.Theme.text.primary : _root.color
 
         horizontalAlignment: Qt.AlignHCenter

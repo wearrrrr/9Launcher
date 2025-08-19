@@ -1,35 +1,46 @@
 list(APPEND CONTROLS_QML_FILES
     MButton.qml
-    # MToggleButton.qml
-    # MFabButton.qml
+    MToggleButton.qml
+    MFabButton.qml
     MCheckbox.qml
+    CheckedGroup.qml
     Checkable.qml
-    # MRadioButton.qml
+    MRadioButton.qml
     MSwitch.qml
-    # MTabButton.qml
-    # MTabs.qml
-    # BadgeNumber.qml
-    # BadgeDot.qml
-    # Badge.qml
-    # Alert.qml
-    # AlertGenerator.qml
-    # Avatar.qml
+    MTabButton.qml
+    MTabs.qml
+    BadgeNumber.qml
+    BadgeDot.qml
+    Badge.qml
+    Accordion.qml
+    Alert.qml
+    AlertGenerator.qml
+    Avatar.qml
     MProgressBar.qml
-    # MCircularProgressBar.qml
-    # BusyIndicator.qml
-    # MScrollIndicator.qml
+    MCircularProgressBar.qml
+    BusyIndicator.qml
+    MScrollIndicator.qml
     MToolTip.qml
-    # MLoader.qml
-    # MSlider.qml
-    # MRectangle.qml
-    # MBorder.qml
-    # CornerRadii.qml
-    # MaskedImage.qml
-    # Popup.qml
-    # ScrollBar.qml
-    # Menu.qml
-    # MenuItem.qml
-    # MenuSeparator.qml
+    MLoader.qml
+    MSlider.qml
+    MRectangle.qml
+    MBorder.qml
+    CornerRadii.qml
+    MaskedImage.qml
+    Popup.qml
+    ScrollBar.qml
+    Menu.qml
+    MenuItem.qml
+    MenuSeparator.qml
+    ListItem.qml
+    ListItemContact.qml
+    AbstractListItem.qml
+    MultiStateButton.qml
+    ToggleButtonGroup.qml
+    SpinBox.qml
+    Breadcrumbs.qml
+    SwipeBar.qml
+    ScrollView.qml
 )
 
 qt_add_qml_module(ControlsLib
@@ -38,16 +49,16 @@ qt_add_qml_module(ControlsLib
     STATIC
 
     IMPORTS
-        # MMaterial.Controls.Inputs
+        MMaterial.Controls.Inputs
 
     OPTIONAL_IMPORTS
         MMaterial.Controls.Dialogs
-        # MMaterial.Controls.Pagination
-        # MMaterial.Controls.Sidebar
+        MMaterial.Controls.Pagination
+        MMaterial.Controls.Sidebar
 
     QML_FILES ${CONTROLS_QML_FILES}
-    # SOURCES
-    #     src/AlertController.h src/AlertController.cpp
+    SOURCES
+        src/AlertController.h src/AlertController.cpp
 )
 
 set_target_properties(ControlsLib PROPERTIES AUTOMOC ON)
@@ -60,6 +71,6 @@ target_include_directories(ControlsLib PUBLIC
 )
 
 add_subdirectory(Dialogs)
-# add_subdirectory(Inputs)
-# add_subdirectory(Pagination)
-# add_subdirectory(Sidebar)
+add_subdirectory(Inputs)
+add_subdirectory(Pagination)
+add_subdirectory(Sidebar)

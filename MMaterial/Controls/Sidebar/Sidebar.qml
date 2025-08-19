@@ -13,11 +13,20 @@ Rectangle {
     default property list<SidebarItem> sidebarItems
 
     property alias loader: _loader
+    property alias customMargins: customMargins
 
     property string name
     property string role
 
-    property int currentIndex: -1
+    property alias currentIndex: d.sidebarData.currentIndex
+    property SidebarItem currentItem: currentIndex >= 0 && currentIndex < sidebarItems.length ? sidebarItems[currentIndex] : null
+
+    component MarginComponent: QtObject {
+        property int left: UI.Size.pixel32
+        property int right: UI.Size.pixel32
+        property int top: UI.Size.pixel32
+        property int bottom: UI.Size.pixel32
+    }
 
     implicitHeight: parent.height
 
@@ -49,11 +58,10 @@ Rectangle {
                     height: root.parent.height
 
                     mainView.anchors {
-                        margins: UI.Size.pixel32
-                        left: root.right
-                        top: root.parent.top
-                        bottom: root.parent.bottom
-                        right: root.parent.right
+                        left: root.right; leftMargin: customMargins.left
+                        top: root.parent.top; topMargin: customMargins.top
+                        bottom: root.parent.bottom; bottomMargin: customMargins.bottom
+                        right: root.parent.right; rightMargin: customMargins.right
                     }
                 }
 
@@ -69,11 +77,10 @@ Rectangle {
                     height: root.parent.height
 
                     mainView.anchors {
-                        margins: UI.Size.pixel32
-                        left: root.right
-                        top: root.parent.top
-                        bottom: root.parent.bottom
-                        right: root.parent.right
+                        left: root.right; leftMargin: customMargins.left
+                        top: root.parent.top; topMargin: customMargins.top
+                        bottom: root.parent.bottom; bottomMargin: customMargins.bottom
+                        right: root.parent.right; rightMargin: customMargins.right
                     }
                 }
 
@@ -89,11 +96,10 @@ Rectangle {
                     height: UI.Size.pixel64
 
                     mainView.anchors {
-                        margins: UI.Size.pixel32
-                        left: root.parent.left
-                        top: root.parent.top
-                        bottom: root.top
-                        right: root.parent.right
+                        left: root.parent.left; leftMargin: customMargins.left
+                        top: root.parent.top; topMargin: customMargins.top
+                        bottom: root.top; bottomMargin: customMargins.bottom
+                        right: root.parent.right; rightMargin: customMargins.right
                     }
                 }
             }
@@ -152,6 +158,10 @@ Rectangle {
             }
         }
     ]
+
+    MarginComponent {
+        id: customMargins
+    }
 
     Loader {
         id: _loader

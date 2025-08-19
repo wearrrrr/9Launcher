@@ -6,7 +6,10 @@ import QtQuick.Layouts
 import QtQuick.Controls.Material
 
 import MMaterial
+import MMaterial.UI as UI
 import MMaterial.Controls as Controls
+import MMaterial.Controls.Inputs as Inputs
+
 import "footer.js" as Footer
 import FileIO
 
@@ -39,7 +42,7 @@ Rectangle {
     FooterPanel {
         id: settingsMenu
         width: 330
-        height: 250
+        height: 220
         alignTo: "left"
         enabled: false
 
@@ -63,12 +66,6 @@ Rectangle {
                     text: qsTr("Discord RPC")
                     id: rpcSetting
                     update: "rpc"
-                }
-
-                Setting {
-                    text: qsTr("File Logging")
-                    id: fileLoggingSetting
-                    update: "fileLogging"
                 }
 
                 Setting {
@@ -163,11 +160,25 @@ Rectangle {
                     onClicked: {
                         Footer.copyInfo([info, version, os, qtver, arch], copyInfo);
                         console.log("Info copied to clipboard!");
-                        // let details = {
-                        //     severity: Alert.Severity.Success,
-                        //     variant: Alert.Variant.Standard,
-                        // }
-                        // Controls.AlertController.alert("Info copied to clipboard!", details, 3500);
+                        let actionButton = {
+                            text : "Action",
+                            onClicked : function() {
+                                console.log("Action clicked")
+                            }
+                        }
+
+                        let dismissButton = {
+                            text : "Close",
+                        }
+
+                        let details = {
+                            severity: Controls.Alert.Severity.Success,
+                            variant: Controls.Alert.Variant.Standard,
+                            actionButton : actionButton,
+                            dismissButton : dismissButton
+                        }
+
+						Controls.AlertController.alert("Info copied to clipboard!", details, 3500, alerts.objectName)
                     }
                 }
             }

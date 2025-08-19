@@ -16,6 +16,7 @@ T.Dialog {
 	property real iconSize: UI.Size.pixel24
     property color textColor: UI.Theme.text.secondary
     property bool showXButton: false
+	property real maxWidth: 480 * UI.Size.scale
 
 	component DialogButton: Controls.MButton {
         Layout.alignment: Qt.AlignRight
@@ -35,7 +36,7 @@ T.Dialog {
 		type: Controls.MButton.Type.Outlined
     }
 
-    implicitWidth: Math.min(480 * UI.Size.scale, Math.max(implicitBackgroundWidth + leftInset + rightInset,
+	implicitWidth: Math.min(control.maxWidth, Math.max(implicitBackgroundWidth + leftInset + rightInset,
                                                                   contentWidth + leftPadding + rightPadding,
                                                                   implicitHeaderWidth + leftPadding + rightPadding,
                                                                   implicitFooterWidth + leftPadding + rightPadding))
@@ -64,6 +65,11 @@ T.Dialog {
         radius: UI.Size.pixel16
         color: UI.Theme.background.paper
 
+		border {
+			width: control.dim ? 0 : 1
+			color: UI.Theme.other.outline
+		}
+
         Media.Icon {
             id: closeIcon
 
@@ -84,7 +90,7 @@ T.Dialog {
     }
 
     font {
-        family: UI.PublicSans.regular
+        family: UI.Font.normal
         pixelSize: UI.Size.pixel16
     }
 

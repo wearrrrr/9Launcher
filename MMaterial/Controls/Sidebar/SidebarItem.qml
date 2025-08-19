@@ -19,5 +19,5 @@ Item {
 
     property var onClicked
 
-
+    property bool hidden: false
 }

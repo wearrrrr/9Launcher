@@ -4,10 +4,10 @@ import MMaterial.UI as UI
 
 UI.BaseText {
 	lineHeight: 1
-    wrapMode: Text.WordWrap
+	wrapMode: Text.WordWrap
 
-    font {
-		family: UI.PublicSans.regular
-        pixelSize: UI.Size.pixel16
-    }
+	font {
+        family: UI.Font.body
+		pixelSize: UI.Size.pixel16
+	}
 }

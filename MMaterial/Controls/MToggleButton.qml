@@ -17,7 +17,7 @@ Rectangle {
 
     signal clicked
 
-    radius: 8
+	radius: UI.Size.pixel8
     opacity: mouseArea.pressed ? 0.7 : 1 //TODO replace with ripple effect when OpacityMask is fixed in Qt6
 	border.width: UI.Size.pixel1
 
@@ -49,8 +49,32 @@ Rectangle {
         anchors.centerIn: _root
 
 		iconData: Media.Icons.heavy.logo
-        visible: iconData.path != ""
+		visible: iconData && iconData.path !== ""
         size: _root.height * 0.7
+
+		states: [
+			State {
+				when: mouseArea.pressed
+				name: "pressed"
+				PropertyChanges { target: _icon; scale: 0.8; }
+			},
+			State {
+				when: true
+				name: "default"
+				PropertyChanges { target: _icon; scale: 1; }
+			}
+		]
+
+		transitions: [
+			Transition {
+				from: "pressed"
+				NumberAnimation { target: _icon; properties: "scale"; duration: 1150; easing.type: Easing.OutElastic; }
+			},
+			Transition {
+				from: "default"
+				NumberAnimation { target: _icon; properties: "scale"; duration: 70; }
+			}
+		]
     }
 
     //Non-Visual elements

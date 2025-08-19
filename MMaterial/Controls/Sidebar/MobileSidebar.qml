@@ -39,7 +39,7 @@ Item {
 
             property SidebarItem data: root.model[index]
 
-            width: UI.Size.pixel36 * 2
+            width: _delegate.data.hidden ? 0 : UI.Size.pixel36 * 2
             height: barList.height
 
             sidebarData: root.sidebarData
@@ -47,6 +47,7 @@ Item {
             icon.iconData: _delegate.data.icon
             category: _delegate.data.category
             model: _delegate.data.model ?? []
+            hidden: _delegate.data.hidden
 
             contextMenu {
                 x: 0

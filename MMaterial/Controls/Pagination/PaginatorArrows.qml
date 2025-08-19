@@ -10,9 +10,9 @@ Item {
     required property SwipeView indexView
 
     anchors {
-        left: indexView.left
-        right: indexView.right
-        verticalCenter: indexView.verticalCenter
+        left: _root.indexView.left
+        right: _root.indexView.right
+        verticalCenter: _root.indexView.verticalCenter
         margins: UI.Size.pixel16
     }
 

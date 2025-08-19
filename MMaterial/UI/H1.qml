@@ -3,11 +3,11 @@ import QtQuick
 import MMaterial.UI as UI
 
 UI.BaseText {
-    elide: Text.ElideRight
     lineHeight: 1
+    elide: Text.ElideRight
 
     font {
-		family: UI.PublicSans.extraBold
+        variableAxes: { "wght": 800 }
         pixelSize: UI.Size.pixel64
     }
 }

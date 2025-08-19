@@ -211,49 +211,44 @@ ColumnLayout {
             }
         }
 
-        MouseArea {
-            id: dateMA
+		MouseArea {
+			id: dateMA
 
-            anchors.fill: grid
-            hoverEnabled: true
-            cursorShape: Qt.PointingHandCursor
-            acceptedButtons: Qt.LeftButton | Qt.RightButton
+			anchors.fill: grid
+			hoverEnabled: true
+			cursorShape: Qt.PointingHandCursor
+			acceptedButtons: Qt.LeftButton | Qt.RightButton
 
-            onPressed: (mouse) => {
-                           if (mouse.button == Qt.LeftButton) {
-                               if (!d.highlightedElement) return;
+			property bool selectionActive: false
 
-                               let date = d.highlightedElement.date
-                               d.initPointDate = date;
-                               d.firstSelectedDate = date;
-                               d.lastSelectedDate = date;
-                           }
-                       }
+			onClicked: (mouse) => {
+				if (mouse.button == Qt.RightButton) {
+					d.reset();
+					selectionActive = false;
+					return;
+				}
 
-            onClicked: (mouse) => {
-                           if (mouse.button == Qt.RightButton) {
-                               d.reset();
-                           }
-                       }
+				if (!d.highlightedElement) return;
 
-            onPositionChanged: (mouse) => {
-                                   if (!dateMA.pressed || mouse.button == Qt.RightButton) return;
+				let date = d.highlightedElement.date;
 
-                                   let newDate = grid.itemAt(dateMA.mouseX, dateMA.mouseY);
-                                   if (!newDate || !d.initPointDate) return;
-
-                                   newDate = newDate.date;
-                                   if (newDate === d.lastSelectedDate) return;
-
-                                   if (d.compareDates(newDate, d.initPointDate) === -1) {
-                                       d.firstSelectedDate = newDate;
-                                       d.lastSelectedDate = d.initPointDate;
-                                   } else {
-                                       d.firstSelectedDate = d.initPointDate;
-                                       d.lastSelectedDate = newDate;
-                                   }
-                               }
-        }
+				if (!selectionActive) {
+					// Start new selection
+					d.firstSelectedDate = date;
+					d.lastSelectedDate = date;
+					selectionActive = true;
+				} else {
+					// Complete the range selection
+					if (d.compareDates(date, d.firstSelectedDate) < 0) {
+						d.lastSelectedDate = d.firstSelectedDate;
+						d.firstSelectedDate = date;
+					} else {
+						d.lastSelectedDate = date;
+					}
+					selectionActive = false;
+				}
+			}
+		}
     }
 
     QtObject {

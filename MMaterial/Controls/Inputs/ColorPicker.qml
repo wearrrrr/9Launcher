@@ -99,8 +99,8 @@ Dialogs.Dialog {
     }
 
     onClosed: () => {
-        hexField.input.focus = false
-        hexField.input.deselect()
+		hexField.focus = false
+		hexField.deselect()
         opacityInput.focus = false
         opacityInput.deselect()
     }
@@ -186,32 +186,27 @@ Dialogs.Dialog {
                 Layout.fillWidth: true
                 Layout.leftMargin: UI.Size.pixel4
                 Layout.rightMargin: UI.Size.pixel4
-                Layout.minimumHeight: UI.Size.pixel36
-                Layout.topMargin: -UI.Size.pixel10
+				Layout.preferredHeight: UI.Size.pixel32
 
                 spacing: UI.Size.pixel15
 
-                Inputs.MTextField {
+                Inputs.TextField {
                     id: hexField
 
+					Layout.maximumHeight: UI.Size.pixel32
                     Layout.leftMargin: UI.Size.pixel5
                     Layout.alignment: Qt.AlignHCenter
                     Layout.fillWidth: true
-                    placeholder: ""
 
-                    input {
-                        horizontalAlignment: Text.AlignLeft
-                        inputMask: "HHHHHHhh"
-                        topPadding: 0
-                        bottomPadding: 0
-                        leftPadding: hashtagPrefix.contentWidth + hashtagPrefix.anchors.leftMargin + UI.Size.pixel2
-                        rightPadding: UI.Size.pixel6
-                        text: internal.color.toString().toUpperCase()
-                        font.pixelSize: UI.Size.pixel16
+					horizontalAlignment: Text.AlignLeft
+					inputMask: "HHHHHHhh"
+					leftPadding: hashtagPrefix.contentWidth + hashtagPrefix.anchors.leftMargin + UI.Size.pixel2
+					rightPadding: UI.Size.pixel6
+					text: internal.color.toString().toUpperCase().replace(/\s/g, '')
+					font.pixelSize: UI.Size.pixel16
 
-                        onEditingFinished: internal.color = `#${text}`
-                        onActiveFocusChanged: if (hexField.input.activeFocus) hexField.input.selectAll()
-                    }
+					onEditingFinished: internal.color = `#${text}`
+					onActiveFocusChanged: if (hexField.activeFocus) hexField.selectAll()
 
                     UI.Caption {
                         id: hashtagPrefix
@@ -221,7 +216,7 @@ Dialogs.Dialog {
                             verticalCenter: hexField.verticalCenter; verticalCenterOffset: hexField.height / 7
                         }
 
-                        font: hexField.input.font
+						font: hexField.font
                         text: "#"
                     }
 
@@ -233,7 +228,7 @@ Dialogs.Dialog {
                             verticalCenter: opacityInput.verticalCenter
                         }
 
-                        font: hexField.input.font
+						font: hexField.font
                         text: "%"
                     }
 
@@ -250,12 +245,12 @@ Dialogs.Dialog {
                         width: UI.Size.pixel36
                         text: Math.round(internal.color.a * 100)
 
-                        color: hexField.input.color
+						color: hexField.color
                         horizontalAlignment: Qt.AlignRight
                         verticalAlignment: Qt.AlignVCenter
-                        font: hexField.input.font
+						font: hexField.font
                         selectByMouse: true
-                        selectionColor: hexField.input.selectionColor
+						selectionColor: hexField.selectionColor
 
                         onEditingFinished: internal.color.a = (parseInt(opacityInput.text) / 100)
                         onActiveFocusChanged: if (activeFocus) opacityInput.selectAll()
@@ -274,7 +269,6 @@ Dialogs.Dialog {
 
                 Media.Icon {
                     Layout.alignment: Qt.AlignBottom
-                    Layout.bottomMargin: hexField.height / 10
 
                     size: UI.Size.pixel24
 					color: UI.Theme.text.primary.toString()

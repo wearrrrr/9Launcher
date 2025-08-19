@@ -26,6 +26,7 @@ Item {
     property bool isOpen: false
 
     property real openingSpeed: 150
+    property bool hidden: false
 
     function selectItem(subindex) : void {
 		if (ListView.view) {
@@ -43,8 +44,9 @@ Item {
 
     signal clicked
 
-    height: _listView.height + _listView.anchors.topMargin + _mainItem.height
+    height: _root.hidden ? 0 : (_listView.height + _listView.anchors.topMargin + _mainItem.height)
     width: ListView.view ? ListView.view.width : 0
+    clip: true
 
     states: [
         State{
@@ -94,7 +96,7 @@ Item {
                 name: "disabled"
                 when: !_root.enabled
                 PropertyChanges{ target: _checkableBackground; color: "transparent"; opacity: 0.64; }
-                PropertyChanges { target: _title; font.family: UI.PublicSans.regular; color: UI.Theme.text.secondary }
+                PropertyChanges { target: _title; font.variableAxes: { "wght": 400 }; color: UI.Theme.text.secondary }
                 PropertyChanges{ target: _icon; color: UI.Theme.text.secondary }
                 PropertyChanges{ target: _arrow; color: UI.Theme.text.secondary }
             },
@@ -102,7 +104,7 @@ Item {
                 name: "checked"
                 when: _root.checked
                 PropertyChanges{ target: _checkableBackground; color: _mainItem.mouseArea.containsMouse ? UI.Theme.primary.transparent.p16 : UI.Theme.primary.transparent.p8; opacity: 1;}
-                PropertyChanges { target: _title; font.family: UI.PublicSans.semiBold; color: UI.Theme.primary.main; }
+                PropertyChanges { target: _title; font.variableAxes: { "wght": 600 }; color: UI.Theme.primary.main; }
                 PropertyChanges{ target: _icon; color: UI.Theme.primary.main }
                 PropertyChanges{ target: _arrow; color: UI.Theme.primary.main; }
             },
@@ -110,7 +112,7 @@ Item {
                 name: "unchecked"
                 when: !_root.checked
                 PropertyChanges{ target: _checkableBackground; color: _mainItem.mouseArea.containsMouse ? UI.Theme.background.neutral : "transparent"; opacity: 1;}
-                PropertyChanges { target: _title; font.family: UI.PublicSans.regular; color: UI.Theme.text.secondary }
+                PropertyChanges { target: _title; font.variableAxes: { "wght": 400 }; color: UI.Theme.text.secondary }
                 PropertyChanges{ target: _icon; color: UI.Theme.text.secondary }
                 PropertyChanges{ target: _arrow; color: UI.Theme.text.secondary }
             }
@@ -231,21 +233,21 @@ Item {
                     when: !_subItem.enabled
                     PropertyChanges{ target: _subItem; opacity: 0.68; }
                     PropertyChanges{ target: _dot; color: UI.Theme.text.secondary; scale: 1 }
-                    PropertyChanges{ target: _label; color: UI.Theme.text.secondary; font.family: UI.PublicSans.regular }
+                    PropertyChanges{ target: _label; color: UI.Theme.text.secondary; font.variableAxes: { "wght": 400 } }
                 },
                 State {
                     name: "checked"
 					when: _root.sidebarData.currentSubIndex === _subItem.index && _root.checked
                     PropertyChanges{ target: _subItem; opacity: 1; }
                     PropertyChanges{ target: _dot; color: UI.Theme.primary.main; scale: 3 }
-                    PropertyChanges{ target: _label; color: UI.Theme.text.primary; font.family: UI.PublicSans.semiBold }
+                    PropertyChanges{ target: _label; color: UI.Theme.text.primary; font.variableAxes: { "wght": 600 } }
                 },
                 State {
                     name: "unchecked"
                     when: true
                     PropertyChanges{ target: _subItem; opacity: 1; }
                     PropertyChanges{ target: _dot; color: UI.Theme.text.secondary; scale: 1 }
-                    PropertyChanges{ target: _label; color: UI.Theme.text.secondary; font.family: UI.PublicSans.regular }
+                    PropertyChanges{ target: _label; color: UI.Theme.text.secondary; font.variableAxes: { "wght": 400 } }
                 }
             ]
 
