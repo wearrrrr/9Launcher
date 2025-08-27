@@ -159,23 +159,10 @@ Rectangle {
                     accent: Theme.info
                     onClicked: {
                         Footer.copyInfo([info, version, os, qtver, arch], copyInfo);
-                        console.log("Info copied to clipboard!");
-                        let actionButton = {
-                            text : "Action",
-                            onClicked : function() {
-                                console.log("Action clicked")
-                            }
-                        }
-
-                        let dismissButton = {
-                            text : "Close",
-                        }
 
                         let details = {
                             severity: Controls.Alert.Severity.Success,
                             variant: Controls.Alert.Variant.Standard,
-                            actionButton : actionButton,
-                            dismissButton : dismissButton
                         }
 
 						Controls.AlertController.alert("Info copied to clipboard!", details, 3500, alerts.objectName)
