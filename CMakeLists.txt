@@ -34,18 +34,6 @@ qt_add_executable(9Launcher
 
 file(GLOB GAME_IMAGES RELATIVE ${CMAKE_SOURCE_DIR} "${CMAKE_SOURCE_DIR}/game-images/*.png")
 
-qt_add_qml_module(downloader
-    URI Downloader
-    VERSION 1.0
-    SOURCES
-        src/cpp/Downloader.cpp
-        src/cpp/include/Downloader.h
-    OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Downloader"
-)
-target_include_directories(downloader
-    PRIVATE src/cpp/include/
-)
-
 qt_add_qml_module(9Launcher
     URI nineLauncher
     VERSION 1.0
@@ -70,6 +58,7 @@ qt_add_qml_module(9Launcher
         SOURCES
             src/cpp/include/AppSettings.h
             src/cpp/include/Clipboard.h
+            src/cpp/include/Downloader.h
             src/cpp/include/FileIO.h
             src/cpp/include/GameLauncher.h
             src/cpp/include/RPC.h
@@ -77,6 +66,7 @@ qt_add_qml_module(9Launcher
 
             src/cpp/AppSettings.cpp
             src/cpp/Clipboard.cpp
+            src/cpp/Downloader.cpp
             src/cpp/FileIO.cpp
             src/cpp/GameLauncher.cpp
             src/cpp/RPC.cpp
@@ -107,7 +97,6 @@ target_include_directories(9Launcher
 )
 
 set_target_properties(MMaterialLib PROPERTIES AUTOMOC ON)
-target_link_libraries(9Launcher PRIVATE downloader)
 target_link_libraries(9Launcher PRIVATE Qt6::Quick Qt::Gui discord-rpc)
 
 set_target_properties(9Launcher PROPERTIES
