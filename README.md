@@ -2,7 +2,7 @@
 
 ## 9Launcher is a Linux and Windows launcher for Touhou Games!
 
-[Official Discord Created!](https://discord.gg/cxmG2jcTpr)
+[Official Discord Created!](https://discord.gg/zxksAmB4am)
 
 This is a complete rewrite of 9Launcher v1, which was written in Tauri, now being written entirely in [QT](https://www.qt.io/)!
 
