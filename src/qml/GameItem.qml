@@ -43,7 +43,7 @@ Button {
         id: gameImage
         width: parent.width
         height: parent.height
-        source: "/nineLauncher/game-images/" + parent.item.game_id + ".webp"
+        source: "/nineLauncher/game-images/" + parent.item.game_id + ".png"
 
         layer.enabled: !isInstalled
         layer.effect: ShaderEffect {
@@ -139,7 +139,7 @@ Button {
 
             currentInstalled.installed.push(targetItem);
 
-            gameImage.source = "/nineLauncher/game-images/" + button.item.game_id + ".webp";
+            gameImage.source = "/nineLauncher/game-images/" + button.item.game_id + ".png";
             button.isInstalled = true
 
             fileIO.write(path, JSON.stringify(currentInstalled));
