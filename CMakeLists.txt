@@ -73,6 +73,11 @@ qt_add_qml_module(9Launcher
             src/cpp/Util.cpp
 )
 
+if (WIN32)
+    enable_language(RC)
+    target_sources(9Launcher PRIVATE assets/windows/9Launcher.rc)
+endif()
+
 qt6_add_shaders(9Launcher "ninelauncher_shaders"
     PREFIX /shaders
     FILES
