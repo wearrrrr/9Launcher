@@ -7,6 +7,7 @@ import "main.js" as Core
 import MMaterial as MMaterial
 import MMaterial.UI as UI
 import MMaterial.Controls as Controls
+import MMaterial.Media as Media
 import MMaterial.Controls.Inputs as Inputs
 import MMaterial.Controls.Dialogs
 
@@ -25,9 +26,9 @@ Window {
 
     Component.onCompleted: () => {
         UI.Theme.primary = UI.BasicBlue;
-        UI.Theme.background.main = "#263238"
-        UI.Theme.background.paper = "#182024"
-    };
+        UI.Theme.background.main = "#263238";
+        UI.Theme.background.paper = "#182024";
+    }
 
     property var mainModel: []
     property var spinoffModel: []
@@ -42,6 +43,35 @@ Window {
         id: appLayout
         width: parent.width
         spacing: 0
+
+        Item {
+            Layout.fillWidth: true
+            Layout.preferredHeight: UI.Size.pixel48
+
+            Controls.MTabs {
+                id: tabs
+                anchors.horizontalCenter: parent.horizontalCenter
+                height: parent.height
+
+                width: contentWidth
+
+                model: ObjectModel {
+                    Controls.MTabButton {
+                        text: "Official Games"
+                    }
+                    Controls.MTabButton {
+                        text: "Fan Games"
+                    }
+                    Controls.MTabButton {
+                        text: "Seihou"
+                    }
+                }
+
+                onCurrentIndexChanged: {
+                    console.log("Selected tab:", tabs.currentItem.text)
+                }
+            }
+        }
 
         Item {
             Layout.preferredHeight: 30
@@ -101,7 +131,7 @@ Window {
         }
     }
 
-   	Controls.AlertGenerator {
+    Controls.AlertGenerator {
         id: alerts
 
         objectName: "AlertGenerator"
