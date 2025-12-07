@@ -1,6 +1,6 @@
 #include "winver.h"
 
-IDI_ICON1 ICON "QmlAppTemplate.ico"
+IDI_ICON1 ICON "9Launcher.ico"
 
 VS_VERSION_INFO VERSIONINFO
  FILEVERSION 1,0,0,0
@@ -15,13 +15,13 @@ BEGIN
     BEGIN
         BLOCK "000004b0"
         BEGIN
-            VALUE "CompanyName", "QmlAppTemplate"
-            VALUE "FileDescription", "QmlAppTemplate"
+            VALUE "CompanyName", "wearr"
+            VALUE "FileDescription", "9Launcher is a launcher for Touhou Project Games written in QT"
             VALUE "FileVersion", "1.0.0.0"
-            VALUE "LegalCopyright", "Copyright (C) 2024 QmlAppTemplate"
-            VALUE "InternalName", "QmlAppTemplate"
-            VALUE "OriginalFilename", "QmlAppTemplate.exe"
-            VALUE "ProductName", "QmlAppTemplate"
+            VALUE "LegalCopyright", "Copyright (C) 2025 9Launcher"
+            VALUE "InternalName", "9Launcher"
+            VALUE "OriginalFilename", "9Launcher.exe"
+            VALUE "ProductName", "9Launcher"
             VALUE "ProductVersion", "1.0.0.0"
         END
     END
