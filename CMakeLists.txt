@@ -53,6 +53,8 @@ qt_add_qml_module(9Launcher
 
         RESOURCES
             src/json/games.json
+            src/json/fan_games.json
+            src/json/seihou.json
             ${GAME_IMAGES}
 
         SOURCES

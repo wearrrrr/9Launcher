@@ -33,10 +33,10 @@ Window {
     property var mainModel: []
     property var spinoffModel: []
 
-    function populateGamesList() {
+    function populateGamesList(jsonFile) {
         mainModel = [];
         spinoffModel = [];
-        Core.populateGamesList();
+        Core.populateGamesList(jsonFile);
     }
 
     ColumnLayout {
@@ -57,18 +57,21 @@ Window {
 
                 model: ObjectModel {
                     Controls.MTabButton {
+                        property string json: "games.json"
                         text: "Official Games"
                     }
                     Controls.MTabButton {
+                        property string json: "fan_games.json"
                         text: "Fan Games"
                     }
                     Controls.MTabButton {
+                        property string json: "seihou.json"
                         text: "Seihou"
                     }
                 }
 
                 onCurrentIndexChanged: {
-                    console.log("Selected tab:", tabs.currentItem.text)
+                    populateGamesList(tabs.currentItem.json);
                 }
             }
         }
@@ -77,7 +80,7 @@ Window {
             Layout.preferredHeight: 30
             Layout.alignment: Qt.AlignLeft
             UI.H4 {
-                text: "Mainline Games"
+                text: "Main Games"
                 font.bold: true
                 padding: 5
             }
@@ -90,7 +93,7 @@ Window {
             spacing: 5
             padding: 10
 
-            Component.onCompleted: populateGamesList()
+            Component.onCompleted: populateGamesList(tabs.currentItem.json);
             Repeater {
                 model: window.mainModel
                 delegate: GameItem {
@@ -110,6 +113,8 @@ Window {
                 font.bold: true
                 padding: 5
             }
+
+            visible: window.spinoffModel.length > 0
         }
 
         Flow {
@@ -128,6 +133,7 @@ Window {
                     isPC98: false
                 }
             }
+            visible: window.spinoffModel.length > 0
         }
     }
 

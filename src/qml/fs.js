@@ -13,7 +13,7 @@ function read(path) {
             content: request.response
         };
     } else {
-        console.error("Error loading file: ", request.status, request.statusText);
+        console.error("Error loading file " + path, "Status: " + request.status);
         return null;
     }
 }

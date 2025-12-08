@@ -1,0 +1,19 @@
+{
+  "games": {
+    "shuusou-gyoku": {
+      "en_title": "Shuusou Gyoku",
+      "jp_title": "秋霜玉",
+      "game_id": "sh01"
+    },
+    "kioh-gyoku": {
+      "en_title": "Kioh Gyoku",
+      "jp_title": "稀翁玉",
+      "game_id": "sh02"
+    },
+    "banshiryuu": {
+      "en_title": "Banshiryuu",
+      "jp_title": "幡紫竜",
+      "game_id": "sh03"
+    }
+  }
+}
