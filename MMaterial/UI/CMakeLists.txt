@@ -30,8 +30,8 @@ list(APPEND UI_QML_FILES
     H4.qml
     H5.qml
     H6.qml
-    Subtitle1.qml
-    Subtitle2.qml
+    # Subtitle1.qml
+    # Subtitle2.qml
     B1.qml
     B2.qml
     Caption.qml
@@ -39,9 +39,9 @@ list(APPEND UI_QML_FILES
     BaseText.qml
     EasedAnimation.qml
     ElasticAnimation.qml
-    DashedLine.qml
-    Pre.qml
-    Teardrop.qml
+    # DashedLine.qml
+    # Pre.qml
+    # Teardrop.qml
 )
 
 set_source_files_properties(

@@ -48,9 +48,8 @@ jobs:
       # Build application
       - name: Build application
         run: |
-             cmake --version
-             cmake -B build/ -DCMAKE_BUILD_TYPE=Release -G Ninja
-             cmake --build build/ --config Release
+            ./build.sh -DCMAKE_BUILD_TYPE=Release
+            strip bin/9Launcher
 
       # Deploy application
       - name: Deploy application
@@ -152,10 +151,9 @@ jobs:
       # Build application
       - name: Build application
         run: |
-             cmake --version
-             cmake -B build/ -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles"
+             cmake -B build/ -DCMAKE_BUILD_TYPE=Release -G Ninja
              cd build/
-             nmake
+             ninja -j%NUMBER_OF_PROCESSORS%
 
       # Deploy application
       - name: Deploy application

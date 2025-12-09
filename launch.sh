@@ -1,6 +1,6 @@
 #!/bin/bash
 rm bin/9Launcher
-./build.sh
+./build.sh $@
 if ([ -f bin/9Launcher ]); then
     ./bin/9Launcher
     else

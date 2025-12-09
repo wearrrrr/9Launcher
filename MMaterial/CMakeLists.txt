@@ -15,8 +15,6 @@ qt_add_qml_module(MMaterialLib
     #     MMaterial.Network
 )
 
-file(GLOB PNG_ASSETS "Media/assets/other/*.png")
-file(GLOB JPEG_ASSETS "Media/assets/other/*.jpeg")
 file(GLOB SVG_ASSETS "Media/assets/svg/*.svg")
 
 qt_add_resources(MMaterialLib
@@ -25,8 +23,6 @@ qt_add_resources(MMaterialLib
     PREFIX "MMaterial"
     BIG_RESOURCES
     FILES
-        ${PNG_ASSETS}
-        ${JPEG_ASSETS}
         ${SVG_ASSETS}
 )
 

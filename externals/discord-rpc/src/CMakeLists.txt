@@ -5,8 +5,8 @@ option(USE_STATIC_CRT "Use /MT[d] for dynamic library" OFF)
 option(WARNINGS_AS_ERRORS "When enabled, compiles with `-Werror` (on *nix platforms)." OFF)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 
 set(BASE_RPC_SRC
     ${PROJECT_SOURCE_DIR}/include/discord_rpc.h

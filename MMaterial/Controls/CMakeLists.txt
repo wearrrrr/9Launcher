@@ -39,7 +39,7 @@ list(APPEND CONTROLS_QML_FILES
     ToggleButtonGroup.qml
     SpinBox.qml
     Breadcrumbs.qml
-    SwipeBar.qml
+    # SwipeBar.qml
     ScrollView.qml
 )
 
@@ -53,7 +53,7 @@ qt_add_qml_module(ControlsLib
 
     OPTIONAL_IMPORTS
         MMaterial.Controls.Dialogs
-        MMaterial.Controls.Pagination
+        # MMaterial.Controls.Pagination
         MMaterial.Controls.Sidebar
 
     QML_FILES ${CONTROLS_QML_FILES}
@@ -72,5 +72,5 @@ target_include_directories(ControlsLib PUBLIC
 
 add_subdirectory(Dialogs)
 add_subdirectory(Inputs)
-add_subdirectory(Pagination)
+# add_subdirectory(Pagination)
 add_subdirectory(Sidebar)
