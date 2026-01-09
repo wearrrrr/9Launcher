@@ -60,10 +60,10 @@ Window {
                         property string json: "games.json"
                         text: "Official Games"
                     }
-                    Controls.MTabButton {
-                        property string json: "fan_games.json"
-                        text: "Fan Games"
-                    }
+                    // Controls.MTabButton {
+                    //     property string json: "fan_games.json"
+                    //     text: "Fan Games"
+                    // }
                     Controls.MTabButton {
                         property string json: "seihou.json"
                         text: "Seihou"
