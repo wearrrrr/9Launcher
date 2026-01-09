@@ -76,7 +76,7 @@ Window {
             text: qsTr("Use Sytem Dosbox-x")
             Layout.preferredWidth: 175
             onClicked: {
-                console.log("Install")
+                AppSettings.setValue("dosbox-x", "system")
             }
         }
 
@@ -84,7 +84,14 @@ Window {
             text: qsTr("Download Dosbox-x")
             Layout.preferredWidth: 175
             onClicked: {
-                console.log("Install")
+                const dl = BinaryManager.downloadDosbox(appData, "/dosbox-x/dosbox-x.zip", downloader, fileIO)
+                if (!dl) {
+                    statusOutput.color = "#e3e3e3"
+                    statusOutput.text = "Dosbox-x already downloaded!"
+                    AppSettings.setValue("dosbox-x", "downloaded")
+                } else {
+                    AppSettings.setValue("dosbox-x", "downloaded")
+                }
             }
         }
     }

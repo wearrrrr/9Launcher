@@ -25,7 +25,8 @@ public:
 
 private:
     const QString GetWinePathFromSettings();
+    const QString GetDosboxXPathFromSettings();
     bool LaunchLinux(const QString &gamePath, const QString &gameCWD);
-    bool LaunchLinux_PC98(const QString &gamePath);
+    bool Launch_PC98(const QString &gamePath);
     bool LaunchWindows(const QString &gamePath, const QString &gameCWD);
 };

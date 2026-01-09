@@ -8,7 +8,7 @@
 
 Downloader::Downloader(QObject *parent) : QObject(parent) {}
 
-void Downloader::download(const QString &url, const QString &filePath, const bool extractTGZ = false) {
+void Downloader::download(const QString &url, const QString &filePath, const bool extractTGZ = false, const bool extractZip = false) {
     QString localPath = QUrl(filePath).toLocalFile();
 
     QString dirPath = QFileInfo(localPath).absolutePath();
@@ -62,6 +62,31 @@ void Downloader::download(const QString &url, const QString &filePath, const boo
             if (!proc.waitForStarted()) {
                 qCritical() << "Failed to start tar!";
                 emit downloadFailed("Failed to start tar! Please check to make sure it's installed!");
+                reply->deleteLater();
+                file.close();
+                return;
+            }
+            proc.waitForFinished(-1);
+
+            qDebug() << "Extraction complete!";
+            file.remove();
+        }
+
+        if (extractZip) {
+            qDebug() << "Beginning Extraction";
+            QProcess proc;
+#ifdef _WIN32
+        proc.setProgram("Expand-Archive");
+        proc.setArguments({"-Path", localPath});
+#else
+        proc.setProgram("unzip");
+        proc.setArguments({"-o", localPath});
+#endif
+            proc.setWorkingDirectory(dirPath);
+            proc.start();
+            if (!proc.waitForStarted()) {
+                qCritical() << "Failed to start unzip!";
+                emit downloadFailed("Failed to start unzip! Please check to make sure it's installed!");
                 reply->deleteLater();
                 file.close();
                 return;

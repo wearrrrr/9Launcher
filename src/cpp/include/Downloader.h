@@ -8,7 +8,7 @@ class Downloader : public QObject {
 public:
     explicit Downloader(QObject *parent = nullptr);
 
-    Q_INVOKABLE void download(const QString &url, const QString &filePath, const bool extractTGZ);
+    Q_INVOKABLE void download(const QString &url, const QString &filePath, const bool extractTGZ, const bool extractZip);
     Q_INVOKABLE void CancelDownloads();
 
 private:

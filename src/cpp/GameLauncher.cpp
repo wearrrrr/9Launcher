@@ -56,13 +56,12 @@ bool GameLauncher::LaunchPC98Thread(const QString &gamePath, const QString &game
     currentGameInfo.gameIcon = gameIcon;
 
     #ifdef Q_OS_LINUX
-    bool launch = LaunchLinux_PC98(gamePath);
+    bool launch = Launch_PC98(gamePath);
     rpc.setRPC("In the main menu");
     return launch;
     #endif
     #ifdef Q_OS_WINDOWS
-    // TODO implement this!
-    // bool launch = LaunchWindows_PC98(gamePath);
+    bool launch = LaunchWindows_PC98(gamePath);
     #endif
     return false;
 }
@@ -143,6 +142,15 @@ const QString GameLauncher::GetWinePathFromSettings() {
     return appData + "/proton/GE-Proton" + option + "/files/bin/wine";
 }
 
+const QString GameLauncher::GetDosboxXPathFromSettings() {
+    QString option = settings.value("dosbox-x").toString();
+    if (option == "system" || option == "") {
+        return "dosbox-x";
+    }
+    QString appData = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    return appData + "/dosbox-x/mingw-build/mingw-sdl2/dosbox-x.exe";
+}
+
 bool GameLauncher::LaunchLinux(const QString &gamePath, const QString &gameCWD) {
     qInfo() << "Launching Game...";
 
@@ -171,12 +179,12 @@ bool GameLauncher::LaunchLinux(const QString &gamePath, const QString &gameCWD) 
     return true;
 }
 
-bool GameLauncher::LaunchLinux_PC98(const QString &gamePath) {
+bool GameLauncher::Launch_PC98(const QString &gamePath) {
     qInfo() << "Launching game on Linux";
 
     QProcess process;
-    process.setProgram("dosbox-x");
-    process.setArguments({
+    QString dosboxPath = GetDosboxXPathFromSettings();
+    QList<QString> args = {
         "-machine",
         "pc98",
         "-set",
@@ -188,8 +196,15 @@ bool GameLauncher::LaunchLinux_PC98(const QString &gamePath) {
         "A:",
         "-c",
         "game",
-    });
+    };
+#ifndef _WIN32
+    process.setProgram(GetWinePathFromSettings());
+    args.emplaceFront(GetDosboxXPathFromSettings());
+#else
+    process.setProgram(GetDosboxXPathFromSettings());
+#endif
 
+    process.setArguments(args);
     process.start();
     if (!process.waitForStarted()) {
         qCritical() << "Failed to start the game process!";
