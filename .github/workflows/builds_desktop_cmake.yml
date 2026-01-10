@@ -43,7 +43,7 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: ${{env.QT_VERSION}}
-          modules: 'qtwayland qtwayland-client qtshadertools qtimageformats'
+          modules: 'qtshadertools qtimageformats'
 
       # Build application
       - name: Build application
