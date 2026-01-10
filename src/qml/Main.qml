@@ -35,6 +35,8 @@ Window {
     property var selectedGameItem: ({})
     property bool selectedIsPC98: false
 
+    signal refreshTriggerChanged()
+
     function populateGamesList(jsonFile) {
         mainModel = [];
         spinoffModel = [];
@@ -226,6 +228,8 @@ Window {
         id: gameLaunchDialog
         gameItem: window.selectedGameItem
         isPC98: window.selectedIsPC98
+
+        onGameRemoved: window.refreshTriggerChanged()
     }
 
     MouseArea {

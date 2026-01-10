@@ -37,9 +37,12 @@ Button {
         height: parent.height
         source: "/nineLauncher/game-images/" + parent.item.game_id + ".png"
 
-        layer.enabled: !isInstalled
+        layer.enabled: true
         layer.effect: ShaderEffect {
-            fragmentShader: "/shaders/grayscale.frag.qsb"
+            fragmentShader: "/shaders/image_mask.frag.qsb"
+            property real radius: 3
+            property vector2d size: Qt.vector2d(gameImage.width, gameImage.height)
+            property bool grayscale: !parent.isInstalled
         }
 
         Component.onCompleted: {

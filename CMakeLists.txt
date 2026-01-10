@@ -86,9 +86,9 @@ endif()
 qt6_add_shaders(9Launcher "ninelauncher_shaders"
     PREFIX /shaders
     FILES
-        src/shaders/grayscale.frag
+        src/shaders/image_mask.frag
     OUTPUTS
-        grayscale.frag.qsb
+        image_mask.frag.qsb
 )
 
 target_include_directories(9Launcher
