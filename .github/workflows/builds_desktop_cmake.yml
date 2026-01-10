@@ -36,7 +36,32 @@ jobs:
       # Install dependencies (from package manager)
       - name: Install dependencies (from package manager)
         run: |
-             sudo apt-get install libgl-dev libxkbcommon-x11-dev libx11-xcb-dev libzstd-dev libxcb1 libxkbcommon0 libxkbcommon-x11-0 libx11-xcb1 libwayland-client0 libwayland-cursor0 libwayland-egl1 libwayland-server0 cmake ninja-build pkgconf libtool libfuse2 qt6-wayland -y;
+          sudo apt-get install -y \
+            build-essential \
+            cmake \
+            ninja-build \
+            pkgconf \
+            libgl-dev \
+            libgles2-mesa-dev \
+            libgles1-mesa-dev \
+            libegl1-mesa-dev \
+            libx11-dev \
+            libx11-xcb-dev \
+            libxext-dev \
+            libxrender-dev \
+            libxi-dev \
+            libxkbcommon-dev \
+            libxkbcommon-x11-dev \
+            libxcb1-dev \
+            libwayland-dev \
+            libwayland-client0 \
+            libwayland-cursor0 \
+            libwayland-egl1 \
+            libwayland-server0 \
+            libzstd-dev \
+            libfuse2 \
+            libtool \
+            qt6-wayland
 
       # Install Qt
       - name: Install Qt
