@@ -123,6 +123,11 @@ if [[ $create_package = true ]] ; then
   cp assets/linux/$APP_NAME_LOWERCASE.png bin/usr/share/pixmaps/$APP_NAME_LOWERCASE.png
   cp assets/linux/$APP_NAME_LOWERCASE.png bin/usr/share/icons/hicolor/128x128/apps/$APP_NAME_LOWERCASE.png
 
+  mkdir -p bin/usr/plugins/wayland-client
+  cp $QT_ROOT_DIR/plugins/wayland-client/*.so bin/usr/plugins/wayland-client/
+
+  cp $QT_ROOT_DIR/lib/libQt6WaylandClient.so* bin/usr/lib/
+
   echo '---- Running AppImage packager'
   ./contribs/deploy/linuxdeploy-x86_64.AppImage --appdir bin --plugin qt --output appimage
   mv $APP_NAME-x86_64.AppImage $APP_NAME-$APP_VERSION-linux64.AppImage
