@@ -43,7 +43,6 @@ jobs:
             pkgconf \
             libgl-dev \
             libgles2-mesa-dev \
-            libgles1-mesa-dev \
             libegl1-mesa-dev \
             libx11-dev \
             libx11-xcb-dev \
