@@ -61,7 +61,7 @@ bool GameLauncher::LaunchPC98Thread(const QString &gamePath, const QString &game
     return launch;
     #endif
     #ifdef Q_OS_WINDOWS
-    bool launch = LaunchWindows_PC98(gamePath);
+    bool launch = Launch_PC98(gamePath);
     #endif
     return false;
 }
