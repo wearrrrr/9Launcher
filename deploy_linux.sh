@@ -149,7 +149,7 @@ if [[ $create_package = true ]] ; then
   mv bin/usr/share/applications/$APP_NAME_LOWERCASE.desktop bin/$APP_NAME/
   mv bin/usr/share/pixmaps/$APP_NAME_LOWERCASE.png bin/$APP_NAME/
   printf '[Paths]\nPrefix = .\nPlugins = plugins\nImports = qml\n' > bin/$APP_NAME/qt.conf
-  printf '#!/bin/sh\nappname=`basename $0 | sed s,\.sh$,,`\ndirname=`dirname $0`\nexport LD_LIBRARY_PATH=$dirname\n$dirname/$appname' > bin/$APP_NAME/$APP_NAME_LOWERCASE.sh
+  printf '#!/bin/sh\nappname=`basename $0 | sed s,\.sh$,,`\ndirname=`dirname $0`\nexport LD_LIBRARY_PATH=$dirname\nQT_QPA_PLATFORM=xcb $dirname/$appname' > bin/$APP_NAME/$APP_NAME_LOWERCASE.sh
   chmod +x bin/$APP_NAME/$APP_NAME_LOWERCASE.sh
 
   #echo '---- MapLibre deployment hack'
