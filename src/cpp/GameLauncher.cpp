@@ -110,6 +110,59 @@ Q_INVOKABLE bool GameLauncher::launchGame(const QString &gamePath, const QString
     return true;
 }
 
+Q_INVOKABLE bool GameLauncher::launchWithThcrap(const QString &configPath, const QString &gamePath, const QString &gameCWD, const QString &gameName, const QString &gameIcon)
+{
+    const QString localConfigPath = QUrl(configPath).toLocalFile();
+    const QString localPath = QUrl(gamePath).toLocalFile();
+    const QString localCWD = QUrl(gameCWD).toLocalFile();
+
+    QThread *thread = new QThread;
+    connect(thread, &QThread::started, [=, this]() {
+        if (!LaunchThcrapThread(localConfigPath, localPath, localCWD, gameName, gameIcon))
+        {
+            qCritical() << "[9L] Failed to launch game with thcrap!";
+        }
+
+        thread->quit();
+    });
+    connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+    thread->start();
+
+    return true;
+}
+
+bool GameLauncher::LaunchThcrapThread(const QString &configPath, const QString &gamePath, const QString &gameCWD, const QString &gameName, const QString &gameIcon)
+{
+    currentGameInfo.gamePath = gamePath;
+    currentGameInfo.gameCWD = gameCWD;
+    currentGameInfo.gameName = gameName;
+    currentGameInfo.gameIcon = gameIcon;
+
+    QString thcrapDir = configPath;
+    thcrapDir = thcrapDir.left(thcrapDir.lastIndexOf("/config/"));
+    QString thcrapLoaderPath = thcrapDir + "/bin/thcrap_loader.exe";
+
+    QProcess process;
+    process.setProgram(thcrapLoaderPath);
+    process.setArguments({configPath, gamePath});
+    process.setWorkingDirectory(gameCWD);
+
+    process.start();
+    if (!process.waitForStarted()) {
+        qCritical() << "[9L] Failed to start thcrap_loader!";
+        launched = false;
+        return false;
+    }
+
+    launched = true;
+
+    process.waitForFinished(-1);
+
+    launched = false;
+
+    return true;
+}
+
 bool GameLauncher::LaunchWindows(const QString &gamePath, const QString &gameCWD) {
     qInfo() << "Launching Game...";
 

@@ -15,8 +15,10 @@ public:
     explicit GameLauncher(QObject *parent = nullptr);
 
     Q_INVOKABLE bool launchGame(const QString &gamePath, const QString &gameCWD, const QString &gameName, const QString &gameIcon, const bool &isPC98);
+    Q_INVOKABLE bool launchWithThcrap(const QString &configPath, const QString &gamePath, const QString &gameCWD, const QString &gameName, const QString &gameIcon);
 
     bool LaunchThread(const QString &gamePath, const QString &gameCWD, const QString &gameName, const QString &gameIcon);
+    bool LaunchThcrapThread(const QString &configPath, const QString &gamePath, const QString &gameCWD, const QString &gameName, const QString &gameIcon);
     bool LaunchPC98Thread(const QString &gamePath, const QString &gameName, const QString &gameIcon);
 
     bool CheckGameRunning();

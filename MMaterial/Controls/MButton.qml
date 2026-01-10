@@ -38,6 +38,7 @@ Rectangle {
 	property bool backgroundVisible: true
 	property string text: "Button"
 	property bool animatePressAndHold: false
+	property int fontCapitalization: Font.Capitalize
 
 	property int type: MButton.Type.Contained
 	property int size: UI.Size.Grade.L
@@ -215,7 +216,7 @@ Rectangle {
 			verticalAlignment: Qt.AlignVCenter
 
 			font{
-				capitalization: Font.Capitalize
+				capitalization: _root.fontCapitalization
 				bold: true
 			}
 		}

@@ -18,3 +18,12 @@ function downloadDosbox(appData, path, downloader, fileIO) {
     downloader.download(url, appData + path, false, true);
     return true;
 }
+
+function downloadThcrap(appData, path, downloader, fileIO) {
+    if (fileIO.exists(appData + `/thcrap/repos`)) {
+        return false;
+    }
+    const url = `https://github.com/thpatch/thcrap/releases/download/2025-12-02/thcrap.zip`;
+    downloader.download(url, appData + path, false, true);
+    return true;
+}

@@ -9,13 +9,21 @@
 Downloader::Downloader(QObject *parent) : QObject(parent) {}
 
 void Downloader::download(const QString &url, const QString &filePath, const bool extractTGZ = false, const bool extractZip = false) {
-    QString localPath = QUrl(filePath).toLocalFile();
+    QString localPath;
+    if (filePath.startsWith("file://")) {
+        localPath = QUrl(filePath).toLocalFile();
+    } else {
+        localPath = filePath;
+    }
 
     QString dirPath = QFileInfo(localPath).absolutePath();
 
-    QDir dir(dirPath);
-    if (!dir.exists()) {
-        dir.mkpath(".");
+    QDir dir;
+    if (!dir.exists(dirPath)) {
+        if (!dir.mkpath(dirPath)) {
+            emit downloadFailed("Failed to create directory: " + dirPath);
+            return;
+        }
     }
 
     // qDebug() << "Directory to save to: " << dirPath;
@@ -111,4 +119,27 @@ void Downloader::CancelDownloads() {
         reply->deleteLater();
     }
     currentlyDownloading.clear();
+}
+
+void Downloader::fetchContent(const QString &url) {
+    QNetworkReply *reply = manager->get(QNetworkRequest(QUrl(url)));
+
+    currentlyDownloading.push_back(reply);
+
+    connect(reply, &QNetworkReply::finished, [=, this]() {
+        currentlyDownloading.erase(
+            currentlyDownloading.begin(),
+            currentlyDownloading.end()
+        );
+
+        if (reply->error()) {
+            emit downloadFailed(reply->errorString());
+            reply->deleteLater();
+            return;
+        }
+
+        QString content = QString::fromUtf8(reply->readAll());
+        emit contentFetched(content);
+        reply->deleteLater();
+    });
 }

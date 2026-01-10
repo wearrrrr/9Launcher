@@ -41,6 +41,9 @@ qt_add_qml_module(9Launcher
     QML_FILES
         src/qml/Main.qml
         src/qml/GameItem.qml
+        src/qml/GameLaunchDialog.qml
+        src/qml/ThcrapConfigDialog.qml
+        src/qml/ThcrapPatchOrderDialog.qml
         src/qml/Footer.qml
         src/qml/Setting.qml
         src/qml/FooterPanel.qml

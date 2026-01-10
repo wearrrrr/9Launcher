@@ -32,11 +32,19 @@ Window {
 
     property var mainModel: []
     property var spinoffModel: []
+    property var selectedGameItem: ({})
+    property bool selectedIsPC98: false
 
     function populateGamesList(jsonFile) {
         mainModel = [];
         spinoffModel = [];
         Core.populateGamesList(jsonFile);
+    }
+
+    function openGameLaunchDialog(gameItem, isPC98) {
+        selectedGameItem = gameItem;
+        selectedIsPC98 = isPC98;
+        gameLaunchDialog.open();
     }
 
     ColumnLayout {
@@ -101,6 +109,7 @@ Window {
                     height: 55
                     item: modelData
                     isPC98: modelData.isPC98 ? true : false
+                    mainWindow: window
                 }
             }
         }
@@ -131,6 +140,7 @@ Window {
                     height: 55
                     item: modelData
                     isPC98: false
+                    mainWindow: window
                 }
             }
             visible: window.spinoffModel.length > 0
@@ -210,6 +220,12 @@ Window {
                 pc98Dialog.close();
             }
         }
+    }
+
+    GameLaunchDialog {
+        id: gameLaunchDialog
+        gameItem: window.selectedGameItem
+        isPC98: window.selectedIsPC98
     }
 
     MouseArea {

@@ -12,24 +12,16 @@ Button {
     property var item: {}
     property bool isPC98: false
     property bool isInstalled: false
+    property var mainWindow: null
     id: button
 
-    function launchGame(item) {
-        const installedJSON = JSON.parse(fileIO.read(StandardPaths.writableLocation(StandardPaths.AppDataLocation) + "/installed.json"));
-        const gameItem = installedJSON.installed.filter(game => game.game_id === item.game_id)[0];
-
-        if (gameItem == null) {
-            console.log(item.game_id + " is not installed but launchGame was called! This is a bug.");
-            return;
+    onClicked: {
+        if (isInstalled) {
+            mainWindow.openGameLaunchDialog(item, isPC98);
+        } else {
+            gameDialog.open();
         }
-
-        const path = gameItem.path;
-        const cwd = path.substring(0, path.lastIndexOf("/"));
-
-        gameLauncher.launchGame(path, cwd, item.en_title, item.game_id, item.isPC98 ? true : false);
     }
-
-    onClicked: isInstalled ? launchGame(item) : gameDialog.open();
 
     FileIO {
         id: fileIO

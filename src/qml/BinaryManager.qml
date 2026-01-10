@@ -60,17 +60,43 @@ Window {
     }
 
     H3 {
-        text: qsTr("Dosbox-x")
+        text: qsTr("thcrap")
         Layout.preferredWidth: 100
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
-        anchors.topMargin: 50
+        anchors.topMargin: 100
     }
 
     RowLayout {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
-        anchors.topMargin: 100
+        anchors.topMargin: 150
+
+        MButton {
+            text: qsTr("Download thcrap")
+            Layout.preferredWidth: 175
+            onClicked: {
+                const dl = BinaryManager.downloadThcrap(appData, "/thcrap/thcrap.zip", downloader, fileIO)
+                if (!dl) {
+                    statusOutput.color = "#e3e3e3"
+                    statusOutput.text = "thcrap already downloaded!"
+                }
+            }
+        }
+    }
+
+    H3 {
+        text: qsTr("Dosbox-x")
+        Layout.preferredWidth: 100
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.topMargin: 200
+    }
+
+    RowLayout {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.topMargin: 250
 
         MButton {
             text: qsTr("Use Sytem Dosbox-x")
@@ -101,13 +127,47 @@ Window {
         Layout.preferredWidth: 100
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
-        anchors.topMargin: 150
+        anchors.topMargin: 300
+    }
+
+    NumberAnimation {
+        id: progressAnimation
+        target: progressBar
+        property: "value"
     }
 
     RowLayout {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
-        anchors.topMargin: 180
+        anchors.topMargin: 350
+
+        MButton {
+            text: qsTr("Use System Wine")
+            Layout.preferredWidth: 150
+            onClicked: {
+                AppSettings.setValue("wine", "system")
+            }
+        }
+
+        MButton {
+            text: qsTr("Proton GE 7.55")
+            Layout.preferredWidth: 150
+            onClicked: {
+                wineVerToSave = "7-55"
+                const dl = BinaryManager.downloadProton("7-55", appData, "/proton/7-55.tar.gz", downloader, fileIO)
+                if (!dl) {
+                    statusOutput.color = "#e3e3e3"
+                    statusOutput.text = "Proton version already downloaded! Setting to default game launcher.."
+                    AppSettings.setValue("wine", wineVerToSave)
+                }
+            }
+        }
+    }
+
+    RowLayout {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.topMargin: 415
 
         H5 {
             text: ""
@@ -152,50 +212,15 @@ Window {
 
         H5 {
             text: parseInt(progressBar.value) + "%"
-            Layout.topMargin: 7
             Layout.preferredWidth: 100
             Layout.alignment: Qt.AlignRight
-        }
-    }
-
-    NumberAnimation {
-        id: progressAnimation
-        target: progressBar
-        property: "value"
-    }
-
-    RowLayout {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
-        anchors.topMargin: 225
-
-        MButton {
-            text: qsTr("Use System Wine")
-            Layout.preferredWidth: 150
-            onClicked: {
-                AppSettings.setValue("wine", "system")
-            }
-        }
-
-        MButton {
-            text: qsTr("Proton GE 7.55")
-            Layout.preferredWidth: 150
-            onClicked: {
-                wineVerToSave = "7-55"
-                const dl = BinaryManager.downloadProton("7-55", appData, "/proton/7-55.tar.gz", downloader, fileIO)
-                if (!dl) {
-                    statusOutput.color = "#e3e3e3"
-                    statusOutput.text = "Proton version already downloaded! Setting to default game launcher.."
-                    AppSettings.setValue("wine", wineVerToSave)
-                }
-            }
         }
     }
 
     Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
-        anchors.topMargin: 275
+        anchors.topMargin: 450
 
         width: parent.width - 50
 

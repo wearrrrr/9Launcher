@@ -75,14 +75,14 @@ T.Dialog {
 
             visible: control.showXButton
             iconData: Media.Icons.light.close
-            size: UI.Size.pixel12
+            size: UI.Size.pixel24
 			color: UI.Theme.text.primary.toString()
             interactive: true
 
             anchors {
                 right: bgRoot.right;
                 top: bgRoot.top;
-                margins: UI.Size.pixel6
+                margins: UI.Size.pixel12
             }
 
             onClicked: control.reject()
