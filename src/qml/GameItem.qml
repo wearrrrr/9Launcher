@@ -40,7 +40,7 @@ Button {
         layer.enabled: true
         layer.effect: ShaderEffect {
             fragmentShader: "/shaders/image_mask.frag.qsb"
-            property real radius: 3
+            property real radius: 5
             property vector2d size: Qt.vector2d(gameImage.width, gameImage.height)
             property bool grayscale: !parent.isInstalled
         }
@@ -73,7 +73,7 @@ Button {
         height: parent.height
         border.color: "white"
         border.width: 1
-        radius: 4
+        radius: 5
         color: "#60000000"
 
         anchors.centerIn: parent

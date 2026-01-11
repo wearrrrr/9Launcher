@@ -1,5 +1,7 @@
 #version 440
 
+// this shader adds an arbitrary border radius, and/or allows it to be greyscaled.
+
 layout(location = 0) in vec2 qt_TexCoord0;
 layout(location = 0) out vec4 fragColor;
 
@@ -10,49 +12,32 @@ layout(std140, binding = 0) uniform buf {
     vec2 size;
     bool grayscale;
 };
+
 layout(binding = 1) uniform sampler2D source;
 
 void main() {
-    float u = qt_TexCoord0.x;
-    float v = qt_TexCoord0.y;
-    float r_u = radius / size.x;
-    float r_v = radius / size.y;
-    bool inside = false;
-    if (u >= r_u && u <= 1.0 - r_u && v >= r_v && v <= 1.0 - r_v) {
-        inside = true;
-    } else if (u < r_u && v < r_v) {
-        float dx = u - r_u;
-        float dy = v - r_v;
-        if (dx * dx + dy * dy <= r_u * r_u) inside = true;
-    } else if (u < r_u && v > 1.0 - r_v) {
-        float dx = u - r_u;
-        float dy = v - (1.0 - r_v);
-        if (dx * dx + dy * dy <= r_u * r_u) inside = true;
-    } else if (u > 1.0 - r_u && v < r_v) {
-        float dx = u - (1.0 - r_u);
-        float dy = v - r_v;
-        if (dx * dx + dy * dy <= r_u * r_u) inside = true;
-    } else if (u > 1.0 - r_u && v > 1.0 - r_v) {
-        float dx = u - (1.0 - r_u);
-        float dy = v - (1.0 - r_v);
-        if (dx * dx + dy * dy <= r_u * r_u) inside = true;
-    } else if ((u < r_u && v >= r_v && v <= 1.0 - r_v) ||
-               (u > 1.0 - r_u && v >= r_v && v <= 1.0 - r_v) ||
-               (v < r_v && u >= r_u && u <= 1.0 - r_u) ||
-               (v > 1.0 - r_v && u >= r_u && u <= 1.0 - r_u)) {
-        inside = true;
-    }
-    if (!inside) {
-        fragColor = vec4(0.0);
-    } else {
-        vec4 p = texture(source, qt_TexCoord0);
-        vec3 color;
-        if (grayscale) {
-            float g = dot(p.xyz, vec3(0.344, 0.5, 0.156));
-            color = vec3(g);
-        } else {
-            color = p.xyz;
-        }
-        fragColor = vec4(color, p.a) * qt_Opacity;
-    }
+    vec2 uv = qt_TexCoord0;
+
+    vec2 r = radius / size;
+
+    vec2 p = uv - 0.5;
+    vec2 scale = vec2(1.0 / r.x, 1.0 / r.y);
+    vec2 d = abs(p) - (vec2(0.5) - r);
+
+    vec2 dScaled = vec2(
+        d.x * scale.x,
+        d.y * scale.y
+    );
+
+    float dist = length(max(dScaled, 0.0)) + min(max(dScaled.x, dScaled.y), 0.0);
+
+    float pixel = 0.5 / min(size.x, size.y);
+    float inside = step(dist, 1.0 + pixel);
+
+    vec4 tex = texture(source, uv);
+
+    float g = dot(tex.rgb, vec3(0.344, 0.5, 0.156));
+    vec3 color = mix(tex.rgb, vec3(g), float(grayscale));
+
+    fragColor = vec4(color, tex.a) * qt_Opacity * inside;
 }
