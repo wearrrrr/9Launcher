@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     app.setOrganizationName("wearr");
     app.setOrganizationDomain("wearr.dev");
     app.setApplicationName("NineLauncher");
-    app.setApplicationVersion("0.0.1");
+    app.setApplicationVersion("0.0.2");
     QQmlApplicationEngine engine;
     static AppSettings settings("wearr", "NineLauncher");
     static Clipboard clipboard = Clipboard();

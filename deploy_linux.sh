@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 export APP_NAME="9Launcher"
-export APP_VERSION=0.0.1
+export APP_VERSION=0.0.2
 export GIT_VERSION=$(git rev-parse --short HEAD)
 
 #export APP_NAME_LOWERCASE=${APP_NAME,,}  # lowercase
