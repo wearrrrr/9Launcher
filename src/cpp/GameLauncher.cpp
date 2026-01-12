@@ -233,7 +233,7 @@ bool GameLauncher::LaunchLinux(const QString &gamePath, const QString &gameCWD) 
 }
 
 bool GameLauncher::Launch_PC98(const QString &gamePath) {
-    qInfo() << "Launching game on Linux";
+    qInfo() << "Launching game";
 
     QProcess process;
     QString dosboxPath = GetDosboxXPathFromSettings();

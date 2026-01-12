@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <qlogging.h>
 
 #include "AppSettings.h"
 #include "Clipboard.h"
@@ -10,13 +11,29 @@
 #include "RPC.h"
 #include "Util.h"
 
+void logToFile(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    QFile file("app.log");
+    if (!file.open(QIODevice::Append | QIODevice::Text)) {
+        qWarning() << "Failed to open log file!";
+        return;
+    }
+    QTextStream out(&file);
+    out << msg << '\n';
+    printf("%s\n", msg.toUtf8().constData());
+}
+
 int main(int argc, char *argv[])
 {
-    // For some reason, the stock file picker is partially broken :D, so it's GTK time until that gets fixed, or maybe forever.
     #ifdef Q_OS_LINUX
+        // For some reason, the stock file picker is partially broken :D, so it's GTK time until that gets fixed, or maybe forever.
         qputenv("QT_QPA_PLATFORMTHEME", "gtk3");
     #endif
     qputenv("QML_XHR_ALLOW_FILE_READ", "1");
+#ifdef Q_OS_WINDOWS
+    qInstallMessageHandler(logToFile);
+#endif
+
     QGuiApplication app(argc, argv);
     app.setOrganizationName("wearr");
     app.setOrganizationDomain("wearr.dev");
