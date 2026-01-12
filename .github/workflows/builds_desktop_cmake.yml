@@ -1,25 +1,13 @@
-#-------------------------------------------------------------------------------
-# Workflow configuration
-#-------------------------------------------------------------------------------
-
 name: "Desktop CI builds (cmake)"
 on:
   push:
   pull_request:
   workflow_dispatch:
 
-#-------------------------------------------------------------------------------
-# Define application name & version
-#-------------------------------------------------------------------------------
-
 env:
   APP_NAME: "9Launcher"
   APP_VERSION: "0.0.2"
   QT_VERSION: "6.8.2"
-
-#-------------------------------------------------------------------------------
-# Workflow jobs
-#-------------------------------------------------------------------------------
 
 jobs:
   ## GNU/Linux build ###########################################################
@@ -27,7 +15,6 @@ jobs:
     name: "Linux CI build"
     runs-on: ubuntu-22.04
     steps:
-      # Checkout repository (and submodules)
       - name: Checkout repository (and submodules)
         uses: actions/checkout@v4
         with:
@@ -39,7 +26,6 @@ jobs:
           sudo sed -i 's/^# deb/deb/' /etc/apt/sources.list
           sudo apt update
 
-      # Install dependencies (from package manager)
       - name: Install dependencies (from package manager)
         run: |
           sudo apt-get install -y \
@@ -70,7 +56,6 @@ jobs:
             clang \
             clang-format
 
-      # Install Qt
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
@@ -79,19 +64,15 @@ jobs:
           install-deps: true
           dir: ${{ github.workspace }}/Qt
 
-      # Build application
       - name: Build application
         run: |
             ./build.sh -DCMAKE_BUILD_TYPE=Release
             strip bin/9Launcher
 
-      # Deploy application
       - name: Deploy application
         run: |
-
             ./deploy_linux.sh -i -c -p
 
-      # Upload application ZIP
       - name: Upload application ZIP
         uses: actions/upload-artifact@v4
         with:
@@ -162,20 +143,11 @@ jobs:
         with:
           submodules: recursive
 
-      # Configure MSVC
       - name: Configure MSVC
         uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: x86_64
 
-      # Install NSIS (already installed in 'windows-2022')
-      #- name: Install NSIS
-      #  run: |
-      #       Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
-      #       scoop bucket add extras
-      #       scoop install nsis
-
-      # Install Qt
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
@@ -183,26 +155,22 @@ jobs:
           arch: 'win64_msvc2022_64'
           modules: 'qtshadertools qtimageformats'
 
-      # Build application
       - name: Build application
         run: |
              cmake -B build/ -DCMAKE_BUILD_TYPE=Release -G Ninja
              cd build/
              ninja -j $env:NUMBER_OF_PROCESSORS
 
-      # Deploy application
       - name: Deploy application
         run: |
              sh deploy_windows.sh -c -p
 
-      # Upload application ZIP
       - name: Upload application ZIP
         uses: actions/upload-artifact@v4
         with:
           name: ${{env.APP_NAME}}-${{env.APP_VERSION}}-win64.zip
           path: ${{env.APP_NAME}}-${{env.APP_VERSION}}-win64.zip
 
-      # Upload NSIS installer
       - name: Upload NSIS installer
         uses: actions/upload-artifact@v4
         with:
