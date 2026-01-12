@@ -58,13 +58,15 @@ jobs:
             libtool \
             qt6-wayland \
             clang \
+            zlib1g-dev \
+            libbz2-dev \
             clang-format
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
           version: ${{env.QT_VERSION}}
-          modules: 'qtshadertools qtimageformats'
+          modules: 'qtshadertools qtimageformats qt5compat'
           install-deps: true
           dir: ${{ github.workspace }}/Qt
 
@@ -157,7 +159,7 @@ jobs:
         with:
           version: ${{env.QT_VERSION}}
           arch: 'win64_msvc2022_64'
-          modules: 'qtshadertools qtimageformats'
+          modules: 'qtshadertools qtimageformats qt5compat'
 
       - name: Build application
         run: |

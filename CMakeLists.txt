@@ -9,7 +9,7 @@ include(FetchContent)
 FetchContent_Declare(
     quazip
     GIT_REPOSITORY https://github.com/stachenov/quazip.git
-    GIT_TAG v1.4
+    GIT_TAG v1.3
 )
 FetchContent_MakeAvailable(quazip)
 
@@ -34,8 +34,7 @@ if (LINUX)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os")
 endif()
 
-find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2 Core)
-find_package(Qt6 COMPONENTS ShaderTools)
+find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2 Core Core5Compat ShaderTools)
 
 qt_add_executable(9Launcher
     src/main.cpp
