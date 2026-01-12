@@ -5,8 +5,11 @@
 #include <QFile>
 #include <QDir>
 #include <QDebug>
-#include <QtCore/private/qzipreader_p.h>
-#include <QtCore/private/qzipwriter_p.h>
+#include <quazip.h>
+#include <quazipfile.h>
+// Using QuaZip (Qt wrapper for minizip) for cross-platform ZIP extraction
+
+
 
 Downloader::Downloader(QObject *parent) : QObject(parent) {}
 
@@ -83,25 +86,53 @@ void Downloader::download(const QString &url, const QString &filePath, const boo
         }
 
         if (extractZip) {
-            qDebug() << "Beginning ZIP extraction";
-            
-            QZipReader zipReader(localPath);
-            
-            if (!zipReader.isReadable()) {
-                emit downloadFailed("Failed to read ZIP file: " + localPath);
+            QuaZip zip(localPath);
+            if (!zip.open(QuaZip::mdUnzip)) {
+                emit downloadFailed("Failed to open ZIP file: " + localPath);
                 reply->deleteLater();
                 file.close();
                 return;
             }
-            
-            if (!zipReader.extractAll(dirPath)) {
-                emit downloadFailed("Failed to extract ZIP file to: " + dirPath);
-                reply->deleteLater();
-                file.close();
-                return;
+
+            for (bool more = zip.goToFirstFile(); more; more = zip.goToNextFile()) {
+                QuaZipFile zipFile(&zip);
+                if (!zipFile.open(QIODevice::ReadOnly)) {
+                    emit downloadFailed("Failed to open file in ZIP: " + zipFile.getActualFileName());
+                    zip.close();
+                    reply->deleteLater();
+                    file.close();
+                    return;
+                }
+
+                QString fileName = zipFile.getActualFileName();
+                QString fullPath = dirPath + "/" + fileName;
+
+                if (fileName.endsWith('/')) {
+                    // directory
+                    QDir().mkpath(fullPath);
+                } else {
+                    // file
+                    QString dir = QFileInfo(fullPath).absolutePath();
+                    QDir().mkpath(dir);
+
+                    QFile outFile(fullPath);
+                    if (!outFile.open(QIODevice::WriteOnly)) {
+                        emit downloadFailed("Failed to create file: " + fullPath);
+                        zipFile.close();
+                        zip.close();
+                        reply->deleteLater();
+                        file.close();
+                        return;
+                    }
+
+                    outFile.write(zipFile.readAll());
+                    outFile.close();
+                }
+
+                zipFile.close();
             }
-            
-            zipReader.close();
+
+            zip.close();
             qDebug() << "ZIP extraction complete!";
             file.remove();
         }

@@ -4,6 +4,15 @@ set(CMAKE_CXX_COMPILER clang++)
 
 project(nineLauncher VERSION 0.1 LANGUAGES CXX)
 
+include(FetchContent)
+
+FetchContent_Declare(
+    quazip
+    GIT_REPOSITORY https://github.com/stachenov/quazip.git
+    GIT_TAG v1.4
+)
+FetchContent_MakeAvailable(quazip)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -94,6 +103,7 @@ qt6_add_shaders(9Launcher "ninelauncher_shaders"
 target_include_directories(9Launcher
     PRIVATE src/cpp/include/
     PRIVATE /usr/include/qt6/QtCore/${Qt6Core_VERSION}
+    PRIVATE ${quazip_SOURCE_DIR}
 )
 
 add_subdirectory(MMaterial)
@@ -109,7 +119,7 @@ target_include_directories(9Launcher
 
 set_target_properties(MMaterialLib PROPERTIES AUTOMOC ON)
 set_target_properties(MMaterialLib PROPERTIES AUTOMOC ON)
-target_link_libraries(9Launcher PRIVATE Qt6::Quick Qt::Gui Qt6::Core discord-rpc)
+target_link_libraries(9Launcher PRIVATE Qt6::Quick Qt::Gui Qt6::Core discord-rpc QuaZip::QuaZip)
 set_target_properties(9Launcher PROPERTIES
     WIN32_EXECUTABLE TRUE
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin"
