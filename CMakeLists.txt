@@ -13,11 +13,12 @@ FetchContent_Declare(
 )
 
 set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(ZLIB_BUILD_STATIC ON CACHE BOOL "Use static zlib library" FORCE)
 FetchContent_MakeAvailable(zlib)
 
-set(ZLIB_LIBRARY zlib)
-set(ZLIB_INCLUDE_DIR ${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
-set(ZLIB_FOUND TRUE)
+set(ZLIB_INCLUDE_DIR "${zlib_SOURCE_DIR}" CACHE PATH "" FORCE)
+set(ZLIB_LIBRARY zlibstatic CACHE STRING "" FORCE)
+set(ZLIB_FOUND TRUE CACHE BOOL "" FORCE)
 
 FetchContent_Declare(
   libzip
@@ -142,7 +143,7 @@ target_include_directories(9Launcher
 )
 
 set_target_properties(MMaterialLib PROPERTIES AUTOMOC ON)
-target_link_libraries(9Launcher PRIVATE Qt6::Quick Qt::Gui Qt6::Core discord-rpc zip)
+target_link_libraries(9Launcher PRIVATE Qt6::Quick Qt::Gui Qt6::Core discord-rpc zlibstatic zip)
 set_target_properties(9Launcher PROPERTIES
     WIN32_EXECUTABLE TRUE
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin"
