@@ -84,8 +84,8 @@ void Downloader::download(const QString &url, const QString &filePath, const boo
             qDebug() << "Beginning Extraction";
             QProcess proc;
 #ifdef _WIN32
-        proc.setProgram("Expand-Archive");
-        proc.setArguments({"-Path", localPath});
+        proc.setProgram("powershell");
+        proc.setArguments({"-Command", "Expand-Archive", "-Path", localPath});
 #else
         proc.setProgram("unzip");
         proc.setArguments({"-o", localPath});
