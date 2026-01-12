@@ -16,6 +16,7 @@ set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(ZLIB_BUILD_STATIC ON CACHE BOOL "Use static zlib library" FORCE)
 FetchContent_MakeAvailable(zlib)
 
+# Determine the correct zlib target name
 if(TARGET zlibstatic)
     set(ZLIB_TARGET zlibstatic)
 elseif(TARGET zlib)
@@ -24,8 +25,10 @@ else()
     message(FATAL_ERROR "Could not find zlib target")
 endif()
 
+get_target_property(ZLIB_LIB_LOCATION ${ZLIB_TARGET} LOCATION)
+
 set(ZLIB_INCLUDE_DIR "${zlib_SOURCE_DIR};${zlib_BINARY_DIR}" CACHE PATH "" FORCE)
-set(ZLIB_LIBRARY ${ZLIB_TARGET} CACHE STRING "" FORCE)
+set(ZLIB_LIBRARY $<TARGET_FILE:${ZLIB_TARGET}> CACHE STRING "" FORCE)
 set(ZLIB_FOUND TRUE CACHE BOOL "" FORCE)
 
 include_directories(${zlib_BINARY_DIR})
