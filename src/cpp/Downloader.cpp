@@ -10,11 +10,8 @@
 #include <array>
 #include <vector>
 #include <minizip/unzip.h>
-// Using minizip (from zlib-ng) for cross-platform ZIP extraction
 
-
-
-Downloader::Downloader(QObject *parent) : QObject(parent) {}
+Downloader::Downloader(QObject *parent) : QObject(parent), manager(new QNetworkAccessManager(this)) {}
 
 void Downloader::download(const QString &url, const QString &filePath, const bool extractTGZ = false, const bool extractZip = false) {
     QString localPath;
@@ -68,6 +65,11 @@ void Downloader::download(const QString &url, const QString &filePath, const boo
 
         file.write(reply->readAll());
 
+        if (extractTGZ && extractZip) {
+            emit downloadFailed("Cannot extract both TGZ and ZIP");
+            return;
+        }
+
         if (extractTGZ) {
             qDebug() << "Beginning Extraction";
             QProcess proc;
@@ -85,6 +87,7 @@ void Downloader::download(const QString &url, const QString &filePath, const boo
             proc.waitForFinished(-1);
 
             qDebug() << "Extraction complete!";
+            file.close();
             file.remove();
         }
 
@@ -147,6 +150,12 @@ void Downloader::download(const QString &url, const QString &filePath, const boo
                 const quint32 posixMode = externalAttributes >> 16;
                 if ((posixMode & 0040000u) == 0040000u || (externalAttributes & 0x10u) == 0x10u) {
                     entryIsDirectory = true;
+                }
+
+                if (rawName.contains("..")) {
+                    qWarning() << "Skipping suspicious ZIP entry" << rawName;
+                    ret = unzGoToNextFile(zipFile);
+                    continue;
                 }
 
                 QString sanitizedName = rawName;
@@ -228,6 +237,7 @@ void Downloader::download(const QString &url, const QString &filePath, const boo
 
             unzClose(zipFile);
             qDebug() << "ZIP extraction complete!";
+            file.close();
             file.remove();
         }
 
@@ -241,6 +251,7 @@ void Downloader::download(const QString &url, const QString &filePath, const boo
 void Downloader::CancelDownloads() {
     if (currentlyDownloading.size() == 0) return;
     for (QNetworkReply *reply : currentlyDownloading) {
+        disconnect(reply, nullptr, this, nullptr);
         reply->abort();
         reply->deleteLater();
     }
@@ -253,10 +264,10 @@ void Downloader::fetchContent(const QString &url) {
     currentlyDownloading.push_back(reply);
 
     connect(reply, &QNetworkReply::finished, [=, this]() {
-        currentlyDownloading.erase(
-            currentlyDownloading.begin(),
-            currentlyDownloading.end()
-        );
+        auto it = std::find(currentlyDownloading.begin(), currentlyDownloading.end(), reply);
+        if (it != currentlyDownloading.end()) {
+            currentlyDownloading.erase(it);
+        }
 
         if (reply->error()) {
             emit downloadFailed(reply->errorString());
