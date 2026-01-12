@@ -6,13 +6,37 @@ project(nineLauncher VERSION 0.1 LANGUAGES CXX)
 
 include(FetchContent)
 
+# Fetch libzip and its dependency zlib
 FetchContent_Declare(
-  minizip
-  GIT_REPOSITORY https://github.com/zlib-ng/minizip-ng.git
-  GIT_TAG 4.0.8
+  zlib
+  GIT_REPOSITORY https://github.com/madler/zlib.git
+  GIT_TAG v1.3.1
 )
 
-FetchContent_MakeAvailable(minizip)
+FetchContent_Declare(
+  libzip
+  GIT_REPOSITORY https://github.com/nih-at/libzip.git
+  GIT_TAG v1.11.2
+)
+
+# Configure zlib
+set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+# Configure libzip
+set(BUILD_TOOLS OFF CACHE BOOL "" FORCE)
+set(BUILD_REGRESS OFF CACHE BOOL "" FORCE)
+set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(BUILD_DOC OFF CACHE BOOL "" FORCE)
+set(ENABLE_COMMONCRYPTO OFF CACHE BOOL "" FORCE)
+set(ENABLE_GNUTLS OFF CACHE BOOL "" FORCE)
+set(ENABLE_MBEDTLS OFF CACHE BOOL "" FORCE)
+set(ENABLE_OPENSSL OFF CACHE BOOL "" FORCE)
+set(ENABLE_WINDOWS_CRYPTO OFF CACHE BOOL "" FORCE)
+set(ENABLE_BZIP2 OFF CACHE BOOL "" FORCE)
+set(ENABLE_LZMA OFF CACHE BOOL "" FORCE)
+set(ENABLE_ZSTD OFF CACHE BOOL "" FORCE)
+
+FetchContent_MakeAvailable(zlib libzip)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -102,7 +126,6 @@ qt6_add_shaders(9Launcher "ninelauncher_shaders"
 
 target_include_directories(9Launcher
     PRIVATE src/cpp/include/
-    PRIVATE /usr/include/qt6/QtCore/${Qt6Core_VERSION}
 )
 
 add_subdirectory(MMaterial)
@@ -117,8 +140,7 @@ target_include_directories(9Launcher
 )
 
 set_target_properties(MMaterialLib PROPERTIES AUTOMOC ON)
-set_target_properties(MMaterialLib PROPERTIES AUTOMOC ON)
-target_link_libraries(9Launcher PRIVATE Qt6::Quick Qt::Gui Qt6::Core discord-rpc minizip)
+target_link_libraries(9Launcher PRIVATE Qt6::Quick Qt::Gui Qt6::Core discord-rpc zip)
 set_target_properties(9Launcher PROPERTIES
     WIN32_EXECUTABLE TRUE
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin"

@@ -1,4 +1,4 @@
-name: "Desktop CI builds (cmake)"
+name: "Desktop builds (cmake)"
 on:
   push:
     branches:
@@ -69,9 +69,21 @@ jobs:
           modules: 'qtshadertools qtimageformats qt5compat'
           install-deps: true
           dir: ${{ github.workspace }}/Qt
+          cache: true
+
+      - name: Cache CMake build directory
+        uses: actions/cache@v4
+        with:
+          path: |
+            build
+            !build/bin
+          key: ${{ runner.os }}-cmake-${{ hashFiles('**/CMakeLists.txt', 'externals/**') }}
+          restore-keys: |
+            ${{ runner.os }}-cmake-
 
       - name: Build application
         run: |
+            export CMAKE_BUILD_PARALLEL_LEVEL=$(nproc)
             ./build.sh -DCMAKE_BUILD_TYPE=Release
             strip bin/9Launcher
 
@@ -160,6 +172,17 @@ jobs:
           version: ${{env.QT_VERSION}}
           arch: 'win64_msvc2022_64'
           modules: 'qtshadertools qtimageformats qt5compat'
+          cache: true
+
+      - name: Cache CMake build directory
+        uses: actions/cache@v4
+        with:
+          path: |
+            build
+            !build/bin
+          key: ${{ runner.os }}-cmake-${{ hashFiles('**/CMakeLists.txt', 'externals/**') }}
+          restore-keys: |
+            ${{ runner.os }}-cmake-
 
       - name: Build application
         run: |

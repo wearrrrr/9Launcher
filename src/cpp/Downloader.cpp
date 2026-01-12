@@ -6,10 +6,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QDebug>
-#include <QByteArray>
-#include <array>
-#include <vector>
-#include <minizip/unzip.h>
+#include <zip.h>
 
 Downloader::Downloader(QObject *parent) : QObject(parent), manager(new QNetworkAccessManager(this)) {}
 
@@ -92,156 +89,121 @@ void Downloader::download(const QString &url, const QString &filePath, const boo
         }
 
         if (extractZip) {
-            qDebug() << "Beginning ZIP extraction";
-
-            const QByteArray zipPathBytes = QFile::encodeName(localPath);
-            unzFile zipFile = unzOpen64(zipPathBytes.constData());
-            if (!zipFile) {
-                emit downloadFailed("Failed to open ZIP file: " + localPath);
-                reply->deleteLater();
-                file.close();
-                return;
-            }
-
-            const QString baseDirNormalized = QDir::cleanPath(dirPath);
-            QString baseDirWithSlash = baseDirNormalized;
-            if (!baseDirWithSlash.endsWith('/')) {
-                baseDirWithSlash.append('/');
-            }
-
-            auto isPathWithinBase = [&](const QString &path) -> bool {
-                return path == baseDirNormalized || path.startsWith(baseDirWithSlash);
-            };
-
-            auto closeAndFail = [&](const QString &message) {
-                emit downloadFailed(message);
-                if (zipFile) {
-                    unzClose(zipFile);
-                    zipFile = nullptr;
-                }
-                reply->deleteLater();
-                file.close();
-            };
-
-            std::vector<char> nameBuffer;
-            std::array<char, 8192> ioBuffer{};
-
-            int ret = unzGoToFirstFile(zipFile);
-            while (ret == UNZ_OK) {
-                unz_file_info64 fileInfo{};
-                if (unzGetCurrentFileInfo64(zipFile, &fileInfo, nullptr, 0, nullptr, 0, nullptr, 0) != UNZ_OK) {
-                    closeAndFail("Failed to read ZIP entry info");
-                    return;
-                }
-
-                nameBuffer.resize(static_cast<size_t>(fileInfo.size_filename) + 1);
-                if (unzGetCurrentFileInfo64(zipFile, &fileInfo, nameBuffer.data(),
-                                            static_cast<unsigned int>(nameBuffer.size()),
-                                            nullptr, 0, nullptr, 0) != UNZ_OK) {
-                    closeAndFail("Failed to read ZIP entry name");
-                    return;
-                }
-                nameBuffer.back() = '\0';
-
-                const QString rawName = QString::fromUtf8(nameBuffer.data());
-                bool entryIsDirectory = rawName.endsWith('/') || rawName.endsWith('\\');
-
-                const quint32 externalAttributes = static_cast<quint32>(fileInfo.external_fa);
-                const quint32 posixMode = externalAttributes >> 16;
-                if ((posixMode & 0040000u) == 0040000u || (externalAttributes & 0x10u) == 0x10u) {
-                    entryIsDirectory = true;
-                }
-
-                if (rawName.contains("..")) {
-                    qWarning() << "Skipping suspicious ZIP entry" << rawName;
-                    ret = unzGoToNextFile(zipFile);
-                    continue;
-                }
-
-                QString sanitizedName = rawName;
-                sanitizedName.replace('\\', '/');
-                sanitizedName = QDir::cleanPath(sanitizedName);
-
-                const bool hasDriveSpecifier = sanitizedName.size() > 1 &&
-                                               sanitizedName.at(1) == ':' &&
-                                               sanitizedName.at(0).isLetter();
-
-                if (sanitizedName.isEmpty() || sanitizedName == "." || sanitizedName.startsWith("..") ||
-                    QDir::isAbsolutePath(sanitizedName) || hasDriveSpecifier) {
-                    qWarning() << "Skipping unsafe ZIP entry" << rawName;
-                    ret = unzGoToNextFile(zipFile);
-                    continue;
-                }
-
-                const QString targetPath = QDir::cleanPath(baseDirNormalized + QLatin1Char('/') + sanitizedName);
-                if (!isPathWithinBase(targetPath)) {
-                    qWarning() << "Skipping ZIP entry outside target directory" << rawName;
-                    ret = unzGoToNextFile(zipFile);
-                    continue;
-                }
-
-                entryIsDirectory = entryIsDirectory || sanitizedName.endsWith('/');
-
-                if (entryIsDirectory) {
-                    if (!QDir().mkpath(targetPath)) {
-                        closeAndFail("Failed to create directory: " + targetPath);
-                        return;
-                    }
-                } else {
-                    const QString outputDir = QFileInfo(targetPath).absolutePath();
-                    if (!QDir().mkpath(outputDir)) {
-                        closeAndFail("Failed to create directory: " + outputDir);
-                        return;
-                    }
-
-                    if (unzOpenCurrentFile(zipFile) != UNZ_OK) {
-                        closeAndFail("Failed to open file in ZIP: " + rawName);
-                        return;
-                    }
-
-                    QFile outFile(targetPath);
-                    if (!outFile.open(QIODevice::WriteOnly)) {
-                        unzCloseCurrentFile(zipFile);
-                        closeAndFail("Failed to create file: " + targetPath);
-                        return;
-                    }
-
-                    int bytesRead = 0;
-                    while ((bytesRead = unzReadCurrentFile(zipFile, ioBuffer.data(),
-                                                           static_cast<unsigned int>(ioBuffer.size()))) > 0) {
-                        if (outFile.write(ioBuffer.data(), bytesRead) != bytesRead) {
-                            outFile.close();
-                            unzCloseCurrentFile(zipFile);
-                            closeAndFail("Failed to write extracted data to: " + targetPath);
-                            return;
-                        }
-                    }
-                    outFile.close();
-
-                    if (bytesRead < 0) {
-                        unzCloseCurrentFile(zipFile);
-                        closeAndFail("Error while reading file from ZIP: " + rawName);
-                        return;
-                    }
-
-                    unzCloseCurrentFile(zipFile);
-                }
-
-                ret = unzGoToNextFile(zipFile);
-            }
-
-            if (ret != UNZ_END_OF_LIST_OF_FILE) {
-                closeAndFail("Error during ZIP extraction");
-                return;
-            }
-
-            unzClose(zipFile);
-            qDebug() << "ZIP extraction complete!";
             file.close();
-            file.remove();
+            qDebug() << "Beginning ZIP extraction";
+            
+            int err = 0;
+            zip_t *archive = zip_open(localPath.toUtf8().constData(), ZIP_RDONLY, &err);
+            
+            if (!archive) {
+                zip_error_t error;
+                zip_error_init_with_code(&error, err);
+                QString errorMsg = QString("Failed to open ZIP file: %1").arg(zip_error_strerror(&error));
+                zip_error_fini(&error);
+                emit downloadFailed(errorMsg);
+                reply->deleteLater();
+                return;
+            }
+            
+            zip_int64_t numEntries = zip_get_num_entries(archive, 0);
+            if (numEntries < 0) {
+                zip_close(archive);
+                emit downloadFailed("Failed to get number of entries in ZIP");
+                reply->deleteLater();
+                return;
+            }
+            
+            for (zip_int64_t i = 0; i < numEntries; i++) {
+                const char *name = zip_get_name(archive, i, 0);
+                if (!name) {
+                    zip_close(archive);
+                    emit downloadFailed("Failed to get entry name from ZIP");
+                    reply->deleteLater();
+                    return;
+                }
+                
+                QString entryName = QString::fromUtf8(name);
+                
+                // Skip entries with path traversal
+                if (entryName.contains("..") || QDir::isAbsolutePath(entryName)) {
+                    qWarning() << "Skipping unsafe ZIP entry:" << entryName;
+                    continue;
+                }
+                
+                QString targetPath = QDir::cleanPath(dirPath + "/" + entryName);
+                
+                // Check if it's a directory
+                if (entryName.endsWith('/')) {
+                    if (!QDir().mkpath(targetPath)) {
+                        zip_close(archive);
+                        emit downloadFailed("Failed to create directory: " + targetPath);
+                        reply->deleteLater();
+                        return;
+                    }
+                    continue;
+                }
+                
+                // Create parent directory
+                QString parentDir = QFileInfo(targetPath).absolutePath();
+                if (!QDir().mkpath(parentDir)) {
+                    zip_close(archive);
+                    emit downloadFailed("Failed to create directory: " + parentDir);
+                    reply->deleteLater();
+                    return;
+                }
+                
+                // Open file in archive
+                zip_file_t *zf = zip_fopen_index(archive, i, 0);
+                if (!zf) {
+                    zip_close(archive);
+                    emit downloadFailed("Failed to open file in ZIP: " + entryName);
+                    reply->deleteLater();
+                    return;
+                }
+                
+                // Create output file
+                QFile outFile(targetPath);
+                if (!outFile.open(QIODevice::WriteOnly)) {
+                    zip_fclose(zf);
+                    zip_close(archive);
+                    emit downloadFailed("Failed to create file: " + targetPath);
+                    reply->deleteLater();
+                    return;
+                }
+                
+                // Read and write data
+                char buffer[8192];
+                zip_int64_t bytesRead;
+                while ((bytesRead = zip_fread(zf, buffer, sizeof(buffer))) > 0) {
+                    if (outFile.write(buffer, bytesRead) != bytesRead) {
+                        outFile.close();
+                        zip_fclose(zf);
+                        zip_close(archive);
+                        emit downloadFailed("Failed to write to file: " + targetPath);
+                        reply->deleteLater();
+                        return;
+                    }
+                }
+                
+                outFile.close();
+                zip_fclose(zf);
+                
+                if (bytesRead < 0) {
+                    zip_close(archive);
+                    emit downloadFailed("Error reading file from ZIP: " + entryName);
+                    reply->deleteLater();
+                    return;
+                }
+            }
+            
+            zip_close(archive);
+            qDebug() << "ZIP extraction complete!";
+            
+            // Remove the ZIP file
+            QFile::remove(localPath);
+        } else {
+            file.close();
         }
-
-        file.close();
 
         emit downloadFinished();
         reply->deleteLater();
