@@ -229,13 +229,39 @@ jobs:
         with:
           path: artifacts
 
+      - name: Extract release notes
+        id: release_notes
+        run: |
+          # Check if there's a release notes file in the tag commit
+          if [ -f "RELEASE_NOTES.md" ]; then
+            echo "notes_file=RELEASE_NOTES.md" >> $GITHUB_OUTPUT
+          else
+            # Create a default release notes template
+            cat > release_notes.md << 'EOF'
+          ## What's Changed
+          
+          **Full Changelog**: https://github.com/${{ github.repository }}/compare/$(git describe --tags --abbrev=0 $GITHUB_REF_NAME^)...$GITHUB_REF_NAME
+          EOF
+            echo "notes_file=release_notes.md" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "$GITHUB_REF_NAME" \
-            --title "9Launcher $GITHUB_REF_NAME" \
-            --generate-notes
+          # Extract version from tag (remove 'v' prefix if present)
+          VERSION="${GITHUB_REF_NAME#v}"
+          
+          # Check if release notes file exists
+          if [ -f "${{ steps.release_notes.outputs.notes_file }}" ]; then
+            gh release create "$GITHUB_REF_NAME" \
+              --title "9Launcher ${VERSION}" \
+              --notes-file "${{ steps.release_notes.outputs.notes_file }}"
+          else
+            gh release create "$GITHUB_REF_NAME" \
+              --title "9Launcher ${VERSION}" \
+              --generate-notes
+          fi
 
       - name: Upload release assets
         env:

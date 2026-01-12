@@ -15,7 +15,7 @@ FetchContent_Declare(
 set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(zlib)
 
-set(ZLIB_LIBRARY zlibstatic)
+set(ZLIB_LIBRARY zlib)
 set(ZLIB_INCLUDE_DIR ${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
 set(ZLIB_FOUND TRUE)
 
