@@ -5,6 +5,8 @@
 #include <QFile>
 #include <QDir>
 #include <QDebug>
+#include <QtCore/private/qzipreader_p.h>
+#include <QtCore/private/qzipwriter_p.h>
 
 Downloader::Downloader(QObject *parent) : QObject(parent) {}
 
@@ -81,27 +83,26 @@ void Downloader::download(const QString &url, const QString &filePath, const boo
         }
 
         if (extractZip) {
-            qDebug() << "Beginning Extraction";
-            QProcess proc;
-#ifdef _WIN32
-        proc.setProgram("powershell");
-        proc.setArguments({"-Command", "Expand-Archive", "-Path", localPath});
-#else
-        proc.setProgram("unzip");
-        proc.setArguments({"-o", localPath});
-#endif
-            proc.setWorkingDirectory(dirPath);
-            proc.start();
-            if (!proc.waitForStarted()) {
-                qCritical() << "Failed to start unzip!";
-                emit downloadFailed("Failed to start unzip! Please check to make sure it's installed!");
+            qDebug() << "Beginning ZIP extraction";
+            
+            QZipReader zipReader(localPath);
+            
+            if (!zipReader.isReadable()) {
+                emit downloadFailed("Failed to read ZIP file: " + localPath);
                 reply->deleteLater();
                 file.close();
                 return;
             }
-            proc.waitForFinished(-1);
-
-            qDebug() << "Extraction complete!";
+            
+            if (!zipReader.extractAll(dirPath)) {
+                emit downloadFailed("Failed to extract ZIP file to: " + dirPath);
+                reply->deleteLater();
+                file.close();
+                return;
+            }
+            
+            zipReader.close();
+            qDebug() << "ZIP extraction complete!";
             file.remove();
         }
 

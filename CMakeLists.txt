@@ -25,7 +25,7 @@ if (LINUX)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os")
 endif()
 
-find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2)
+find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2 Core)
 find_package(Qt6 COMPONENTS ShaderTools)
 
 qt_add_executable(9Launcher
@@ -93,6 +93,7 @@ qt6_add_shaders(9Launcher "ninelauncher_shaders"
 
 target_include_directories(9Launcher
     PRIVATE src/cpp/include/
+    PRIVATE /usr/include/qt6/QtCore/${Qt6Core_VERSION}
 )
 
 add_subdirectory(MMaterial)
@@ -107,8 +108,8 @@ target_include_directories(9Launcher
 )
 
 set_target_properties(MMaterialLib PROPERTIES AUTOMOC ON)
-target_link_libraries(9Launcher PRIVATE Qt6::Quick Qt::Gui discord-rpc)
-
+set_target_properties(MMaterialLib PROPERTIES AUTOMOC ON)
+target_link_libraries(9Launcher PRIVATE Qt6::Quick Qt::Gui Qt6::Core discord-rpc)
 set_target_properties(9Launcher PROPERTIES
     WIN32_EXECUTABLE TRUE
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin"
