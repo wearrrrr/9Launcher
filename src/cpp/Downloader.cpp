@@ -3,11 +3,14 @@
 #include <QProcess>
 #include <QUrl>
 #include <QFile>
+#include <QFileInfo>
 #include <QDir>
 #include <QDebug>
-#include <quazip.h>
-#include <quazipfile.h>
-// Using QuaZip (Qt wrapper for minizip) for cross-platform ZIP extraction
+#include <QByteArray>
+#include <array>
+#include <vector>
+#include <minizip/unzip.h>
+// Using minizip (from zlib-ng) for cross-platform ZIP extraction
 
 
 
@@ -86,53 +89,144 @@ void Downloader::download(const QString &url, const QString &filePath, const boo
         }
 
         if (extractZip) {
-            QuaZip zip(localPath);
-            if (!zip.open(QuaZip::mdUnzip)) {
+            qDebug() << "Beginning ZIP extraction";
+
+            const QByteArray zipPathBytes = QFile::encodeName(localPath);
+            unzFile zipFile = unzOpen64(zipPathBytes.constData());
+            if (!zipFile) {
                 emit downloadFailed("Failed to open ZIP file: " + localPath);
                 reply->deleteLater();
                 file.close();
                 return;
             }
 
-            for (bool more = zip.goToFirstFile(); more; more = zip.goToNextFile()) {
-                QuaZipFile zipFile(&zip);
-                if (!zipFile.open(QIODevice::ReadOnly)) {
-                    emit downloadFailed("Failed to open file in ZIP: " + zipFile.getActualFileName());
-                    zip.close();
-                    reply->deleteLater();
-                    file.close();
+            const QString baseDirNormalized = QDir::cleanPath(dirPath);
+            QString baseDirWithSlash = baseDirNormalized;
+            if (!baseDirWithSlash.endsWith('/')) {
+                baseDirWithSlash.append('/');
+            }
+
+            auto isPathWithinBase = [&](const QString &path) -> bool {
+                return path == baseDirNormalized || path.startsWith(baseDirWithSlash);
+            };
+
+            auto closeAndFail = [&](const QString &message) {
+                emit downloadFailed(message);
+                if (zipFile) {
+                    unzClose(zipFile);
+                    zipFile = nullptr;
+                }
+                reply->deleteLater();
+                file.close();
+            };
+
+            std::vector<char> nameBuffer;
+            std::array<char, 8192> ioBuffer{};
+
+            int ret = unzGoToFirstFile(zipFile);
+            while (ret == UNZ_OK) {
+                unz_file_info64 fileInfo{};
+                if (unzGetCurrentFileInfo64(zipFile, &fileInfo, nullptr, 0, nullptr, 0, nullptr, 0) != UNZ_OK) {
+                    closeAndFail("Failed to read ZIP entry info");
                     return;
                 }
 
-                QString fileName = zipFile.getActualFileName();
-                QString fullPath = dirPath + "/" + fileName;
+                nameBuffer.resize(static_cast<size_t>(fileInfo.size_filename) + 1);
+                if (unzGetCurrentFileInfo64(zipFile, &fileInfo, nameBuffer.data(),
+                                            static_cast<unsigned int>(nameBuffer.size()),
+                                            nullptr, 0, nullptr, 0) != UNZ_OK) {
+                    closeAndFail("Failed to read ZIP entry name");
+                    return;
+                }
+                nameBuffer.back() = '\0';
 
-                if (fileName.endsWith('/')) {
-                    // directory
-                    QDir().mkpath(fullPath);
+                const QString rawName = QString::fromUtf8(nameBuffer.data());
+                bool entryIsDirectory = rawName.endsWith('/') || rawName.endsWith('\\');
+
+                const quint32 externalAttributes = static_cast<quint32>(fileInfo.external_fa);
+                const quint32 posixMode = externalAttributes >> 16;
+                if ((posixMode & 0040000u) == 0040000u || (externalAttributes & 0x10u) == 0x10u) {
+                    entryIsDirectory = true;
+                }
+
+                QString sanitizedName = rawName;
+                sanitizedName.replace('\\', '/');
+                sanitizedName = QDir::cleanPath(sanitizedName);
+
+                const bool hasDriveSpecifier = sanitizedName.size() > 1 &&
+                                               sanitizedName.at(1) == ':' &&
+                                               sanitizedName.at(0).isLetter();
+
+                if (sanitizedName.isEmpty() || sanitizedName == "." || sanitizedName.startsWith("..") ||
+                    QDir::isAbsolutePath(sanitizedName) || hasDriveSpecifier) {
+                    qWarning() << "Skipping unsafe ZIP entry" << rawName;
+                    ret = unzGoToNextFile(zipFile);
+                    continue;
+                }
+
+                const QString targetPath = QDir::cleanPath(baseDirNormalized + QLatin1Char('/') + sanitizedName);
+                if (!isPathWithinBase(targetPath)) {
+                    qWarning() << "Skipping ZIP entry outside target directory" << rawName;
+                    ret = unzGoToNextFile(zipFile);
+                    continue;
+                }
+
+                entryIsDirectory = entryIsDirectory || sanitizedName.endsWith('/');
+
+                if (entryIsDirectory) {
+                    if (!QDir().mkpath(targetPath)) {
+                        closeAndFail("Failed to create directory: " + targetPath);
+                        return;
+                    }
                 } else {
-                    // file
-                    QString dir = QFileInfo(fullPath).absolutePath();
-                    QDir().mkpath(dir);
-
-                    QFile outFile(fullPath);
-                    if (!outFile.open(QIODevice::WriteOnly)) {
-                        emit downloadFailed("Failed to create file: " + fullPath);
-                        zipFile.close();
-                        zip.close();
-                        reply->deleteLater();
-                        file.close();
+                    const QString outputDir = QFileInfo(targetPath).absolutePath();
+                    if (!QDir().mkpath(outputDir)) {
+                        closeAndFail("Failed to create directory: " + outputDir);
                         return;
                     }
 
-                    outFile.write(zipFile.readAll());
+                    if (unzOpenCurrentFile(zipFile) != UNZ_OK) {
+                        closeAndFail("Failed to open file in ZIP: " + rawName);
+                        return;
+                    }
+
+                    QFile outFile(targetPath);
+                    if (!outFile.open(QIODevice::WriteOnly)) {
+                        unzCloseCurrentFile(zipFile);
+                        closeAndFail("Failed to create file: " + targetPath);
+                        return;
+                    }
+
+                    int bytesRead = 0;
+                    while ((bytesRead = unzReadCurrentFile(zipFile, ioBuffer.data(),
+                                                           static_cast<unsigned int>(ioBuffer.size()))) > 0) {
+                        if (outFile.write(ioBuffer.data(), bytesRead) != bytesRead) {
+                            outFile.close();
+                            unzCloseCurrentFile(zipFile);
+                            closeAndFail("Failed to write extracted data to: " + targetPath);
+                            return;
+                        }
+                    }
                     outFile.close();
+
+                    if (bytesRead < 0) {
+                        unzCloseCurrentFile(zipFile);
+                        closeAndFail("Error while reading file from ZIP: " + rawName);
+                        return;
+                    }
+
+                    unzCloseCurrentFile(zipFile);
                 }
 
-                zipFile.close();
+                ret = unzGoToNextFile(zipFile);
             }
 
-            zip.close();
+            if (ret != UNZ_END_OF_LIST_OF_FILE) {
+                closeAndFail("Error during ZIP extraction");
+                return;
+            }
+
+            unzClose(zipFile);
             qDebug() << "ZIP extraction complete!";
             file.remove();
         }
