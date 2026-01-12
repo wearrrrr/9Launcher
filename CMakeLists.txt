@@ -154,7 +154,7 @@ target_include_directories(9Launcher
 )
 
 set_target_properties(MMaterialLib PROPERTIES AUTOMOC ON)
-target_link_libraries(9Launcher PRIVATE Qt6::Quick Qt::Gui Qt6::Core discord-rpc zlibstatic zip)
+target_link_libraries(9Launcher PRIVATE Qt6::Quick Qt::Gui Qt6::Core discord-rpc zip)
 set_target_properties(9Launcher PROPERTIES
     WIN32_EXECUTABLE TRUE
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin"
