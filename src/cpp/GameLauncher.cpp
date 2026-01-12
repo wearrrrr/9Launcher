@@ -259,8 +259,10 @@ bool GameLauncher::Launch_PC98(const QString &gamePath) {
 
     process.setArguments(args);
     process.start();
+    qDebug() << args.join(" ");
     if (!process.waitForStarted()) {
         qCritical() << "Failed to start the game process!";
+        qCritical() << "Launch arguments: " << args.join(" ");
         return false;
     }
 
