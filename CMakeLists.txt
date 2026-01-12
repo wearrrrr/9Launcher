@@ -6,23 +6,25 @@ project(nineLauncher VERSION 0.1 LANGUAGES CXX)
 
 include(FetchContent)
 
-# Fetch libzip and its dependency zlib
 FetchContent_Declare(
   zlib
   GIT_REPOSITORY https://github.com/madler/zlib.git
   GIT_TAG v1.3.1
 )
 
+set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(zlib)
+
+set(ZLIB_LIBRARY zlibstatic)
+set(ZLIB_INCLUDE_DIR ${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
+set(ZLIB_FOUND TRUE)
+
 FetchContent_Declare(
   libzip
   GIT_REPOSITORY https://github.com/nih-at/libzip.git
-  GIT_TAG v1.11.2
+  GIT_TAG v1.11.4
 )
 
-# Configure zlib
-set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-
-# Configure libzip
 set(BUILD_TOOLS OFF CACHE BOOL "" FORCE)
 set(BUILD_REGRESS OFF CACHE BOOL "" FORCE)
 set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
@@ -36,7 +38,7 @@ set(ENABLE_BZIP2 OFF CACHE BOOL "" FORCE)
 set(ENABLE_LZMA OFF CACHE BOOL "" FORCE)
 set(ENABLE_ZSTD OFF CACHE BOOL "" FORCE)
 
-FetchContent_MakeAvailable(zlib libzip)
+FetchContent_MakeAvailable(libzip)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
