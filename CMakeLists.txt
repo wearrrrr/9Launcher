@@ -16,9 +16,12 @@ set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(ZLIB_BUILD_STATIC ON CACHE BOOL "Use static zlib library" FORCE)
 FetchContent_MakeAvailable(zlib)
 
-set(ZLIB_INCLUDE_DIR "${zlib_SOURCE_DIR}" CACHE PATH "" FORCE)
+set(ZLIB_INCLUDE_DIR "${zlib_SOURCE_DIR};${zlib_BINARY_DIR}" CACHE PATH "" FORCE)
 set(ZLIB_LIBRARY zlibstatic CACHE STRING "" FORCE)
 set(ZLIB_FOUND TRUE CACHE BOOL "" FORCE)
+
+include_directories(${zlib_BINARY_DIR})
+include_directories(${zlib_SOURCE_DIR})
 
 FetchContent_Declare(
   libzip
