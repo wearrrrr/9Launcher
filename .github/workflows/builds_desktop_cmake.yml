@@ -166,6 +166,10 @@ jobs:
         with:
           arch: x86_64
 
+      - name: Install dependencies via vcpkg
+        run: |
+          vcpkg install libzip:x64-windows-static
+          
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
@@ -186,7 +190,7 @@ jobs:
 
       - name: Build application
         run: |
-             cmake -B build/ -DCMAKE_BUILD_TYPE=Release -G Ninja
+             cmake -B build/ -DCMAKE_BUILD_TYPE=Release -G Ninja -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static
              cd build/
              ninja -j $env:NUMBER_OF_PROCESSORS
 

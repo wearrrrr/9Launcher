@@ -6,54 +6,49 @@ project(nineLauncher VERSION 0.1 LANGUAGES CXX)
 
 include(FetchContent)
 
-FetchContent_Declare(
-  zlib
-  GIT_REPOSITORY https://github.com/madler/zlib.git
-  GIT_TAG v1.3.1
-)
-
-set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(ZLIB_BUILD_STATIC ON CACHE BOOL "Use static zlib library" FORCE)
-FetchContent_MakeAvailable(zlib)
-
-# Determine the correct zlib target name
-if(TARGET zlibstatic)
-    set(ZLIB_TARGET zlibstatic)
-elseif(TARGET zlib)
-    set(ZLIB_TARGET zlib)
+# use vcpkg on windows
+if(WIN32)
+    find_package(ZLIB REQUIRED)
+    find_package(libzip REQUIRED)
 else()
-    message(FATAL_ERROR "Could not find zlib target")
+    FetchContent_Declare(
+      zlib
+      GIT_REPOSITORY https://github.com/madler/zlib.git
+      GIT_TAG v1.3.1
+    )
+
+    set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    set(ZLIB_BUILD_STATIC ON CACHE BOOL "Use static zlib library" FORCE)
+    FetchContent_MakeAvailable(zlib)
+
+    set(ZLIB_INCLUDE_DIR "${zlib_SOURCE_DIR};${zlib_BINARY_DIR}" CACHE PATH "" FORCE)
+    set(ZLIB_LIBRARY zlibstatic CACHE STRING "" FORCE)
+    set(ZLIB_FOUND TRUE CACHE BOOL "" FORCE)
+
+    include_directories(${zlib_BINARY_DIR})
+    include_directories(${zlib_SOURCE_DIR})
+
+    FetchContent_Declare(
+      libzip
+      GIT_REPOSITORY https://github.com/nih-at/libzip.git
+      GIT_TAG v1.11.4
+    )
+
+    set(BUILD_TOOLS OFF CACHE BOOL "" FORCE)
+    set(BUILD_REGRESS OFF CACHE BOOL "" FORCE)
+    set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    set(BUILD_DOC OFF CACHE BOOL "" FORCE)
+    set(ENABLE_COMMONCRYPTO OFF CACHE BOOL "" FORCE)
+    set(ENABLE_GNUTLS OFF CACHE BOOL "" FORCE)
+    set(ENABLE_MBEDTLS OFF CACHE BOOL "" FORCE)
+    set(ENABLE_OPENSSL OFF CACHE BOOL "" FORCE)
+    set(ENABLE_WINDOWS_CRYPTO OFF CACHE BOOL "" FORCE)
+    set(ENABLE_BZIP2 OFF CACHE BOOL "" FORCE)
+    set(ENABLE_LZMA OFF CACHE BOOL "" FORCE)
+    set(ENABLE_ZSTD OFF CACHE BOOL "" FORCE)
+
+    FetchContent_MakeAvailable(libzip)
 endif()
-
-get_target_property(ZLIB_LIB_LOCATION ${ZLIB_TARGET} LOCATION)
-
-set(ZLIB_INCLUDE_DIR "${zlib_SOURCE_DIR};${zlib_BINARY_DIR}" CACHE PATH "" FORCE)
-set(ZLIB_LIBRARY $<TARGET_FILE:${ZLIB_TARGET}> CACHE STRING "" FORCE)
-set(ZLIB_FOUND TRUE CACHE BOOL "" FORCE)
-
-include_directories(${zlib_BINARY_DIR})
-include_directories(${zlib_SOURCE_DIR})
-
-FetchContent_Declare(
-  libzip
-  GIT_REPOSITORY https://github.com/nih-at/libzip.git
-  GIT_TAG v1.11.4
-)
-
-set(BUILD_TOOLS OFF CACHE BOOL "" FORCE)
-set(BUILD_REGRESS OFF CACHE BOOL "" FORCE)
-set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(BUILD_DOC OFF CACHE BOOL "" FORCE)
-set(ENABLE_COMMONCRYPTO OFF CACHE BOOL "" FORCE)
-set(ENABLE_GNUTLS OFF CACHE BOOL "" FORCE)
-set(ENABLE_MBEDTLS OFF CACHE BOOL "" FORCE)
-set(ENABLE_OPENSSL OFF CACHE BOOL "" FORCE)
-set(ENABLE_WINDOWS_CRYPTO OFF CACHE BOOL "" FORCE)
-set(ENABLE_BZIP2 OFF CACHE BOOL "" FORCE)
-set(ENABLE_LZMA OFF CACHE BOOL "" FORCE)
-set(ENABLE_ZSTD OFF CACHE BOOL "" FORCE)
-
-FetchContent_MakeAvailable(libzip)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
