@@ -8,16 +8,19 @@ This is a complete rewrite of 9Launcher v1, which was written in Tauri, now bein
 
 ## Features
 
-- 🔧 Support for every officially released Touhou Project game
-- 🌌 Universal UI
-- ✏️ Delete and add games with one click
-- 📈 Starts up incredibly fast
+- Support for every officially released Touhou Project and (Windows) Seihou Project game
+- Thcrap support
+- Manager for Dosbox-x, thcrap, and Proton
+- Universal UI
+- Delete and add games with one click
+- Starts up incredibly fast
 
-![9Launcher UI](https://github.com/user-attachments/assets/220bd549-5b6e-480d-8f4f-4e9a5a794155)
+![9Launcher UI](https://github.com/user-attachments/assets/189e335f-f7c5-47a8-855d-3696d4e43515)
+
 
 
 ## TODO
-- Wine Manager (currently invokes system wine, should also conditionally hide the wine manager on windows ^^)
+- Binary Manager (should conditionally hide the proton part on windows ^^)
 - Finish the settings panel
 - ~~Finish the info panel~~ ✅~
 - ~~Optimize the size of the output binary (cull unused MMaterial stuff)~~
