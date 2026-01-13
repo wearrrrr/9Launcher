@@ -169,7 +169,7 @@ jobs:
       - name: Install dependencies via vcpkg
         run: |
           vcpkg install libzip:x64-windows-static
-          
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
@@ -241,10 +241,17 @@ jobs:
             echo "notes_file=RELEASE_NOTES.md" >> $GITHUB_OUTPUT
           else
             # Create a default release notes template
-            cat > release_notes.md << 'EOF'
+            PREV_TAG=$(git describe --tags --abbrev=0 $GITHUB_REF_NAME^ 2>/dev/null || true)
+            if [ -z "$PREV_TAG" ]; then
+              PREV_TAG=$(git tag --sort=-creatordate | sed -n '2p')
+            fi
+            if [ -z "$PREV_TAG" ]; then
+              PREV_TAG="$GITHUB_REF_NAME"
+            fi
+            cat > release_notes.md << EOF
           ## What's Changed
-          
-          **Full Changelog**: https://github.com/${{ github.repository }}/compare/$(git describe --tags --abbrev=0 $GITHUB_REF_NAME^)...$GITHUB_REF_NAME
+
+          **Full Changelog**: https://github.com/wearrrrr/9Launcher/compare/${PREV_TAG}...${GITHUB_REF_NAME}
           EOF
             echo "notes_file=release_notes.md" >> $GITHUB_OUTPUT
           fi
@@ -255,7 +262,7 @@ jobs:
         run: |
           # Extract version from tag (remove 'v' prefix if present)
           VERSION="${GITHUB_REF_NAME#v}"
-          
+
           # Check if release notes file exists
           if [ -f "${{ steps.release_notes.outputs.notes_file }}" ]; then
             gh release create "$GITHUB_REF_NAME" \

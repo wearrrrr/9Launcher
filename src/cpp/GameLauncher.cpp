@@ -1,6 +1,7 @@
 #include <QtDebug>
 #include <QUrl>
 #include <QString>
+#include <QStringList>
 #include <QThread>
 #include <QProcess>
 #include <QStandardPaths>
@@ -209,8 +210,18 @@ bool GameLauncher::LaunchLinux(const QString &gamePath, const QString &gameCWD) 
 
     QProcess process;
     QString winePath = GetWinePathFromSettings();
-    process.setProgram(winePath);
-    process.setArguments({gamePath});
+    const bool useGamescope = settings.value("gamescope", false).toBool();
+    QStringList arguments;
+
+    if (useGamescope) {
+        process.setProgram("gamescope");
+        arguments << "--" << winePath << gamePath;
+    } else {
+        process.setProgram(winePath);
+        arguments << gamePath;
+    }
+
+    process.setArguments(arguments);
     process.setWorkingDirectory(gameCWD);
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();

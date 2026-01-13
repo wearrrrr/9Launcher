@@ -42,7 +42,7 @@ Rectangle {
     FooterPanel {
         id: settingsMenu
         width: 330
-        height: 220
+        height: Qt.platform.os === "linux" ? 260 : 220
         alignTo: "left"
         enabled: false
 
@@ -66,6 +66,13 @@ Rectangle {
                     text: qsTr("Discord RPC")
                     id: rpcSetting
                     update: "rpc"
+                }
+
+                Setting {
+                    text: qsTr("Enable Gamescope")
+                    id: gamescopeSetting
+                    update: "gamescope"
+                    visible: Qt.platform.os === "linux"
                 }
 
                 Setting {
