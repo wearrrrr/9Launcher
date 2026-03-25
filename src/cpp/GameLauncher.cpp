@@ -201,6 +201,9 @@ const QString GameLauncher::GetDosboxXPathFromSettings() {
     if (option == "system" || option == "") {
         return "dosbox-x";
     }
+    if (option == "flatpak") {
+        return "com.dosbox_x.DOSBox-X";
+    }
     QString appData = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     return appData + "/dosbox-x/mingw-build/mingw-sdl2/dosbox-x.exe";
 }
@@ -247,6 +250,7 @@ bool GameLauncher::Launch_PC98(const QString &gamePath) {
     qInfo() << "Launching game";
 
     QProcess process;
+    QString dosboxXSetting = settings.value("dosbox-x").toString();
     QString dosboxPath = GetDosboxXPathFromSettings();
     QList<QString> args = {
         "-machine",
@@ -262,15 +266,20 @@ bool GameLauncher::Launch_PC98(const QString &gamePath) {
         "game",
     };
 #ifndef _WIN32
-    process.setProgram(GetWinePathFromSettings());
-    args.emplaceFront(GetDosboxXPathFromSettings());
+    if (dosboxXSetting != "flatpak" && dosboxXSetting != "system" && dosboxXSetting != "") {
+        process.setProgram(GetWinePathFromSettings());
+        args.emplaceFront(GetDosboxXPathFromSettings());
+    } else {
+        process.setProgram(dosboxPath);
+    }
+
 #else
     process.setProgram(GetDosboxXPathFromSettings());
 #endif
 
     process.setArguments(args);
     process.start();
-    qDebug() << args.join(" ");
+    qDebug() << process.program() << args.join(" ");
     if (!process.waitForStarted()) {
         qCritical() << "Failed to start the game process!";
         qCritical() << "Launch arguments: " << args.join(" ");

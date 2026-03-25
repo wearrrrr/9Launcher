@@ -13,7 +13,7 @@ import "BinaryManager.js" as BinaryManager
 Window {
     id: root
     color: "#2f2f2f"
-    width: 500
+    width: 600
     height: 600
     minimumWidth: width
     minimumHeight: height
@@ -99,10 +99,18 @@ Window {
         anchors.topMargin: 250
 
         MButton {
-            text: qsTr("Use Sytem Dosbox-x")
+            text: qsTr("Use System Dosbox-x")
             Layout.preferredWidth: 175
             onClicked: {
                 AppSettings.setValue("dosbox-x", "system")
+            }
+        }
+
+        MButton {
+            text: qsTr("Use Flatpak Dosbox-x")
+            Layout.preferredWidth: 175
+            onClicked: {
+                AppSettings.setValue("dosbox-x", "flatpak")
             }
         }
 
