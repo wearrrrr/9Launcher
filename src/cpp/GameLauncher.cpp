@@ -266,12 +266,19 @@ bool GameLauncher::Launch_PC98(const QString &gamePath) {
         "game",
     };
 #ifndef _WIN32
-    if (dosboxXSetting != "flatpak" && dosboxXSetting != "system" && dosboxXSetting != "") {
-        process.setProgram(GetWinePathFromSettings());
+    if (dosboxXSetting == "flatpak") {
+        process.setProgram(dosboxXSetting);
         args.emplaceFront(GetDosboxXPathFromSettings());
+        args.emplaceFront("run");
     } else {
-        process.setProgram(dosboxPath);
+        if (dosboxXSetting == "wine") {
+            process.setProgram(GetWinePathFromSettings());
+            args.emplaceFront(GetDosboxXPathFromSettings());
+        } else {
+            process.setProgram(dosboxPath);
+        }
     }
+
 
 #else
     process.setProgram(GetDosboxXPathFromSettings());
