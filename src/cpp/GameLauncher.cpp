@@ -267,7 +267,7 @@ bool GameLauncher::Launch_PC98(const QString &gamePath) {
     };
 #ifndef _WIN32
     if (dosboxXSetting == "flatpak") {
-        process.setProgram(dosboxXSetting);
+        process.setProgram("/usr/bin/flatpak");
         args.emplaceFront(GetDosboxXPathFromSettings());
         args.emplaceFront("run");
     } else {
