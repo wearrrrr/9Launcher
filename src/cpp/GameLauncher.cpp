@@ -285,6 +285,7 @@ bool GameLauncher::Launch_PC98(const QString &gamePath) {
 #endif
 
     process.setArguments(args);
+    process.setProcessChannelMode(QProcess::MergedChannels);
     process.start();
     qDebug() << process.program() << args.join(" ");
     if (!process.waitForStarted()) {
@@ -296,6 +297,9 @@ bool GameLauncher::Launch_PC98(const QString &gamePath) {
     launched = true;
 
     process.waitForFinished(-1);
+
+    qDebug() << process.readAll();
+    qDebug() << "Exit code:" << process.exitCode();
 
     launched = false;
 
