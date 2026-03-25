@@ -11,22 +11,7 @@ if(WIN32)
     find_package(ZLIB REQUIRED)
     find_package(libzip REQUIRED)
 else()
-    FetchContent_Declare(
-      zlib
-      GIT_REPOSITORY https://github.com/madler/zlib.git
-      GIT_TAG v1.3.1
-    )
-
-    set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-    set(ZLIB_BUILD_STATIC ON CACHE BOOL "Use static zlib library" FORCE)
-    FetchContent_MakeAvailable(zlib)
-
-    set(ZLIB_INCLUDE_DIR "${zlib_SOURCE_DIR};${zlib_BINARY_DIR}" CACHE PATH "" FORCE)
-    set(ZLIB_LIBRARY zlibstatic CACHE STRING "" FORCE)
-    set(ZLIB_FOUND TRUE CACHE BOOL "" FORCE)
-
-    include_directories(${zlib_BINARY_DIR})
-    include_directories(${zlib_SOURCE_DIR})
+    find_package(ZLIB REQUIRED)
 
     FetchContent_Declare(
       libzip
@@ -157,7 +142,7 @@ if(WIN32)
     find_package(libzip CONFIG REQUIRED)
     target_link_libraries(9Launcher PRIVATE Qt6::Quick Qt::Gui Qt6::Core discord-rpc libzip::zip)
 else()
-    target_link_libraries(9Launcher PRIVATE Qt6::Quick Qt::Gui Qt6::Core discord-rpc zip)
+    target_link_libraries(9Launcher PRIVATE Qt6::Quick Qt::Gui Qt6::Core discord-rpc zip ${ZLIB_LIBRARY})
 endif()
 
 set_target_properties(9Launcher PROPERTIES
