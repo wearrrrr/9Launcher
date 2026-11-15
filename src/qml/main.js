@@ -11,6 +11,7 @@ function populateGamesList(jsonFile) {
     );
 
   if (jsonFile == "games.json") {
+    window.remakeModel = Object.values(games.remakes);
     window.spinoffModel = Object.values(games.spinoffs);
   }
 }

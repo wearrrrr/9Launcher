@@ -15,7 +15,7 @@ Window {
     id: window
     Material.theme: Material.Dark
     width: 950
-    height: 600
+    height: 705
     minimumWidth: width
     minimumHeight: height
     maximumWidth: width
@@ -31,6 +31,7 @@ Window {
     }
 
     property var mainModel: []
+    property var remakeModel: []
     property var spinoffModel: []
     property var selectedGameItem: ({})
     property bool selectedIsPC98: false
@@ -39,6 +40,7 @@ Window {
 
     function populateGamesList(jsonFile) {
         mainModel = [];
+        remakeModel = [];
         spinoffModel = [];
         Core.populateGamesList(jsonFile);
     }
@@ -114,6 +116,38 @@ Window {
                     mainWindow: window
                 }
             }
+        }
+
+        Item {
+            Layout.preferredHeight: 30
+            Layout.alignment: Qt.AlignLeft
+            UI.H4 {
+                text: "Remakes"
+                font.bold: true
+                padding: 5
+            }
+
+            visible: window.remakeModel.length > 0
+        }
+
+        Flow {
+            id: remakeLayout
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignTop
+            spacing: 5
+            padding: 10
+
+            Repeater {
+                model: window.remakeModel
+                delegate: GameItem {
+                    width: 150
+                    height: 55
+                    item: modelData
+                    isPC98: false
+                    mainWindow: window
+                }
+            }
+            visible: window.remakeModel.length > 0
         }
 
         Item {

@@ -19,6 +19,7 @@ Dialog {
 
     property var gameItem: ({})
     property bool isPC98: false
+    readonly property bool noThcrap: gameItem.noThcrap === true
 
     title: qsTr("Launch ") + gameItem.en_title
     width: 650
@@ -144,12 +145,14 @@ Dialog {
     Dialog.DialogButton {
         text: qsTr("Launch with thcrap")
         fontCapitalization: Font.MixedCase
+        enabled: !control.noThcrap
         onClicked: control.launchWithThcrap()
     }
 
     Dialog.DialogButton {
         text: qsTr("Configure thcrap")
         fontCapitalization: Font.MixedCase
+        enabled: !control.noThcrap
         onClicked: {
             thcrapConfigDialog.open()
         }

@@ -106,6 +106,14 @@
       "game_id": "th20"
     }
   },
+  "remakes": {
+    "th06nc": {
+      "en_title": "Embodiment of Scarlet Devil: NC",
+      "jp_title": "東方紅魔郷 New Classic",
+      "game_id": "th06nc",
+      "noThcrap": true
+    }
+  },
   "spinoffs": {
     "th07_5": {
       "en_title": "Immaterial and Missing Power",
